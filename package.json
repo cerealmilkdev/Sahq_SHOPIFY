@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.10",
+    "tailwindcss": "^4.1.10"
+  },
+  "scripts": {
+    "dev": "shopify theme dev",
+    "dev:tailwind": "npx @tailwindcss/cli -i assets/tailwind.input.css -o assets/tailwind.output.css --watch"
+  }
+}

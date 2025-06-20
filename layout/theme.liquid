@@ -11,9 +11,14 @@
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
+
+    {{ 'tailwind.output.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body>
+  <h1 class="text-3xl uppercase font-bold underline">
+    Hello world!
+</h1>
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
