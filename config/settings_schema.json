@@ -1,11 +1,11 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
-    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
-    "theme_support_url": "https://support.shopify.com/"
+    "theme_name": "Sahq",
+    "theme_version": "1.0.0",
+    "theme_author": "CEREALMILK",
+    "theme_documentation_url": "https://github.com/Mandroso22/Sahq_SHOPIFY",
+    "theme_support_url": "https://github.com/Mandroso22/Sahq_SHOPIFY/issues"
   },
   {
     "name": "t:general.typography",
@@ -17,20 +17,23 @@
       {
         "type": "font_picker",
         "id": "type_heading_font",
-        "default": "work_sans_n4",
-        "label": "t:general.heading_font"
+        "default": "poppins_n4",
+        "label": "t:general.heading_font",
+        "info": "t:general.heading_font_info"
       },
       {
         "type": "font_picker",
         "id": "type_body_font",
-        "default": "work_sans_n4",
-        "label": "t:general.body_font"
+        "default": "roboto_n4",
+        "label": "t:general.body_font",
+        "info": "t:general.body_font_info"
       },
       {
         "type": "font_picker",
         "id": "type_accent_font",
-        "default": "work_sans_n4",
-        "label": "t:general.accent_font"
+        "default": "poppins_n6",
+        "label": "t:general.accent_font",
+        "info": "t:general.accent_font_info"
       }
     ]
   },

@@ -14,9 +14,214 @@
   font-display: swap;
 }
 
-/* Override theme font variables if needed */
+/* Custom Fonts - Poppins and Roboto */
+
+/* Poppins Font Family */
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Thin.ttf" | asset_url }}') format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-ThinItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-ExtraLight.ttf" | asset_url }}') format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-ExtraLightItalic.ttf" | asset_url }}')
+    format("truetype");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Light.ttf" | asset_url }}') format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-LightItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Regular.ttf" | asset_url }}') format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Italic.ttf" | asset_url }}') format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Medium.ttf" | asset_url }}') format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-MediumItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-SemiBold.ttf" | asset_url }}') format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-SemiBoldItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Bold.ttf" | asset_url }}') format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-BoldItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-ExtraBold.ttf" | asset_url }}') format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-ExtraBoldItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-Black.ttf" | asset_url }}') format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url('{{ "Poppins-BlackItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Roboto Font Family */
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-Thin.ttf" | asset_url }}') format("truetype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-Regular.ttf" | asset_url }}') format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-Medium.ttf" | asset_url }}') format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-SemiBoldItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-Bold.ttf" | asset_url }}') format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-BoldItalic.ttf" | asset_url }}') format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url('{{ "Roboto-ExtraBold.ttf" | asset_url }}') format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Override theme font variables to use Poppins and Roboto */
 :root {
-  --font-heading--family: "Playfair Display", serif;
-  --font-body--family: "Inter", sans-serif;
-  --font-accent--family: "CustomFont", sans-serif;
+  --font-heading--family: "Poppins", sans-serif;
+  --font-body--family: "Roboto", sans-serif;
+  --font-accent--family: "Poppins", sans-serif;
 }

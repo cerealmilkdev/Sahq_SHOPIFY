@@ -5,41 +5,373 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
-
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
+<div class="product-page">
+  <div class="product-container">
+    <!-- Product Images -->
+    <div class="product-images">
+      {% for image in product.images %}
+        <div class="product-image-wrapper">
+          {% render 'image', 
+            class: 'product-image', 
+            image: image,
+            width: 600,
+            height: 600,
+            crop: 'center'
+          %}
+        </div>
       {% endfor %}
-    </select>
+    </div>
 
-    <input type="text" name="quantity" min="1" value="1">
+    <!-- Product Info -->
+    <div class="product-info">
+      <h1 class="product-title">{{ product.title }}</h1>
+      <div class="product-price">{{ product.price | money }}</div>
+      <div class="product-description">{{ product.description }}</div>
+    </div>
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+    <!-- Product Form -->
+    <div class="product-form">
+      {% form 'product', product %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+
+        {% if product.variants.size > 1 %}
+          <div class="form-group">
+            <label for="variant-select" class="form-label">Variant</label>
+            <select name="id" id="variant-select" class="form-select">
+              {% for variant in product.variants %}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == current_variant %}
+                    selected="selected"
+                  {% endif %}
+                >
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+
+        <div class="form-group">
+          <label for="quantity" class="form-label">Quantité</label>
+          <input 
+            type="number" 
+            name="quantity" 
+            id="quantity"
+            min="1" 
+            value="1"
+            class="form-input"
+          >
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <span class="btn-text">Ajouter au panier</span>
+            <span class="btn-icon">🛒</span>
+          </button>
+          {{ form | payment_button }}
+        </div>
+      {% endform %}
+    </div>
+  </div>
 </div>
+
+{% stylesheet %}
+  .product-page {
+    padding: 2rem 0;
+    min-height: 80vh;
+  }
+
+  .product-container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  /* Product Images */
+  .product-images {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .product-image-wrapper {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .product-image-wrapper:hover {
+    transform: scale(1.02);
+  }
+
+  .product-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Product Info */
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .product-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .product-price {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    padding: 0.5rem 0;
+  }
+
+  .product-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  /* Product Form */
+  .product-form {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--color-foreground);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .form-select,
+  .form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+
+  .form-select:focus,
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  }
+
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Payment Button Styling */
+  .product-form .shopify-payment-button {
+    margin-top: 1rem;
+  }
+
+  .product-form .shopify-payment-button__button {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 1rem 2rem !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .product-form .shopify-payment-button__button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4) !important;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .product-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .product-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-page {
+      padding: 1rem 0;
+    }
+
+    .product-container {
+      padding: 0 1rem;
+    }
+
+    .product-title {
+      font-size: 1.75rem;
+    }
+
+    .product-form {
+      padding: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.875rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .product-title {
+      font-size: 1.5rem;
+    }
+
+    .product-price {
+      font-size: 1.5rem;
+    }
+
+    .product-form {
+      padding: 1rem;
+    }
+  }
+
+  /* Loading States */
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* Animation for form submission */
+  .form-submitting .btn-text {
+    opacity: 0.7;
+  }
+
+  .form-submitting .btn-icon {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class ProductPage {
+    constructor() {
+      this.form = document.querySelector('.product-form form');
+      this.variantSelect = document.querySelector('#variant-select');
+      this.quantityInput = document.querySelector('#quantity');
+      this.submitButton = document.querySelector('.btn-primary');
+      this.init();
+    }
+
+    init() {
+      if (!this.form) return;
+
+      // Handle form submission
+      this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+
+      // Handle variant change
+      if (this.variantSelect) {
+        this.variantSelect.addEventListener('change', (e) => this.handleVariantChange(e));
+      }
+
+      // Handle quantity change
+      if (this.quantityInput) {
+        this.quantityInput.addEventListener('change', (e) => this.handleQuantityChange(e));
+      }
+    }
+
+    handleSubmit(e) {
+      if (!this.submitButton) return;
+
+      // Add loading state
+      this.submitButton.disabled = true;
+      this.form.classList.add('form-submitting');
+      
+      const btnText = this.submitButton.querySelector('.btn-text');
+      if (btnText) {
+        btnText.textContent = 'Ajout en cours...';
+      }
+    }
+
+    handleVariantChange(e) {
+      console.log('Variant changed:', e.target.value);
+      // Add your variant change logic here
+    }
+
+    handleQuantityChange(e) {
+      const quantity = parseInt(e.target.value);
+      if (quantity < 1) {
+        e.target.value = 1;
+      }
+    }
+  }
+
+  // Initialize product page
+  document.addEventListener('DOMContentLoaded', () => {
+    new ProductPage();
+  });
+{% endjavascript %}
 
 {% schema %}
 {

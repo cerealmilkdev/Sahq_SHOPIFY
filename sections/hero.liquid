@@ -3,7 +3,7 @@
   Supports: image background, video background, overlay text, CTA buttons
 {% endcomment %}
 
-<section class="hero hero--{{ section.settings.layout }} hero--{{ section.settings.text_alignment }} hero--{{ section.settings.height }}" 
+<section class="hero full-width hero--{{ section.settings.layout }} hero--{{ section.settings.text_alignment }} hero--{{ section.settings.height }}" 
          style="--hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
   
   {% if section.settings.background_video != blank %}
@@ -68,8 +68,6 @@
     justify-content: center;
     overflow: hidden;
     width: 100%;
-    margin-top: 4rem;
-    border-radius: 0.5rem;
   }
 
   .hero--full-height {

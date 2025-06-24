@@ -47,13 +47,28 @@
     "placeholder": "Search articles, pages, or products",
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "results_for_html": "{{ count }} results found for {{ terms }}",
+    "no_results": "No results found for",
+    "results_for": "Results for"
   },
   "general": {
     "fonts": "Fonts",
     "heading_font": "Heading font",
+    "heading_font_info": "Used for titles and headings. Default: Poppins",
     "body_font": "Body font",
-    "accent_font": "Accent font"
+    "body_font_info": "Used for main text content. Default: Roboto",
+    "accent_font": "Accent font",
+    "accent_font_info": "Used for buttons and highlights. Default: Poppins SemiBold",
+    "404": {
+      "title": "Page not found",
+      "subtext": "The page you requested does not exist.",
+      "link": "Continue shopping"
+    },
+    "footer": "Footer",
+    "header": "Header",
+    "newsletter": "Newsletter",
+    "social": "Social",
+    "payment": "Payment"
   },
   "sections": {
     "hero": {
@@ -126,6 +141,79 @@
           }
         }
       }
+    },
+    "footer": {
+      "settings": {
+        "newsletter": {
+          "header": "Newsletter"
+        },
+        "show_newsletter": {
+          "label": "Show newsletter signup"
+        },
+        "menus": {
+          "header": "Footer Menus"
+        },
+        "company_menu": {
+          "label": "Company menu"
+        },
+        "customer_service_menu": {
+          "label": "Customer service menu"
+        },
+        "legal_menu": {
+          "label": "Legal menu"
+        },
+        "social": {
+          "header": "Social Media"
+        },
+        "show_social_icons": {
+          "label": "Show social media icons"
+        },
+        "payment": {
+          "header": "Payment Methods"
+        },
+        "show_payment_icons": {
+          "label": "Show payment method icons"
+        }
+      }
+    },
+    "banner": {
+      "name": "Announcement Banner",
+      "settings": {
+        "show_banner": {
+          "label": "Show banner"
+        },
+        "text": {
+          "label": "Banner text"
+        },
+        "show_icon": {
+          "label": "Show sparkle icon"
+        },
+        "link": {
+          "label": "Link URL"
+        },
+        "link_text": {
+          "label": "Link text"
+        },
+        "show_close_button": {
+          "label": "Show close button"
+        },
+        "style": {
+          "header": "Style",
+          "label": "Banner style",
+          "options": {
+            "gradient": "Gradient",
+            "solid": "Solid color",
+            "glass": "Glass effect"
+          }
+        }
+      },
+      "presets": {
+        "name": "Announcement Banner"
+      }
     }
+  },
+  "labels": {
+    "menu": "Menu",
+    "show_payment_icons": "Show payment icons"
   }
 }

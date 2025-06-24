@@ -1,160 +1,388 @@
-<h1 align="center" style="position: relative;">
-  <br>
-    <img src="./assets/shoppy-x-ray.svg" alt="logo" width="200">
-  <br>
-  Shopify Skeleton Theme
-</h1>
+# 🚀 Sahq - Shopify Theme
 
-A minimal, carefully structured Shopify theme designed to help you quickly get started. Designed with modularity, maintainability, and Shopify's best practices in mind.
+Un thème Shopify moderne et flexible, conçu pour offrir une expérience e-commerce exceptionnelle avec une personnalisation poussée.
 
-<p align="center">
-  <a href="./LICENSE.md"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
-  <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Shopify/skeleton-theme/actions/workflows/ci.yml/badge.svg"></a>
-</p>
+![Sahq Theme](https://img.shields.io/badge/Shopify-Theme-blue?style=for-the-badge&logo=shopify)
+![Version](https://img.shields.io/badge/Version-1.0.0-green?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
-## Getting started
+## 📋 Table des matières
 
-### Prerequisites
+- [🎯 Vue d'ensemble](#-vue-densemble)
+- [✨ Fonctionnalités](#-fonctionnalités)
+- [🏗️ Architecture](#️-architecture)
+- [🚀 Installation](#-installation)
+- [⚙️ Configuration](#️-configuration)
+- [🎨 Personnalisation](#-personnalisation)
+- [📱 Sections disponibles](#-sections-disponibles)
+- [🔧 Développement](#-développement)
+- [📈 Roadmap](#-roadmap)
+- [🤝 Contribution](#-contribution)
+- [📄 Licence](#-licence)
 
-Before starting, ensure you have the latest Shopify CLI installed:
+## 🎯 Vue d'ensemble
 
-- [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) – helps you download, upload, preview themes, and streamline your workflows
+Sahq est un thème Shopify moderne basé sur le Skeleton Theme de Shopify, enrichi avec des fonctionnalités avancées et un design contemporain. Il combine la robustesse de l'architecture Shopify avec la flexibilité de Tailwind CSS pour créer une expérience e-commerce exceptionnelle.
 
-If you use VS Code:
+### 🎨 Design Philosophy
 
-- [Shopify Liquid VS Code Extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode) – provides syntax highlighting, linting, inline documentation, and auto-completion specifically designed for Liquid templates
+- **Mobile-first** : Optimisé pour tous les appareils
+- **Performance** : CSS critique et optimisations avancées
+- **Accessibilité** : Conforme aux standards WCAG
+- **Flexibilité** : Personnalisation poussée via l'éditeur de thème
+- **Typographie moderne** : Poppins pour les titres, Roboto pour le contenu
 
-### Clone
+## ✨ Fonctionnalités
 
-Clone this repository using Git or Shopify CLI:
+### 🎯 Fonctionnalités Core
 
-```bash
-git clone git@github.com:Shopify/skeleton-theme.git
-# or
-shopify theme init
+- ✅ **Sections modulaires** : Ajout/suppression/réorganisation facile
+- ✅ **Design responsive** : Adaptation parfaite sur tous les écrans
+- ✅ **Optimisation SEO** : Meta tags, structured data, performance
+- ✅ **Accessibilité** : Navigation clavier, screen readers, contrastes
+- ✅ **Internationalisation** : Support multi-langues complet
+
+### 🛒 Fonctionnalités E-commerce
+
+- ✅ **Gestion des produits** : Galeries, variantes, recommandations
+- ✅ **Panier intelligent** : Drawer, calculs, codes promo
+- ✅ **Recherche avancée** : Filtres, tri, suggestions
+- ✅ **Comptes clients** : Inscription, connexion, historique
+- ✅ **Checkout optimisé** : Processus fluide et sécurisé
+
+### 🎨 Fonctionnalités Design
+
+- ✅ **Système de couleurs** : Palette personnalisable
+- ✅ **Typographie flexible** : Poppins (titres) + Roboto (contenu)
+- ✅ **Animations fluides** : Micro-interactions et transitions
+- ✅ **Glassmorphism** : Effets modernes et élégants
+- ✅ **Dark mode ready** : Support pour thème sombre
+
+## 🏗️ Architecture
+
+```
+Sahq/
+├── 📁 assets/                 # Fichiers statiques (CSS, JS, images)
+│   ├── critical.css          # CSS critique pour performance
+│   ├── custom-fonts.css      # Fonts Poppins et Roboto
+│   ├── Poppins-*.ttf         # Famille Poppins complète
+│   ├── Roboto-*.ttf          # Famille Roboto complète
+│   └── tailwind.output.css   # CSS Tailwind compilé
+├── 📁 blocks/                # Blocs réutilisables
+├── 📁 config/                # Configuration du thème
+│   ├── settings_schema.json  # Paramètres de personnalisation
+│   └── settings_data.json    # Valeurs par défaut
+├── 📁 layout/                # Layouts principaux
+│   └── theme.liquid          # Layout principal
+├── 📁 locales/               # Fichiers de traduction
+├── 📁 sections/              # Sections de contenu
+│   ├── hero.liquid           # Section Hero moderne
+│   ├── header.liquid         # Navigation principale
+│   ├── footer.liquid         # Pied de page
+│   └── ...                   # Autres sections
+├── 📁 snippets/              # Composants réutilisables
+├── 📁 templates/             # Templates de pages
+└── 📄 package.json           # Dépendances et scripts
 ```
 
-### Preview
+## 🚀 Installation
 
-Preview this theme using Shopify CLI:
+### Prérequis
+
+- [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) (dernière version)
+- [Node.js](https://nodejs.org/) (v16 ou supérieur)
+- Compte Shopify (development store recommandé)
+
+### Installation rapide
+
+1. **Cloner le repository**
 
 ```bash
-shopify theme dev
+   git clone https://github.com/Mandroso22/Sahq_SHOPIFY.git
+   cd Sahq_SHOPIFY
 ```
 
-## Theme architecture
+2. **Installer les dépendances**
+
+   ```bash
+   npm install
+   ```
+
+3. **Lancer le développement**
 
 ```bash
-.
-├── assets          # Stores static assets (CSS, JS, images, fonts, etc.)
-├── blocks          # Reusable, nestable, customizable UI components
-├── config          # Global theme settings and customization options
-├── layout          # Top-level wrappers for pages (layout templates)
-├── locales         # Translation files for theme internationalization
-├── sections        # Modular full-width page components
-├── snippets        # Reusable Liquid code or HTML fragments
-└── templates       # Templates combining sections to define page structures
+   npm run dev
 ```
 
-To learn more, refer to the [theme architecture documentation](https://shopify.dev/docs/storefronts/themes/architecture).
+4. **Compiler Tailwind CSS** (dans un autre terminal)
+   ```bash
+   npm run dev:tailwind
+   ```
 
-### Templates
+### Déploiement
 
-[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme.
+1. **Build pour production**
 
-The Skeleton Theme scaffolds [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) to make it easy for merchants to customize their store.
+```bash
+   shopify theme push
+```
 
-None of the template types are required, and not all of them are included in the Skeleton Theme. Refer to the [template types reference](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) for a full list.
+2. **Ou via l'interface Shopify**
+   - Admin → Online Store → Themes
+   - Upload theme files
 
-### Sections
+## ⚙️ Configuration
 
-[Sections](https://shopify.dev/docs/storefronts/themes/architecture/sections) are Liquid files that allow you to create reusable modules of content that can be customized by merchants. They can also include blocks which allow merchants to add, remove, and reorder content within a section.
+### Paramètres du thème
 
-Sections are made customizable by including a `{% schema %}` in the body. For more information, refer to the [section schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema).
+Le thème offre une personnalisation complète via l'éditeur Shopify :
 
-### Blocks
+#### 🎨 Typographie
 
-[Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks) let developers create flexible layouts by breaking down sections into smaller, reusable pieces of Liquid. Each block has its own set of settings, and can be added, removed, and reordered within a section.
+- **Heading Font** : Poppins (par défaut) - Police pour les titres
+- **Body Font** : Roboto (par défaut) - Police pour le texte principal
+- **Accent Font** : Poppins SemiBold (par défaut) - Police pour les éléments d'accent
 
-Blocks are made customizable by including a `{% schema %}` in the body. For more information, refer to the [block schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/schema).
+#### 🎨 Couleurs
 
-## Schemas
+- **Background Color** : Couleur de fond principale
+- **Foreground Color** : Couleur du texte
+- **Input Corner Radius** : Rayon des coins des formulaires
 
-When developing components defined by schema settings, we recommend these guidelines to simplify your code:
+#### 📐 Layout
 
-- **Single property settings**: For settings that correspond to a single CSS property, use CSS variables:
+- **Page Width** : Largeur maximale du contenu (90rem/110rem)
+- **Page Margin** : Marges latérales (10-100px)
 
-  ```liquid
-  <div class="collection" style="--gap: {{ block.settings.gap }}px">
-    ...
-  </div>
+### Configuration avancée
 
-  {% stylesheet %}
-    .collection {
-      gap: var(--gap);
-    }
-  {% endstylesheet %}
+#### Variables CSS personnalisées
 
-  {% schema %}
-  {
-    "settings": [{
-      "type": "range",
-      "label": "gap",
-      "id": "gap",
-      "min": 0,
-      "max": 100,
-      "unit": "px",
-      "default": 0,
-    }]
-  }
-  {% endschema %}
-  ```
+```css
+:root {
+  --font-heading--family: "Poppins", sans-serif;
+  --font-body--family: "Roboto", sans-serif;
+  --font-accent--family: "Poppins", sans-serif;
+  --color-accent: #007bff;
+  --color-accent-dark: #0056b3;
+}
+```
 
-- **Multiple property settings**: For settings that control multiple CSS properties, use CSS classes:
+#### Fonts incluses
 
-  ```liquid
-  <div class="collection {{ block.settings.layout }}">
-    ...
-  </div>
+Le thème inclut toutes les variantes de Poppins et Roboto :
 
-  {% stylesheet %}
-    .collection--full-width {
-      /* multiple styles */
-    }
-    .collection--narrow {
-      /* multiple styles */
-    }
-  {% endstylesheet %}
+- **Poppins** : Thin, ExtraLight, Light, Regular, Medium, SemiBold, Bold, ExtraBold, Black
+- **Roboto** : Thin, Regular, Medium, SemiBold, Bold, ExtraBold
+- Toutes les variantes italiques sont également disponibles
 
-  {% schema %}
-  {
-    "settings": [{
-      "type": "select",
-      "id": "layout",
-      "label": "layout",
-      "values": [
-        { "value": "collection--full-width", "label": "t:options.full" },
-        { "value": "collection--narrow", "label": "t:options.narrow" }
-      ]
-    }]
-  }
-  {% endschema %}
-  ```
+## 🎨 Personnalisation
 
-## CSS & JavaScript
+### Ajouter une nouvelle section
 
-For CSS and JavaScript, we recommend using the [`{% stylesheet %}`](https://shopify.dev/docs/api/liquid/tags#stylesheet) and [`{% javascript %}`](https://shopify.dev/docs/api/liquid/tags/javascript) tags. They can be included multiple times, but the code will only appear once.
+1. **Créer le fichier section**
 
-### `critical.css`
+```liquid
+<!-- sections/my-section.liquid -->
+<section class="my-section">
+ <h2>{{ section.settings.title }}</h2>
+ <p>{{ section.settings.description }}</p>
+</section>
 
-The Skeleton Theme explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
+{% schema %}
+{
+ "name": "My Section",
+ "settings": [
+   {
+     "type": "text",
+     "id": "title",
+     "label": "Title",
+     "default": "My Section"
+   }
+ ]
+}
+{% endschema %}
+```
 
-## Contributing
+2. **Ajouter au template**
+   ```json
+   // templates/index.json
+   {
+     "sections": {
+       "my_section": {
+         "type": "my-section",
+         "settings": {
+           "title": "Welcome"
+         }
+       }
+     },
+     "order": ["my_section"]
+   }
+   ```
 
-We're excited for your contributions to the Skeleton Theme! This repository aims to remain as lean, lightweight, and fundamental as possible, and we kindly ask your contributions to align with this intention.
+### Personnaliser les couleurs
 
-Visit our [CONTRIBUTING.md](./CONTRIBUTING.md) for a detailed overview of our process, guidelines, and recommendations.
+1. **Via l'éditeur Shopify**
 
-## License
+   - Theme Settings → Colors
+   - Modifier les couleurs principales
 
-Skeleton Theme is open-sourced under the [MIT](./LICENSE.md) License.
+2. **Via CSS personnalisé**
+   ```css
+   /* assets/custom-styles.css */
+   .my-custom-element {
+     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   }
+   ```
+
+## 📱 Sections disponibles
+
+### 🎯 Sections Core
+
+| Section        | Description               | Fonctionnalités                                  |
+| -------------- | ------------------------- | ------------------------------------------------ |
+| **Hero**       | Section d'accueil moderne | Image/vidéo background, overlay, CTA, responsive |
+| **Header**     | Navigation principale     | Menu, logo, panier, compte client                |
+| **Footer**     | Pied de page              | Liens, newsletter, réseaux sociaux               |
+| **Product**    | Page produit              | Galerie, variantes, recommandations              |
+| **Collection** | Page collection           | Grille, filtres, tri, pagination                 |
+| **Cart**       | Panier                    | Items, quantités, codes promo                    |
+| **Search**     | Recherche                 | Résultats, filtres, suggestions                  |
+
+### 🎨 Sections Marketing
+
+| Section          | Description                       | Statut              |
+| ---------------- | --------------------------------- | ------------------- |
+| **Features**     | Mise en avant des fonctionnalités | 🚧 En développement |
+| **Testimonials** | Avis clients                      | 🚧 En développement |
+| **Newsletter**   | Inscription newsletter            | 🚧 En développement |
+| **Social Feed**  | Réseaux sociaux                   | 🚧 En développement |
+| **FAQ**          | Questions fréquentes              | 🚧 En développement |
+
+## 🔧 Développement
+
+### Scripts disponibles
+
+```bash
+# Développement
+npm run dev                    # Lance le serveur de développement
+npm run dev:tailwind          # Compile Tailwind en mode watch
+
+# Production
+shopify theme push            # Déploie le thème
+shopify theme pull            # Récupère les modifications
+```
+
+### Structure de développement
+
+#### Conventions CSS
+
+- **BEM** : Block\_\_Element--Modifier
+- **Variables CSS** : `--component-property`
+- **Responsive** : Mobile-first avec `min-width`
+- **Performance** : CSS critique séparé
+
+#### Conventions Liquid
+
+- **Snippets** : Réutilisables et paramétrables
+- **Sections** : Modulaires avec schema
+- **Traductions** : Clés organisées par contexte
+- **Performance** : Lazy loading des images
+
+### Outils recommandés
+
+- **VS Code** avec extension Shopify Liquid
+- **Shopify CLI** pour le développement
+- **Theme Check** pour la validation
+- **Lighthouse** pour les performances
+
+## 📈 Roadmap
+
+### 🎯 Version 1.1 (Q1 2024)
+
+- [ ] Section Features avec icônes
+- [ ] Section Testimonials avec carousel
+- [ ] Section Newsletter signup
+- [ ] Optimisation des performances
+- [ ] Support dark mode
+
+### 🎯 Version 1.2 (Q2 2024)
+
+- [ ] Section FAQ accordion
+- [ ] Section Social media feed
+- [ ] Quick view des produits
+- [ ] Wishlist functionality
+- [ ] Advanced product filtering
+
+### 🎯 Version 2.0 (Q3 2024)
+
+- [ ] Mega menu navigation
+- [ ] Advanced cart drawer
+- [ ] Product comparison
+- [ ] Customer reviews system
+- [ ] Advanced analytics integration
+
+## 🤝 Contribution
+
+Nous accueillons les contributions ! Voici comment participer :
+
+### 🐛 Signaler un bug
+
+1. Vérifier les [issues existantes](https://github.com/Mandroso22/Sahq_SHOPIFY/issues)
+2. Créer une nouvelle issue avec le template bug report
+3. Inclure les étapes de reproduction et captures d'écran
+
+### 💡 Proposer une fonctionnalité
+
+1. Créer une issue avec le template feature request
+2. Décrire la fonctionnalité et son utilité
+3. Discuter avec l'équipe
+
+### 🔧 Contribuer au code
+
+1. Fork le repository
+2. Créer une branche feature : `git checkout -b feature/amazing-feature`
+3. Commit les changements : `git commit -m 'Add amazing feature'`
+4. Push vers la branche : `git push origin feature/amazing-feature`
+5. Ouvrir une Pull Request
+
+### 📋 Guidelines
+
+- Suivre les conventions de code existantes
+- Tester sur différents appareils
+- Documenter les nouvelles fonctionnalités
+- Respecter les standards d'accessibilité
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE.md](LICENSE.md) pour plus de détails.
+
+## 🆘 Support
+
+### 📚 Documentation
+
+- [Shopify Theme Development](https://shopify.dev/docs/storefronts/themes)
+- [Liquid Template Language](https://shopify.dev/docs/api/liquid)
+- [Theme Architecture](https://shopify.dev/docs/storefronts/themes/architecture)
+
+### 💬 Communauté
+
+- [Shopify Community](https://community.shopify.com/)
+- [GitHub Discussions](https://github.com/Mandroso22/Sahq_SHOPIFY/discussions)
+
+### 📧 Contact
+
+- **Email** : support@sahq-theme.com
+- **GitHub** : [@Mandroso22](https://github.com/Mandroso22)
+
+---
+
+<div align="center">
+
+**Sahq Theme** - Construit avec ❤️ pour la communauté Shopify
+
+[![GitHub stars](https://img.shields.io/github/stars/Mandroso22/Sahq_SHOPIFY?style=social)](https://github.com/Mandroso22/Sahq_SHOPIFY/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Mandroso22/Sahq_SHOPIFY?style=social)](https://github.com/Mandroso22/Sahq_SHOPIFY/network)
+[![GitHub issues](https://img.shields.io/github/issues/Mandroso22/Sahq_SHOPIFY)](https://github.com/Mandroso22/Sahq_SHOPIFY/issues)
+
+</div>
