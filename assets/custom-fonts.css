@@ -1,0 +1,22 @@
+/* Custom Fonts - Add your custom fonts here */
+
+/* Example: Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap");
+
+/* Example: Local font files */
+@font-face {
+  font-family: "CustomFont";
+  src: url('{{ "custom-font.woff2" | asset_url }}') format("woff2"),
+    url('{{ "custom-font.woff" | asset_url }}') format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Override theme font variables if needed */
+:root {
+  --font-heading--family: "Playfair Display", serif;
+  --font-body--family: "Inter", sans-serif;
+  --font-accent--family: "CustomFont", sans-serif;
+}

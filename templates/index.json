@@ -1,20 +1,25 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "subtitle": "Welcome to our store",
+        "heading": "Discover Amazing Products",
+        "description": "<p>Shop our curated collection of premium products designed to enhance your lifestyle.</p>",
+        "button_text": "Shop Now",
+        "button_link": "/collections/all",
+        "secondary_button_text": "Learn More",
+        "secondary_button_link": "/pages/about",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30,
+        "height": "large",
+        "text_alignment": "center"
+      }
+    },
+    "hello-world": {
       "type": "hello-world",
       "settings": {}
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["hello-world", "hero"]
 }

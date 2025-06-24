@@ -48,5 +48,84 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "general": {
+    "fonts": "Fonts",
+    "heading_font": "Heading font",
+    "body_font": "Body font",
+    "accent_font": "Accent font"
+  },
+  "sections": {
+    "hero": {
+      "name": "Hero",
+      "presets": {
+        "name": "Hero"
+      },
+      "settings": {
+        "content": {
+          "header": "Content"
+        },
+        "subtitle": {
+          "label": "Subtitle"
+        },
+        "heading": {
+          "label": "Heading"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "buttons": {
+          "header": "Buttons"
+        },
+        "button_text": {
+          "label": "Primary button text"
+        },
+        "button_link": {
+          "label": "Primary button link"
+        },
+        "secondary_button_text": {
+          "label": "Secondary button text"
+        },
+        "secondary_button_link": {
+          "label": "Secondary button link"
+        },
+        "background": {
+          "header": "Background"
+        },
+        "background_image": {
+          "label": "Background image"
+        },
+        "background_video": {
+          "label": "Background video URL",
+          "info": "MP4 format recommended. Will override background image if both are set."
+        },
+        "overlay_color": {
+          "label": "Overlay color"
+        },
+        "overlay_opacity": {
+          "label": "Overlay opacity"
+        },
+        "layout": {
+          "header": "Layout"
+        },
+        "height": {
+          "label": "Height",
+          "options": {
+            "full_height": "Full height",
+            "large": "Large",
+            "medium": "Medium",
+            "small": "Small"
+          }
+        },
+        "text_alignment": {
+          "label": "Text alignment",
+          "options": {
+            "center": "Center",
+            "left": "Left",
+            "right": "Right"
+          }
+        }
+      }
+    }
   }
 }

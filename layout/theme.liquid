@@ -7,6 +7,9 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {% # Custom fonts (if needed) %}
+    {{ 'custom-fonts.css' | asset_url | stylesheet_tag }}
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
@@ -16,9 +19,7 @@
   </head>
 
   <body>
-  <h1 class="text-3xl uppercase font-bold underline">
-    Hello world!
-</h1>
+
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
