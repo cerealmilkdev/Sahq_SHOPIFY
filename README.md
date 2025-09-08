@@ -362,7 +362,7 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE.md](LICENSE.md) pour pl
 ### 📧 Contact
 
 - **Email** : adminms@makesocial.me
-- **GitHub** : [@Mandroso22](https://github.com/Mandroso22)
+- **GitHub** : [@cerealmilkdev](https://github.com/cerealmilkdev)
 
 ---
 
@@ -375,3 +375,4 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE.md](LICENSE.md) pour pl
 [![GitHub issues](https://img.shields.io/github/issues/Mandroso22/Sahq_SHOPIFY)](https://github.com/Mandroso22/Sahq_SHOPIFY/issues)
 
 </div>
+
