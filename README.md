@@ -95,7 +95,7 @@ Sahq/
 1. **Cloner le repository**
 
    ```bash
-   git clone https://github.com/Mandroso22/Sahq_SHOPIFY.git
+   git clone https://github.com/cerealmilkdev/Sahq_SHOPIFY.git
    cd Sahq_SHOPIFY
    ```
 
@@ -113,7 +113,7 @@ Sahq/
 
 4. **Compiler Tailwind CSS** (dans un autre terminal)
    ```bash
-   npm run dev:tailwind
+   npm run tailwind
    ```
 
 ### Déploiement
@@ -375,4 +375,5 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE.md](LICENSE.md) pour pl
 [![GitHub issues](https://img.shields.io/github/issues/Mandroso22/Sahq_SHOPIFY)](https://github.com/Mandroso22/Sahq_SHOPIFY/issues)
 
 </div>
+
 
