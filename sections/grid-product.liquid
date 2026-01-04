@@ -1,0 +1,256 @@
+{% comment %}
+Grid 2 colonnes avec images empilées verticalement
+{% endcomment %}
+
+{% if section.settings.show_section %}
+  <section class="image-grid" data-section-id="{{ section.id }}">
+    <div class="image-grid__container">
+      {% if section.settings.title != blank %}
+        <h2 class="image-grid__title">{{ section.settings.title }}</h2>
+      {% endif %}
+
+      <div class="image-grid__columns">
+        <div class="image-grid__column">
+          {% for block in section.blocks %}
+            {% assign remainder = forloop.index0 | modulo: 2 %}
+            {% if remainder == 0 %}
+              {% case block.type %}
+                {% when 'image' %}
+                  <div class="image-grid__item" {{ block.shopify_attributes }}>
+                    {% if block.settings.link != blank %}
+                      <a href="{{ block.settings.link }}" class="image-grid__link">
+                    {% endif %}
+                    
+                    <div class="image-grid__image-wrapper">
+                      <img 
+                        src="{{ block.settings.image | image_url: width: 500 }}"
+                        alt="{{ block.settings.image.alt | default: 'Gallery image' }}"
+                        class="image-grid__image"
+                        loading="lazy"
+                      >
+                    </div>
+                    
+                    {% if block.settings.link != blank %}
+                      </a>
+                    {% endif %}
+                  </div>
+              {% endcase %}
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="image-grid__column">
+          {% for block in section.blocks %}
+            {% assign remainder = forloop.index0 | modulo: 2 %}
+            {% if remainder == 1 %}
+              {% case block.type %}
+                {% when 'image' %}
+                  <div class="image-grid__item" {{ block.shopify_attributes }}>
+                    {% if block.settings.link != blank %}
+                      <a href="{{ block.settings.link }}" class="image-grid__link">
+                    {% endif %}
+                    
+                    <div class="image-grid__image-wrapper">
+                      <img 
+                        src="{{ block.settings.image | image_url: width: 500 }}"
+                        alt="{{ block.settings.image.alt | default: 'Gallery image' }}"
+                        class="image-grid__image"
+                        loading="lazy"
+                      >
+                    </div>
+                    
+                    {% if block.settings.link != blank %}
+                      </a>
+                    {% endif %}
+                  </div>
+              {% endcase %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% stylesheet %}
+  .image-grid {
+    padding: 4rem 0;
+  }
+
+  .image-grid__container {
+    max-width: var(--content-width, 1200px);
+    margin: 0 auto;
+    padding: 0 var(--page-margin, 1rem);
+  }
+
+  .image-grid__title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .image-grid__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .image-grid__column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .image-grid__item {
+    width: 100%;
+  }
+
+  .image-grid__link {
+    display: block;
+    width: 100%;
+  }
+
+  .image-grid__image-wrapper {
+    width: 100%;
+    aspect-ratio: {{ section.settings.image_ratio | default: '1/1' }};
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .image-grid__image {
+    width: 100%;
+    height: 100%;
+    object-fit: {{ section.settings.image_fit | default: 'cover' }};
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+
+  .image-grid__item:hover .image-grid__image {
+    transform: scale(1.01);
+  }
+
+  @media (max-width: 768px) {
+    .image-grid__columns {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .image-grid__column {
+      gap: 1rem;
+    }
+    
+    .image-grid__title {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image Grid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Grid title"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "1/1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "4/3",
+          "label": "Landscape (4:3)"
+        },
+        {
+          "value": "3/4",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "16/9",
+          "label": "Wide (16:9)"
+        }
+      ],
+      "default": "1/1"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover (crop)"
+        },
+        {
+          "value": "contain",
+          "label": "Contain (fit)"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Grid",
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50
+}
+{% endschema %}

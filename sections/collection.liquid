@@ -1,47 +1,469 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Page de catalogue moderne pour Shopify - Tendances 2025
+  Vue grille et vue liste avec design minimaliste
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
-
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
-        </div>
+<div class="catalog-page">
+  <div class="catalog-container">
+    <!-- En-tête avec titre et contrôles de vue -->
+    <div class="catalog-header">
+      <h1 class="catalog-title">{{ 'collections.title' | t }}</h1>
+      
+      <div class="view-controls">
+        <button 
+          class="view-toggle active" 
+          data-view="grid"
+          aria-label="Vue grille"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </button>
+        <button 
+          class="view-toggle" 
+          data-view="list"
+          aria-label="Vue liste"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </button>
       </div>
-    {% endfor %}
+    </div>
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
+    <!-- Grille de collections -->
+    <div class="collections-grid" data-view="grid">
+      {% for collection in collections %}
+        <article class="collection-item">
+          <a href="{{ collection.url }}" class="collection-link">
+            <div class="collection-image">
+              {% if collection.featured_image %}
+                {% render 'image',
+                  class: 'collection-img',
+                  image: collection.featured_image,
+                  width: 400,
+                  height: 400,
+                  crop: 'center'
+                %}
+              {% else %}
+                <div class="collection-placeholder">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21,15 16,10 5,21"/>
+                  </svg>
+                </div>
+              {% endif %}
+              
+              <div class="collection-overlay">
+                <span class="collection-cta">Découvrir</span>
+              </div>
+            </div>
+
+            <div class="collection-info">
+              <h2 class="collection-name">{{ collection.title }}</h2>
+              {% if collection.description %}
+                <p class="collection-description">{{ collection.description | strip_html | truncatewords: 12 }}</p>
+              {% endif %}
+              <div class="collection-meta">
+                <span class="product-count">{{ collection.products_count }} produit{{ collection.products_count | pluralize: 's' }}</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
 {% stylesheet %}
-  .collection-products {
+  :root {
+    --catalog-bg: #fafafa;
+    --catalog-surface: #ffffff;
+    --catalog-border: #e5e7eb;
+    --catalog-text: #111827;
+    --catalog-text-muted: #6b7280;
+    --catalog-accent: #2563eb;
+    --catalog-radius: 12px;
+    --catalog-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    --catalog-shadow-hover: 0 4px 25px -4px rgba(0, 0, 0, 0.15);
+    --catalog-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .catalog-page {
+    background: var(--catalog-bg);
+    min-height: 100vh;
+    padding: 2rem 0;
+  }
+
+  .catalog-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .catalog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--catalog-border);
+  }
+
+  .catalog-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--catalog-text);
+    margin: 0;
+    letter-spacing: -0.025em;
+  }
+
+  .view-controls {
+    display: flex;
+    gap: 0.5rem;
+    background: var(--catalog-surface);
+    padding: 0.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--catalog-border);
+  }
+
+  .view-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--catalog-text-muted);
+    cursor: pointer;
+    transition: var(--catalog-transition);
+  }
+
+  .view-toggle:hover {
+    color: var(--catalog-text);
+    background: var(--catalog-bg);
+  }
+
+  .view-toggle.active {
+    background: var(--catalog-accent);
+    color: white;
+  }
+
+  /* Vue Grille */
+  .collections-grid[data-view="grid"] {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Vue Liste */
+  .collections-grid[data-view="list"] {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .collections-grid[data-view="list"] .collection-item {
+    background: var(--catalog-surface);
+    border-radius: var(--catalog-radius);
+    border: 1px solid var(--catalog-border);
+    overflow: hidden;
+  }
+
+  .collections-grid[data-view="list"] .collection-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  .collections-grid[data-view="list"] .collection-image {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+  }
+
+  .collections-grid[data-view="list"] .collection-info {
+    flex: 1;
+  }
+
+  /* Styles des items */
+  .collection-item {
+    transition: var(--catalog-transition);
+  }
+
+  .collection-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  .collection-image {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    border-radius: var(--catalog-radius);
+    margin-bottom: 1rem;
+  }
+
+  .collections-grid[data-view="list"] .collection-image {
+    margin-bottom: 0;
+    border-radius: 8px;
+  }
+
+  .collection-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--catalog-transition);
+  }
+
+  .collection-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: var(--catalog-text-muted);
+  }
+
+  .collection-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--catalog-transition);
+    backdrop-filter: blur(2px);
+  }
+
+  .collection-cta {
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transform: translateY(8px);
+    transition: var(--catalog-transition);
+  }
+
+  .collection-item:hover .collection-overlay {
+    opacity: 1;
+  }
+
+  .collection-item:hover .collection-cta {
+    transform: translateY(0);
+  }
+
+  .collection-item:hover .collection-img {
+    transform: scale(1.02);
+  }
+
+  .collection-info {
+    padding: 0 0.5rem 0.5rem;
+  }
+
+  .collections-grid[data-view="list"] .collection-info {
+    padding: 0;
+  }
+
+  .collection-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--catalog-text);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.3;
+  }
+
+  .collection-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--catalog-text-muted);
+    margin: 0 0 1rem 0;
+  }
+
+  .collection-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .product-count {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--catalog-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .catalog-page {
+      padding: 1rem 0;
+    }
+
+    .catalog-header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .catalog-title {
+      font-size: 1.875rem;
+    }
+
+    .collections-grid[data-view="grid"] {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .collections-grid[data-view="list"] .collection-link {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .collections-grid[data-view="list"] .collection-image {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .collections-grid[data-view="grid"] {
+      grid-template-columns: 1fr;
+    }
+
+    .catalog-header {
+      align-items: center;
+    }
+  }
+
+  /* Animation d'entrée */
+  .collection-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  .collection-item:nth-child(1) { animation-delay: 0.1s; }
+  .collection-item:nth-child(2) { animation-delay: 0.2s; }
+  .collection-item:nth-child(3) { animation-delay: 0.3s; }
+  .collection-item:nth-child(4) { animation-delay: 0.4s; }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 {% endstylesheet %}
 
+{% javascript %}
+  class CatalogPage {
+    constructor() {
+      this.viewButtons = document.querySelectorAll('.view-toggle');
+      this.collectionsGrid = document.querySelector('.collections-grid');
+      this.currentView = 'grid';
+      
+      this.init();
+    }
+
+    init() {
+      this.bindEvents();
+      this.loadSavedView();
+    }
+
+    bindEvents() {
+      this.viewButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          const view = e.currentTarget.dataset.view;
+          this.switchView(view);
+        });
+      });
+    }
+
+    switchView(view) {
+      if (this.currentView === view) return;
+
+      // Mise à jour des boutons
+      this.viewButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+      });
+
+      // Mise à jour de la grille
+      this.collectionsGrid.dataset.view = view;
+      this.currentView = view;
+
+      // Sauvegarde de la préférence
+      localStorage.setItem('catalog-view', view);
+
+      // Animation subtile
+      this.collectionsGrid.style.opacity = '0.7';
+      setTimeout(() => {
+        this.collectionsGrid.style.opacity = '1';
+      }, 150);
+    }
+
+    loadSavedView() {
+      const savedView = localStorage.getItem('catalog-view');
+      if (savedView && savedView !== this.currentView) {
+        this.switchView(savedView);
+      }
+    }
+  }
+
+  // Initialisation
+  document.addEventListener('DOMContentLoaded', () => {
+    new CatalogPage();
+  });
+{% endjavascript %}
+
 {% schema %}
 {
-  "name": "t:general.collection",
-  "settings": []
+  "name": "Catalogue Collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Titre de la page",
+      "default": "Nos Collections"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_toggle",
+      "label": "Afficher les boutons de vue",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Vue par défaut",
+      "options": [
+        { "value": "grid", "label": "Grille" },
+        { "value": "list", "label": "Liste" }
+      ],
+      "default": "grid"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Catalogue Collections"
+    }
+  ]
 }
 {% endschema %}

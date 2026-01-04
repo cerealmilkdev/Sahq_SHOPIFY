@@ -114,6 +114,10 @@
           "label": "Background video URL",
           "info": "MP4 format recommended. Will override background image if both are set."
         },
+        "video_poster": {
+          "label": "Video poster image",
+          "info": "Image shown before video loads. Recommended for better performance."
+        },
         "overlay_color": {
           "label": "Overlay color"
         },
@@ -139,6 +143,37 @@
             "left": "Left",
             "right": "Right"
           }
+        },
+        "text_color_scheme": {
+          "label": "Text color",
+          "options": {
+            "light": "Light",
+            "dark": "Dark",
+            "accent": "Accent",
+            "custom": "Custom"
+          }
+        },
+        "custom_text_color": {
+          "label": "Custom text color",
+          "info": "Only applies when 'Custom' is selected above"
+        },
+        "animation": {
+          "header": "Animation",
+          "label": "Content animation",
+          "options": {
+            "none": "None",
+            "fade": "Fade in",
+            "slide": "Slide up"
+          }
+        },
+        "spacing": {
+          "header": "Spacing"
+        },
+        "padding_top": {
+          "label": "Padding top"
+        },
+        "padding_bottom": {
+          "label": "Padding bottom"
         }
       }
     },
@@ -209,6 +244,73 @@
       },
       "presets": {
         "name": "Announcement Banner"
+      }
+    },
+    "testimonials": {
+      "name": "Testimonials",
+      "empty": "No testimonials added yet. Add testimonial blocks to display customer reviews.",
+      "presets": {
+        "name": "Testimonials"
+      },
+      "settings": {
+        "content": {
+          "header": "Content"
+        },
+        "heading": {
+          "label": "Heading"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "layout": {
+          "header": "Layout",
+          "label": "Columns",
+          "options": {
+            "one_column": "1 column",
+            "two_columns": "2 columns",
+            "three_columns": "3 columns",
+            "four_columns": "4 columns"
+          }
+        },
+        "background_color_scheme": {
+          "label": "Background",
+          "options": {
+            "light": "Light",
+            "dark": "Dark",
+            "accent": "Accent"
+          }
+        },
+        "spacing": {
+          "header": "Spacing"
+        },
+        "padding_top": {
+          "label": "Padding top"
+        },
+        "padding_bottom": {
+          "label": "Padding bottom"
+        }
+      },
+      "blocks": {
+        "testimonial": {
+          "name": "Testimonial",
+          "settings": {
+            "image": {
+              "label": "Image"
+            },
+            "quote": {
+              "label": "Quote"
+            },
+            "author": {
+              "label": "Author name"
+            },
+            "role": {
+              "label": "Author role"
+            },
+            "rating": {
+              "label": "Rating"
+            }
+          }
+        }
       }
     }
   },

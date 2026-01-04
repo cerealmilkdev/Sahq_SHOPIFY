@@ -1,13 +1,15 @@
 <header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
-
   <div class="header__menu">
     {% for link in section.settings.menu.links %}
       {{ link.title | link_to: link.url }}
     {% endfor %}
   </div>
+  {% if section.settings.show_title %}
+    <h2 class="header__title">
+      {{ shop.name | link_to: routes.root_url }}
+    </h2>
+  {% endif %}
+
 
   <div class="header__icons">
     {% if shop.customer_accounts_enabled %}
@@ -26,10 +28,18 @@
 
 {% stylesheet %}
   header {
-    height: 5rem;
+    height: 3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 101;
+    width: 100%;
+    background-color: var(--color-background);
   }
   header a {
     position: relative;
@@ -60,6 +70,12 @@
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
     }
   ]
 }

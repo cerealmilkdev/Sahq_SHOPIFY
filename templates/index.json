@@ -7,8 +7,7 @@
         "text": "🎉 Free shipping on orders over $50 ! Limited time offer.",
         "show_icon": true,
         "link": "/collections/all",
-        "link_text": "Shop Now",
-        "style": "gradient"
+        "link_text": "Shop Now"
       }
     },
     "hello-world": {
@@ -34,7 +33,40 @@
         "height": "large",
         "text_alignment": "center"
       }
+    },
+    "grid-product": {
+      "type": "grid-product",
+      "settings": {
+        "show_section": true,
+        "title": "Our Gallery"
+      },
+      "blocks": {
+        "image-1": {
+          "type": "image"
+        },
+        "image-2": {
+          "type": "image"
+        },
+        "image-3": {
+          "type": "image"
+        },
+        "image-4": {
+          "type": "image"
+        }
+      },
+      "block_order": ["image-1", "image-2", "image-3", "image-4"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {}
     }
   },
-  "order": ["banner", "hero", "collections", "hello-world"]
+  "order": [
+    "banner",
+    "hero",
+    "collections",
+    "hello-world",
+    "grid-product",
+    "testimonials"
+  ]
 }

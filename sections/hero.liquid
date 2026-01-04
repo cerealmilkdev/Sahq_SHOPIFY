@@ -1,15 +1,29 @@
 {% comment %}
   Hero Section - Flexible hero section with multiple layout options
-  Supports: image background, video background, overlay text, CTA buttons
+  Supports: image background, video background, overlay text, CTA buttons, animations
 {% endcomment %}
 
-<section class="hero full-width hero--{{ section.settings.layout }} hero--{{ section.settings.text_alignment }} hero--{{ section.settings.height }}" 
-         style="--hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
+<section class="hero full-width hero--{{ section.settings.text_alignment }} hero--{{ section.settings.height }} hero--text-{{ section.settings.text_color_scheme }} hero--animation-{{ section.settings.animation }}"
+         style="--hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }}; --hero-padding-top: {{ section.settings.padding_top }}rem; --hero-padding-bottom: {{ section.settings.padding_bottom }}rem; {% if section.settings.custom_text_color != blank %}--custom-text-color: {{ section.settings.custom_text_color }};{% endif %}"
+         {{ section.shopify_attributes }}>
   
   {% if section.settings.background_video != blank %}
     <div class="hero__video-container">
-      <video class="hero__video" autoplay muted loop playsinline>
+      <video 
+        class="hero__video" 
+        autoplay 
+        muted 
+        loop 
+        playsinline
+        {% if section.settings.video_poster != blank %}
+          poster="{{ section.settings.video_poster | image_url: width: 1920 }}"
+        {% endif %}
+        aria-label="{{ section.settings.heading | default: 'Hero background video' }}"
+      >
         <source src="{{ section.settings.background_video }}" type="video/mp4">
+        {% if section.settings.background_image != blank %}
+          {{ section.settings.background_image | image_url: width: 1920 | image_tag: alt: 'Hero background', class: 'hero__video-fallback' }}
+        {% endif %}
       </video>
     </div>
   {% elsif section.settings.background_image != blank %}
@@ -17,40 +31,39 @@
       {% render 'image', 
         image: section.settings.background_image,
         class: 'hero__image',
-        sizes: '100vw',
-        loading: 'eager'
+        width: 1920
       %}
     </div>
   {% endif %}
 
-  {% if section.settings.overlay_color != blank %}
-    <div class="hero__overlay" style="background-color: {{ section.settings.overlay_color }};"></div>
-  {% endif %}
+  <div class="hero__overlay" style="{% if section.settings.overlay_color != blank %}background-color: {{ section.settings.overlay_color }};{% else %}background-color: rgba(0, 0, 0, 0.6);{% endif %}"></div>
 
   <div class="hero__content">
     <div class="hero__text-container">
       {% if section.settings.subtitle != blank %}
-        <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
+        <p class="hero__subtitle" data-animate>{{ section.settings.subtitle }}</p>
       {% endif %}
       
       {% if section.settings.heading != blank %}
-        <h1 class="hero__heading">{{ section.settings.heading }}</h1>
+        <h1 class="hero__heading" data-animate>{{ section.settings.heading }}</h1>
       {% endif %}
       
       {% if section.settings.description != blank %}
-        <div class="hero__description">{{ section.settings.description }}</div>
+        <div class="hero__description" data-animate>{{ section.settings.description }}</div>
       {% endif %}
       
       {% if section.settings.button_text != blank and section.settings.button_link != blank %}
-        <div class="hero__buttons">
+        <div class="hero__buttons" data-animate>
           <a href="{{ section.settings.button_link }}" 
-             class="hero__button hero__button--primary">
+             class="hero__button hero__button--primary"
+             aria-label="{{ section.settings.button_text }}">
             {{ section.settings.button_text }}
           </a>
           
           {% if section.settings.secondary_button_text != blank and section.settings.secondary_button_link != blank %}
             <a href="{{ section.settings.secondary_button_link }}" 
-               class="hero__button hero__button--secondary">
+               class="hero__button hero__button--secondary"
+               aria-label="{{ section.settings.secondary_button_text }}">
               {{ section.settings.secondary_button_text }}
             </a>
           {% endif %}
@@ -68,6 +81,8 @@
     justify-content: center;
     overflow: hidden;
     width: 100%;
+    padding-top: var(--hero-padding-top);
+    padding-bottom: var(--hero-padding-bottom);
   }
 
   .hero--full-height {
@@ -103,6 +118,10 @@
     object-fit: cover;
   }
 
+  .hero__video-fallback {
+    display: none;
+  }
+
   .hero__overlay {
     position: absolute;
     top: 0;
@@ -111,6 +130,7 @@
     height: 100%;
     z-index: 2;
     opacity: var(--hero-overlay-opacity);
+    transition: opacity 0.3s ease;
   }
 
   .hero__content {
@@ -140,13 +160,55 @@
     text-align: right;
   }
 
+  /* Text color schemes */
+  .hero--text-light .hero__subtitle,
+  .hero--text-light .hero__heading,
+  .hero--text-light .hero__description {
+    color: white;
+  }
+
+  .hero--text-dark .hero__subtitle,
+  .hero--text-dark .hero__heading,
+  .hero--text-dark .hero__description {
+    color: var(--color-foreground);
+  }
+
+  .hero--text-accent .hero__subtitle,
+  .hero--text-accent .hero__heading,
+  .hero--text-accent .hero__description {
+    color: var(--color-accent);
+  }
+
+  .hero--text-custom .hero__subtitle,
+  .hero--text-custom .hero__heading,
+  .hero--text-custom .hero__description {
+    color: var(--custom-text-color);
+  }
+
   .hero__subtitle {
     font-size: 1.125rem;
-    font-weight: 500;
-    color: var(--color-accent);
+    font-weight: 600;
     margin-bottom: 1rem;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  .hero--text-light .hero__subtitle {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .hero--text-dark .hero__subtitle {
+    color: var(--color-accent);
+  }
+
+  .hero--text-accent .hero__subtitle {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .hero--text-custom .hero__subtitle {
+    color: var(--custom-text-color);
+    opacity: 0.9;
   }
 
   .hero__heading {
@@ -154,14 +216,13 @@
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    color: var(--color-foreground);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
 
   .hero__description {
     font-size: 1.25rem;
     line-height: 1.6;
     margin-bottom: 2rem;
-    color: var(--color-foreground);
     opacity: 0.9;
   }
 
@@ -189,30 +250,150 @@
     text-decoration: none;
     transition: all 0.3s ease;
     min-height: 3rem;
+    border: none;
+    cursor: pointer;
   }
 
   .hero__button--primary {
-    background-color: var(--color-accent);
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
     color: white;
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.4);
   }
 
-  .hero__button--primary:hover {
-    background-color: var(--color-accent-dark);
+  .hero__button--primary:hover,
+  .hero__button--primary:focus {
+    background: linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-accent) 100%);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+    outline: none;
+  }
+
+  .hero__button--primary:active {
+    transform: translateY(0);
   }
 
   .hero__button--secondary {
     background-color: transparent;
-    color: var(--color-foreground);
-    border: 2px solid var(--color-foreground);
+    border: 2px solid;
+    transition: all 0.3s ease;
   }
 
-  .hero__button--secondary:hover {
+  /* Secondary button colors based on text scheme */
+  .hero--text-light .hero__button--secondary {
+    border-color: white;
+    color: white;
+  }
+
+  .hero--text-light .hero__button--secondary:hover,
+  .hero--text-light .hero__button--secondary:focus {
+    background-color: white;
+    color: var(--color-foreground);
+    outline: none;
+  }
+
+  .hero--text-dark .hero__button--secondary {
+    border-color: var(--color-foreground);
+    color: var(--color-foreground);
+  }
+
+  .hero--text-dark .hero__button--secondary:hover,
+  .hero--text-dark .hero__button--secondary:focus {
     background-color: var(--color-foreground);
     color: var(--color-background);
+    outline: none;
   }
 
-  @media (max-width: 768px) {
+  .hero--text-accent .hero__button--secondary {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .hero--text-accent .hero__button--secondary:hover,
+  .hero--text-accent .hero__button--secondary:focus {
+    background-color: var(--color-accent);
+    color: white;
+    outline: none;
+  }
+
+  .hero--text-custom .hero__button--secondary {
+    border-color: var(--custom-text-color);
+    color: var(--custom-text-color);
+  }
+
+  .hero--text-custom .hero__button--secondary:hover,
+  .hero--text-custom .hero__button--secondary:focus {
+    background-color: var(--custom-text-color);
+    color: var(--color-background);
+    outline: none;
+  }
+
+  /* Animations */
+  .hero--animation-fade [data-animate] {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+  }
+
+  .hero--animation-fade [data-animate]:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .hero--animation-fade [data-animate]:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .hero--animation-fade [data-animate]:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+
+  .hero--animation-fade [data-animate]:nth-child(4) {
+    animation-delay: 0.7s;
+  }
+
+  .hero--animation-slide [data-animate] {
+    opacity: 0;
+    transform: translateY(2rem);
+    animation: slideInUp 0.8s ease forwards;
+  }
+
+  .hero--animation-slide [data-animate]:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .hero--animation-slide [data-animate]:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .hero--animation-slide [data-animate]:nth-child(3) {
+    animation-delay: 0.5s;
+  }
+
+  .hero--animation-slide [data-animate]:nth-child(4) {
+    animation-delay: 0.7s;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(2rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
     .hero__content {
       padding: 1.5rem var(--page-margin);
     }
@@ -229,6 +410,32 @@
     .hero--center .hero__buttons,
     .hero--right .hero__buttons {
       justify-content: stretch;
+    }
+
+    .hero__heading {
+      font-size: clamp(2rem, 6vw, 3rem);
+    }
+
+    .hero__description {
+      font-size: 1.125rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero--animation-fade [data-animate],
+    .hero--animation-slide [data-animate] {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .hero__button {
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .hero__button:hover,
+    .hero__button:focus {
+      transform: none;
     }
   }
 {% endstylesheet %}
@@ -303,6 +510,12 @@
       "info": "t:sections.hero.settings.background_video.info"
     },
     {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "t:sections.hero.settings.video_poster.label",
+      "info": "t:sections.hero.settings.video_poster.info"
+    },
+    {
       "type": "color",
       "id": "overlay_color",
       "label": "t:sections.hero.settings.overlay_color.label",
@@ -316,7 +529,7 @@
       "step": 5,
       "unit": "%",
       "label": "t:sections.hero.settings.overlay_opacity.label",
-      "default": 30
+      "default": 50
     },
     {
       "type": "header",
@@ -365,6 +578,84 @@
         }
       ],
       "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_color_scheme",
+      "label": "t:sections.hero.settings.text_color_scheme.label",
+      "options": [
+        {
+          "value": "light",
+          "label": "t:sections.hero.settings.text_color_scheme.options.light"
+        },
+        {
+          "value": "dark",
+          "label": "t:sections.hero.settings.text_color_scheme.options.dark"
+        },
+        {
+          "value": "accent",
+          "label": "t:sections.hero.settings.text_color_scheme.options.accent"
+        },
+        {
+          "value": "custom",
+          "label": "t:sections.hero.settings.text_color_scheme.options.custom"
+        }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "color",
+      "id": "custom_text_color",
+      "label": "t:sections.hero.settings.custom_text_color.label",
+      "info": "t:sections.hero.settings.custom_text_color.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero.settings.animation.header"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "label": "t:sections.hero.settings.animation.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.hero.settings.animation.options.none"
+        },
+        {
+          "value": "fade",
+          "label": "t:sections.hero.settings.animation.options.fade"
+        },
+        {
+          "value": "slide",
+          "label": "t:sections.hero.settings.animation.options.slide"
+        }
+      ],
+      "default": "fade"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero.settings.spacing.header"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "t:sections.hero.settings.padding_top.label",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 8,
+      "step": 0.5,
+      "unit": "rem",
+      "label": "t:sections.hero.settings.padding_bottom.label",
+      "default": 0
     }
   ],
   "presets": [
@@ -373,4 +664,4 @@
     }
   ]
 }
-{% endschema %} 
+{% endschema %}
