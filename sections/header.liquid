@@ -1,34 +1,92 @@
-<header>
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<header class="header" data-header>
+  <!-- Mobile Menu Toggle (hamburger) -->
+  <button
+    class="header__menu-toggle"
+    data-mobile-menu-toggle
+    aria-label="{{ 'general.menu' | t }}"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+  >
+    <span class="hamburger">
+      <span class="hamburger__line"></span>
+      <span class="hamburger__line"></span>
+      <span class="hamburger__line"></span>
+    </span>
+  </button>
+
+  <!-- Logo / Shop Name -->
   {% if section.settings.show_title %}
     <h2 class="header__title">
       {{ shop.name | link_to: routes.root_url }}
     </h2>
   {% endif %}
 
+  <!-- Desktop Navigation -->
+  <nav class="header__nav header__nav--desktop" aria-label="Navigation principale">
+    {% for link in section.settings.menu.links %}
+      <a href="{{ link.url }}" class="header__nav-link">{{ link.title }}</a>
+    {% endfor %}
+  </nav>
 
+  <!-- Icons (Search, Account, Cart) -->
   <div class="header__icons">
+    <!-- Search -->
+    <button class="header__icon" data-search-trigger aria-label="{{ 'general.search' | t }}">
+      {{ 'icon-search.svg' | inline_asset_content }}
+    </button>
+
+    <!-- Account -->
     {% if shop.customer_accounts_enabled %}
-      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
+      <a href="{{ routes.account_url }}" class="header__icon" aria-label="{{ 'general.account' | t }}">
+        {{ 'icon-account.svg' | inline_asset_content }}
+      </a>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
+    <!-- Cart -->
+    <a href="{{ routes.cart_url }}" class="header__icon header__cart" data-cart-trigger aria-label="{{ 'general.cart' | t }}">
       {{ 'icon-cart.svg' | inline_asset_content }}
+      <span class="header__cart-count" data-cart-count {% if cart.item_count == 0 %}style="display: none;"{% endif %}>
+        {{ cart.item_count }}
+      </span>
     </a>
   </div>
 </header>
 
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" data-mobile-menu-overlay></div>
+
+<!-- Mobile Menu Panel -->
+<nav class="mobile-menu" id="mobile-menu" data-mobile-menu aria-label="Menu mobile">
+  <div class="mobile-menu__header">
+    <span class="mobile-menu__title">Menu</span>
+    <button class="mobile-menu__close" data-mobile-menu-close aria-label="Fermer le menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <div class="mobile-menu__content">
+    {% for link in section.settings.menu.links %}
+      <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="mobile-menu__footer">
+    {% if shop.customer_accounts_enabled %}
+      <a href="{{ routes.account_url }}" class="mobile-menu__footer-link">
+        {{ 'icon-account.svg' | inline_asset_content }}
+        <span>{{ 'general.account' | t }}</span>
+      </a>
+    {% endif %}
+  </div>
+</nav>
+
 {% stylesheet %}
-  header {
-    height: 3rem;
+  /* Header Base */
+  .header {
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -40,25 +98,276 @@
     z-index: 101;
     width: 100%;
     background-color: var(--color-background);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  header a {
-    position: relative;
+
+  .header a {
     text-decoration: none;
     color: var(--color-foreground);
   }
-  header a sup {
+
+  .header svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* Logo */
+  .header__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    font-family: var(--font-heading--family, 'Poppins', sans-serif);
+  }
+
+  .header__title a {
+    color: var(--color-foreground);
+  }
+
+  /* Desktop Navigation */
+  .header__nav--desktop {
+    display: none;
+    gap: 2rem;
+  }
+
+  .header__nav-link {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    transition: color 0.2s ease;
+    position: relative;
+  }
+
+  .header__nav-link::after {
+    content: '';
     position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: width 0.3s ease;
   }
-  header svg {
-    width: 2rem;
+
+  .header__nav-link:hover::after {
+    width: 100%;
   }
-  header .header__menu,
-  header .header__icons {
+
+  @media (min-width: 768px) {
+    .header__nav--desktop {
+      display: flex;
+    }
+  }
+
+  /* Icons */
+  .header__icons {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .header__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    color: var(--color-foreground);
+  }
+
+  .header__icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .header__cart {
+    position: relative;
+  }
+
+  .header__cart-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.25rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hamburger Button */
+  .header__menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    z-index: 102;
+  }
+
+  @media (min-width: 768px) {
+    .header__menu-toggle {
+      display: none;
+    }
+  }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    gap: 5px;
+  }
+
+  .hamburger__line {
+    width: 20px;
+    height: 2px;
+    background-color: var(--color-foreground);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  /* Hamburger Animation */
+  .header__menu-toggle.is-active .hamburger__line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .header__menu-toggle.is-active .hamburger__line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .header__menu-toggle.is-active .hamburger__line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .mobile-menu-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Mobile Menu Panel */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(320px, 85vw);
+    height: 100vh;
+    background-color: var(--color-background);
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .mobile-menu.is-open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-menu__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    font-family: var(--font-heading--family, 'Poppins', sans-serif);
+  }
+
+  .mobile-menu__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+  }
+
+  .mobile-menu__close:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-menu__content {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+  }
+
+  .mobile-menu__link {
+    display: block;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .mobile-menu__link:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .mobile-menu__footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-menu__footer-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: var(--color-foreground);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .mobile-menu__footer-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Body offset for fixed header */
+  @media (min-width: 0) {
+    body {
+      padding-top: 4rem;
+    }
   }
 {% endstylesheet %}
 

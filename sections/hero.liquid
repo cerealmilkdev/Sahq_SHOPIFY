@@ -28,11 +28,15 @@
     </div>
   {% elsif section.settings.background_image != blank %}
     <div class="hero__image-container">
-      {% render 'image', 
+      {% render 'image',
         image: section.settings.background_image,
         class: 'hero__image',
         width: 1920
       %}
+    </div>
+  {% else %}
+    <div class="hero__image-container">
+      <img src="https://picsum.photos/1920/1080" alt="Hero background" class="hero__image" loading="eager">
     </div>
   {% endif %}
 
@@ -90,7 +94,7 @@
   }
 
   .hero--large {
-    min-height: 80vh;
+    min-height: 90vh;
   }
 
   .hero--medium {

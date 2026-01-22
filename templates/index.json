@@ -21,9 +21,9 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "subtitle": "Welcome to our store",
-        "heading": "Discover Amazing Products",
-        "description": "<p>Shop our curated collection of premium products designed to enhance your lifestyle.</p>",
+        "subtitle": "Discover our first e-commerce theme",
+        "heading": "Sahq",
+        "description": "<p>The commerce new era, just right here.</p>",
         "button_text": "Shop Now",
         "button_link": "/collections/all",
         "secondary_button_text": "Learn More",
@@ -33,6 +33,10 @@
         "height": "large",
         "text_alignment": "center"
       }
+    },
+    "slider": {
+      "type": "slider",
+      "settings": {}
     },
     "grid-product": {
       "type": "grid-product",
@@ -63,10 +67,11 @@
   },
   "order": [
     "banner",
+    "slider",
     "hero",
-    "collections",
     "hello-world",
-    "grid-product",
-    "testimonials"
+    "collections",
+    "testimonials",
+    "grid-product"
   ]
 }

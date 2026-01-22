@@ -1,72 +1,64 @@
 {% comment %}
-Grid 2 colonnes avec images empilées verticalement
+  Modern image gallery with masonry-style layout
+  Consistent with collections.liquid styling
 {% endcomment %}
 
 {% if section.settings.show_section %}
-  <section class="image-grid" data-section-id="{{ section.id }}">
+  <section 
+    class="image-grid"
+    style="
+      --grid-radius: {{ section.settings.border_radius }}px;
+      --grid-gap: {{ section.settings.gap | default: 16 }}px;
+    "
+  >
     <div class="image-grid__container">
       {% if section.settings.title != blank %}
-        <h2 class="image-grid__title">{{ section.settings.title }}</h2>
-      {% endif %}
+          <h2 class="image-grid__title">{{ section.settings.title }}</h2>
+        {% endif %}
 
-      <div class="image-grid__columns">
-        <div class="image-grid__column">
-          {% for block in section.blocks %}
-            {% assign remainder = forloop.index0 | modulo: 2 %}
-            {% if remainder == 0 %}
-              {% case block.type %}
-                {% when 'image' %}
-                  <div class="image-grid__item" {{ block.shopify_attributes }}>
-                    {% if block.settings.link != blank %}
-                      <a href="{{ block.settings.link }}" class="image-grid__link">
-                    {% endif %}
-                    
-                    <div class="image-grid__image-wrapper">
-                      <img 
-                        src="{{ block.settings.image | image_url: width: 500 }}"
-                        alt="{{ block.settings.image.alt | default: 'Gallery image' }}"
-                        class="image-grid__image"
-                        loading="lazy"
-                      >
+      <div class="image-grid__gallery">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'image' %}
+              <figure class="image-grid__item" {{ block.shopify_attributes }}>
+                {% if block.settings.link != blank %}
+                  <a href="{{ block.settings.link }}" class="image-grid__link">
+                {% endif %}
+                
+                <div class="image-grid__media">
+                  {% if block.settings.image %}
+                    {% render 'image',
+                      class: 'image-grid__image',
+                      image: block.settings.image,
+                      width: 800,
+                      height: 800,
+                      crop: 'center'
+                    %}
+                  {% else %}
+                    <div class="image-grid__placeholder">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21,15 16,10 5,21"/>
+                      </svg>
                     </div>
-                    
-                    {% if block.settings.link != blank %}
-                      </a>
-                    {% endif %}
-                  </div>
-              {% endcase %}
-            {% endif %}
-          {% endfor %}
-        </div>
+                  {% endif %}
+                  
+                  <div class="image-grid__overlay"></div>
+                </div>
 
-        <div class="image-grid__column">
-          {% for block in section.blocks %}
-            {% assign remainder = forloop.index0 | modulo: 2 %}
-            {% if remainder == 1 %}
-              {% case block.type %}
-                {% when 'image' %}
-                  <div class="image-grid__item" {{ block.shopify_attributes }}>
-                    {% if block.settings.link != blank %}
-                      <a href="{{ block.settings.link }}" class="image-grid__link">
-                    {% endif %}
-                    
-                    <div class="image-grid__image-wrapper">
-                      <img 
-                        src="{{ block.settings.image | image_url: width: 500 }}"
-                        alt="{{ block.settings.image.alt | default: 'Gallery image' }}"
-                        class="image-grid__image"
-                        loading="lazy"
-                      >
-                    </div>
-                    
-                    {% if block.settings.link != blank %}
-                      </a>
-                    {% endif %}
-                  </div>
-              {% endcase %}
-            {% endif %}
-          {% endfor %}
-        </div>
+                {% if block.settings.caption != blank %}
+                  <figcaption class="image-grid__caption">
+                    {{ block.settings.caption }}
+                  </figcaption>
+                {% endif %}
+                
+                {% if block.settings.link != blank %}
+                  </a>
+                {% endif %}
+              </figure>
+          {% endcase %}
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -74,183 +66,333 @@ Grid 2 colonnes avec images empilées verticalement
 
 {% stylesheet %}
   .image-grid {
-    padding: 4rem 0;
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    padding: clamp(2rem, 4vw, 5rem) 0 clamp(3rem, 6vw, 8rem);
+    background: #f8f8f8;
+    overflow-x: hidden;
   }
 
   .image-grid__container {
-    max-width: var(--content-width, 1200px);
+    max-width: var(--content-width, 1600px);
     margin: 0 auto;
-    padding: 0 var(--page-margin, 1rem);
+    padding: 0 clamp(1rem, 4vw, 3rem);
   }
 
+  /* Titre - même style que collections.liquid */
   .image-grid__title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--color-foreground);
+    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--color-foreground, #1a1a1a);
+    margin: 0 0 clamp(1.5rem, 4vw, 3rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
     text-align: center;
-    margin-bottom: 3rem;
   }
 
-  .image-grid__columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-
-  .image-grid__column {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  /* ========================================
+     GRID - Masonry avec CSS columns
+     ======================================== */
+  .image-grid__gallery {
+    columns: 2;
+    column-gap: var(--grid-gap);
   }
 
   .image-grid__item {
-    width: 100%;
+    break-inside: avoid;
+    margin: 0 0 var(--grid-gap);
+    position: relative;
   }
 
   .image-grid__link {
     display: block;
-    width: 100%;
+    text-decoration: none;
+    color: inherit;
   }
 
-  .image-grid__image-wrapper {
-    width: 100%;
-    aspect-ratio: {{ section.settings.image_ratio | default: '1/1' }};
+  /* Media container - même style que collection-card */
+  .image-grid__media {
+    position: relative;
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: var(--grid-radius);
+    background: linear-gradient(145deg, #eee 0%, #ddd 100%);
   }
 
   .image-grid__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.5s var(--transition-smooth);
+  }
+
+  .image-grid__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4/5;
     width: 100%;
     height: 100%;
-    object-fit: {{ section.settings.image_fit | default: 'cover' }};
-    border-radius: 8px;
-    transition: transform 0.3s ease;
+    color: rgba(0, 0, 0, 0.15);
+    background: linear-gradient(145deg, #f5f5f5 0%, #e8e8e8 100%);
+  }
+
+  /* Overlay - même style que collection-card */
+  .image-grid__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s var(--transition-smooth);
+    pointer-events: none;
+  }
+
+  .image-grid__item:hover .image-grid__overlay {
+    opacity: 1;
   }
 
   .image-grid__item:hover .image-grid__image {
-    transform: scale(1.01);
+    transform: scale(1.04);
   }
 
-  @media (max-width: 768px) {
-    .image-grid__columns {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+  /* Caption */
+  .image-grid__caption {
+    padding: 1rem 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-foreground, #1a1a1a);
+    opacity: 0.6;
+    line-height: 1.4;
+  }
+
+  /* ========================================
+     TV / Ultra-wide (>1920px)
+     ======================================== */
+  @media (min-width: 1920px) {
+    .image-grid__container {
+      max-width: 2000px;
     }
-    
-    .image-grid__column {
-      gap: 1rem;
+
+    .image-grid__title {
+      font-size: 4rem;
+      margin-bottom: 4rem;
     }
-    
+
+    .image-grid__gallery {
+      columns: 3;
+      column-gap: calc(var(--grid-gap) * 1.5);
+    }
+
+    .image-grid__item {
+      margin-bottom: calc(var(--grid-gap) * 1.5);
+    }
+
+    .image-grid__caption {
+      font-size: 1rem;
+      padding: 1.25rem 0.5rem;
+    }
+  }
+
+  /* ========================================
+     DESKTOP (1024px - 1919px)
+     ======================================== */
+  @media (min-width: 1024px) and (max-width: 1919px) {
+    .image-grid__gallery {
+      columns: 2;
+    }
+  }
+
+  /* ========================================
+     LAPTOP (1024px - 1440px)
+     ======================================== */
+  @media (min-width: 1024px) and (max-width: 1440px) {
+    .image-grid__gallery {
+      column-gap: clamp(12px, 1.5vw, 20px);
+    }
+
+    .image-grid__item {
+      margin-bottom: clamp(12px, 1.5vw, 20px);
+    }
+
+    .image-grid__caption {
+      font-size: 0.8rem;
+      padding: 0.75rem 0.25rem;
+    }
+  }
+
+  /* ========================================
+     TABLET (768px - 1023px)
+     ======================================== */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .image-grid__gallery {
+      columns: 2;
+      column-gap: 16px;
+    }
+
+    .image-grid__item {
+      margin-bottom: 16px;
+    }
+
+    .image-grid__caption {
+      font-size: 0.8rem;
+      padding: 0.75rem 0.25rem;
+    }
+  }
+
+  /* ========================================
+     MOBILE (<768px)
+     ======================================== */
+  @media (max-width: 767px) {
+    .image-grid {
+      padding: 1.5rem 0 2.5rem;
+    }
+
+    .image-grid__container {
+      padding: 0 1rem;
+    }
+
     .image-grid__title {
       font-size: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .image-grid__gallery {
+      columns: 1;
+    }
+
+    .image-grid__item {
+      margin-bottom: 1rem;
+    }
+
+    .image-grid__media {
+      border-radius: calc(var(--grid-radius) * 0.75);
+    }
+
+    .image-grid__caption {
+      font-size: 0.8rem;
+      padding: 0.75rem 0;
+    }
+
+    /* Désactiver hover sur touch */
+    .image-grid__item:hover .image-grid__image {
+      transform: none;
+    }
+
+    .image-grid__item:hover .image-grid__overlay {
+      opacity: 0;
+    }
+  }
+
+  /* ========================================
+     SMALL MOBILE (<400px)
+     ======================================== */
+  @media (max-width: 399px) {
+    .image-grid__caption {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Focus states */
+  .image-grid__link:focus-visible {
+    outline: 2px solid var(--color-foreground, #1a1a1a);
+    outline-offset: 3px;
+    border-radius: var(--grid-radius);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .image-grid__image,
+    .image-grid__overlay {
+      transition: none;
+    }
+
+    .image-grid__item:hover .image-grid__image {
+      transform: none;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Image Grid",
+  "name": "t:sections.gallery.name",
+  "tag": "section",
   "settings": [
     {
       "type": "checkbox",
       "id": "show_section",
-      "label": "Show section",
+      "label": "t:sections.gallery.settings.show_section",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.gallery.settings.header_content"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Grid title"
+      "label": "t:sections.gallery.settings.title",
+      "default": "Our Gallery"
     },
     {
-      "type": "select",
-      "id": "image_ratio",
-      "label": "Image ratio",
-      "options": [
-        {
-          "value": "1/1",
-          "label": "Square (1:1)"
-        },
-        {
-          "value": "4/3",
-          "label": "Landscape (4:3)"
-        },
-        {
-          "value": "3/4",
-          "label": "Portrait (3:4)"
-        },
-        {
-          "value": "16/9",
-          "label": "Wide (16:9)"
-        }
-      ],
-      "default": "1/1"
+      "type": "header",
+      "content": "t:sections.gallery.settings.header_layout"
     },
     {
-      "type": "select",
-      "id": "image_fit",
-      "label": "Image fit",
-      "options": [
-        {
-          "value": "cover",
-          "label": "Cover (crop)"
-        },
-        {
-          "value": "contain",
-          "label": "Contain (fit)"
-        }
-      ],
-      "default": "cover"
+      "type": "range",
+      "id": "gap",
+      "label": "t:sections.gallery.settings.gap",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "default": 16,
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "border_radius",
-      "label": "Border radius",
+      "label": "t:sections.gallery.settings.border_radius",
       "min": 0,
-      "max": 20,
-      "step": 1,
-      "default": 8,
+      "max": 32,
+      "step": 4,
+      "default": 16,
       "unit": "px"
     }
   ],
   "blocks": [
     {
       "type": "image",
-      "name": "Image",
+      "name": "t:sections.gallery.blocks.image.name",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "t:sections.gallery.blocks.image.settings.image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "t:sections.gallery.blocks.image.settings.caption"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link (optional)"
+          "label": "t:sections.gallery.blocks.image.settings.link"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Image Grid",
+      "name": "t:sections.gallery.presets.name",
       "blocks": [
-        {
-          "type": "image"
-        },
-        {
-          "type": "image"
-        },
-        {
-          "type": "image"
-        },
-        {
-          "type": "image"
-        }
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
       ]
     }
   ],
-  "max_blocks": 50
+  "max_blocks": 24
 }
 {% endschema %}

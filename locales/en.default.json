@@ -17,7 +17,12 @@
     "checkout": "Checkout",
     "title": "Cart",
     "update": "Update",
-    "remove": "Remove"
+    "remove": "Remove",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "view_cart": "View cart",
+    "continue_shopping": "Continue shopping",
+    "taxes_note": "Taxes and shipping calculated at checkout"
   },
   "customers": {
     "login": {
@@ -28,7 +33,10 @@
     }
   },
   "collections": {
-    "title": "Collections"
+    "title": "Collections",
+    "explore": "Explore",
+    "items": "items",
+    "view": "View collection"
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -52,6 +60,11 @@
     "results_for": "Results for"
   },
   "general": {
+    "menu": "Menu",
+    "search": "Search",
+    "account": "Account",
+    "cart": "Cart",
+    "search_placeholder": "Search...",
     "fonts": "Fonts",
     "heading_font": "Heading font",
     "heading_font_info": "Used for titles and headings. Default: Poppins",
@@ -311,6 +324,31 @@
             }
           }
         }
+      }
+    },
+    "gallery": {
+      "name": "Image Gallery",
+      "settings": {
+        "show_section": "Show section",
+        "header_content": "Content",
+        "subtitle": "Subtitle",
+        "title": "Title",
+        "header_layout": "Layout",
+        "gap": "Spacing",
+        "border_radius": "Corner radius"
+      },
+      "blocks": {
+        "image": {
+          "name": "Image",
+          "settings": {
+            "image": "Image",
+            "caption": "Caption",
+            "link": "Link"
+          }
+        }
+      },
+      "presets": {
+        "name": "Image Gallery"
       }
     }
   },
