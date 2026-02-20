@@ -1,16 +1,32 @@
 {% if section.settings.show_banner %}
-  <div class="announcement-banner full-width" data-banner>
+  <div class="announcement-banner full-width" data-banner
+    style="
+      --banner-bg: {{ section.settings.bg_color }};
+      --banner-text: {{ section.settings.text_color }};
+    "
+  >
     <div class="announcement-banner__container">
       <div class="announcement-banner__content">
         {% if section.settings.text != blank %}
           <div class="announcement-banner__text-wrapper">
-            <span class="announcement-banner__text">{{ section.settings.text }}</span>
             {% if section.settings.show_icon %}
               <span class="announcement-banner__icon">✨</span>
             {% endif %}
+            <span class="announcement-banner__text">{{ section.settings.text }}</span>
           </div>
         {% endif %}
-        
+
+        {% if section.settings.show_timer and section.settings.timer_end_date != blank %}
+          <div class="announcement-banner__timer" data-timer data-end="{{ section.settings.timer_end_date }}">
+            <span class="timer__label">{{ 'sections.banner.timer_label' | t | default: 'Ends in' }}:</span>
+            <span class="timer__segment"><span data-timer-hours>--</span>h</span>
+            <span class="timer__sep">:</span>
+            <span class="timer__segment"><span data-timer-minutes>--</span>m</span>
+            <span class="timer__sep">:</span>
+            <span class="timer__segment"><span data-timer-seconds>--</span>s</span>
+          </div>
+        {% endif %}
+
         {% if section.settings.link != blank and section.settings.link_text != blank %}
           <a href="{{ section.settings.link }}" class="announcement-banner__link">
             {{ section.settings.link_text }}
@@ -20,15 +36,29 @@
           </a>
         {% endif %}
       </div>
-    </div>    
+    </div>
+
+    {% if section.settings.show_close_button %}
+      <button
+        type="button"
+        class="announcement-banner__close"
+        data-banner-close
+        aria-label="{{ 'general.close' | t | default: 'Close' }}"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    {% endif %}
   </div>
 {% endif %}
 
 {% stylesheet %}
   .announcement-banner {
     position: relative;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: var(--banner-bg, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    color: var(--banner-text, white);
     overflow: hidden;
     font-size: 0.875rem;
     font-weight: 500;
@@ -46,7 +76,7 @@
     align-items: center;
     justify-content: center;
     gap: 1.5rem;
-    padding: 0.75rem 0;
+    padding: 0.75rem 3rem 0.75rem 0;
     min-height: 44px;
   }
 
@@ -54,7 +84,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    animation: slideIn 0.6s ease-out;
+    animation: bannerSlideIn 0.6s ease-out;
   }
 
   .announcement-banner__text {
@@ -65,14 +95,14 @@
 
   .announcement-banner__icon {
     font-size: 1rem;
-    animation: pulse 2s infinite;
+    animation: bannerPulse 2s infinite;
   }
 
   .announcement-banner__link {
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    color: white;
+    color: var(--banner-text, white);
     text-decoration: none;
     font-weight: 600;
     padding: 0.5rem 1rem;
@@ -81,6 +111,7 @@
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
   }
 
   .announcement-banner__link:hover {
@@ -97,84 +128,156 @@
     transform: translateX(2px);
   }
 
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-100%);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Timer */
+  .announcement-banner__timer {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    white-space: nowrap;
   }
 
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
+  .timer__label {
+    font-weight: 500;
+    opacity: 0.85;
   }
 
-  /* Responsive */
+  .timer__segment {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  .timer__sep {
+    font-weight: 700;
+  }
+
+  /* Close Button */
+  .announcement-banner__close {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--banner-text, white);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .announcement-banner__close:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  @keyframes bannerSlideIn {
+    from { opacity: 0; transform: translateY(-100%); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bannerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  @keyframes bannerSlideOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-100%); }
+  }
+
   @media (max-width: 768px) {
     .announcement-banner__content {
       flex-direction: column;
-      gap: 0.75rem;
-      padding: 1rem 0;
+      gap: 0.5rem;
+      padding: 0.75rem 2.5rem 0.75rem 0.5rem;
+      text-align: center;
     }
 
     .announcement-banner__text {
       white-space: normal;
-      text-align: center;
+    }
+
+    .announcement-banner__timer {
+      font-size: 0.8rem;
     }
 
     .announcement-banner__close {
       right: 0.5rem;
     }
   }
-
-  @media (max-width: 480px) {
-    .announcement-banner {
-      font-size: 0.8rem;
-    }
-
-    .announcement-banner__content {
-      padding: 0.75rem 0;
-    }
-  }
-
 {% endstylesheet %}
 
 {% javascript %}
   class AnnouncementBanner {
     constructor() {
       this.banner = document.querySelector('[data-banner]');
+      this.closeBtn = document.querySelector('[data-banner-close]');
+      this.timerEl = document.querySelector('[data-timer]');
       this.init();
     }
-  return;
+
+    init() {
+      if (!this.banner) return;
+      this.bindClose();
+      if (this.timerEl) this.initTimer();
+    }
+
+    bindClose() {
+      if (!this.closeBtn) return;
+      this.closeBtn.addEventListener('click', () => {
+        this.banner.style.animation = 'bannerSlideOut 0.4s ease forwards';
+        setTimeout(() => {
+          this.banner.style.display = 'none';
+          this.banner.setAttribute('aria-hidden', 'true');
+        }, 400);
+      });
+    }
+
+    initTimer() {
+      const endDate = new Date(this.timerEl.dataset.end);
+      const hoursEl = this.timerEl.querySelector('[data-timer-hours]');
+      const minutesEl = this.timerEl.querySelector('[data-timer-minutes]');
+      const secondsEl = this.timerEl.querySelector('[data-timer-seconds]');
+
+      if (!hoursEl || !minutesEl || !secondsEl) return;
+
+      const update = () => {
+        const now = new Date();
+        const diff = endDate - now;
+
+        if (diff <= 0) {
+          hoursEl.textContent = '00';
+          minutesEl.textContent = '00';
+          secondsEl.textContent = '00';
+          return;
+        }
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        hoursEl.textContent = String(h).padStart(2, '0');
+        minutesEl.textContent = String(m).padStart(2, '0');
+        secondsEl.textContent = String(s).padStart(2, '0');
+      };
+
+      update();
+      setInterval(update, 1000);
+    }
   }
-  // Initialize banner
+
   document.addEventListener('DOMContentLoaded', () => {
     new AnnouncementBanner();
   });
-
-  // Add slideOut animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes slideOut {
-      from {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateY(-100%);
-      }
-    }
-  `;
-  document.head.appendChild(style);
 {% endjavascript %}
 
 {% schema %}
@@ -211,28 +314,43 @@
       "default": "Shop Now"
     },
     {
+      "type": "checkbox",
+      "id": "show_close_button",
+      "label": "t:sections.banner.settings.show_close_button.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.banner.settings.timer.header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_timer",
+      "label": "t:sections.banner.settings.show_timer.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "timer_end_date",
+      "label": "t:sections.banner.settings.timer_end_date.label",
+      "info": "t:sections.banner.settings.timer_end_date.info",
+      "placeholder": "2025-12-31T23:59:59"
+    },
+    {
       "type": "header",
       "content": "t:sections.banner.settings.style.header"
     },
     {
-      "type": "select",
-      "id": "style",
-      "label": "t:sections.banner.settings.style.label",
-      "options": [
-        {
-          "value": "gradient",
-          "label": "t:sections.banner.settings.style.options.gradient"
-        },
-        {
-          "value": "solid",
-          "label": "t:sections.banner.settings.style.options.solid"
-        },
-        {
-          "value": "glass",
-          "label": "t:sections.banner.settings.style.options.glass"
-        }
-      ],
-      "default": "gradient"
+      "type": "color_background",
+      "id": "bg_color",
+      "label": "t:sections.banner.settings.bg_color.label",
+      "default": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:sections.banner.settings.text_color.label",
+      "default": "#ffffff"
     }
   ],
   "presets": [

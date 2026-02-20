@@ -1,0 +1,260 @@
+{% comment %}
+  Image with Text — Split layout: image left or right, with title, description, and CTA.
+{% endcomment %}
+
+<section class="iwt-section" style="
+  background-color: {{ section.settings.bg_color }};
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+">
+  <div class="iwt-container iwt--{{ section.settings.image_position }}">
+    <div class="iwt-image-col">
+      {% if section.settings.image %}
+        {% render 'image',
+          image: section.settings.image,
+          class: 'iwt-image',
+          width: 800
+        %}
+      {% else %}
+        <div class="iwt-image-placeholder">
+          {{ 'image' | placeholder_svg_tag: 'iwt-placeholder-svg' }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="iwt-text-col">
+      {% if section.settings.subtitle != blank %}
+        <p class="iwt-subtitle">{{ section.settings.subtitle }}</p>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="iwt-title">{{ section.settings.title }}</h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <div class="iwt-description">{{ section.settings.description }}</div>
+      {% endif %}
+
+      {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="iwt-btn">
+          {{ section.settings.button_text }}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .iwt-section {
+  }
+
+  .iwt-container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .iwt--right .iwt-image-col {
+    order: 2;
+  }
+
+  .iwt--right .iwt-text-col {
+    order: 1;
+  }
+
+  /* Image */
+  .iwt-image-col {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .iwt-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+
+  .iwt-image-placeholder {
+    background: #f3f4f6;
+    border-radius: 16px;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .iwt-placeholder-svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  /* Text */
+  .iwt-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .iwt-subtitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  .iwt-title {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 800;
+    color: var(--color-foreground);
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .iwt-description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  .iwt-description p:first-child { margin-top: 0; }
+  .iwt-description p:last-child { margin-bottom: 0; }
+
+  .iwt-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--color-accent, #667eea);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+
+  .iwt-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  }
+
+  .iwt-btn svg {
+    transition: transform 0.3s ease;
+  }
+
+  .iwt-btn:hover svg {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 768px) {
+    .iwt-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .iwt--right .iwt-image-col,
+    .iwt--right .iwt-text-col {
+      order: unset;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.image_with_text.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.image_with_text.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.image_with_text.settings.image_position.label",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.image_with_text.settings.title.label",
+      "default": "Crafted with purpose."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "t:sections.image_with_text.settings.description.label",
+      "default": "<p>We believe in creating products that make a real difference. Quality materials, thoughtful design, and exceptional service — that's our promise to you.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "t:sections.image_with_text.settings.button_text.label",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.image_with_text.settings.button_link.label"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.image_with_text.settings.bg_color.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.image_with_text.settings.padding_top.label",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.image_with_text.settings.padding_bottom.label",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_with_text.presets.name"
+    }
+  ]
+}
+{% endschema %}

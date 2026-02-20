@@ -1,76 +1,537 @@
 {
   "general": {
-    "404": "Not found",
+    "404": "404",
+    "accent_font": "Accent Font",
+    "accent_font_info": "Accent Font Info",
     "article": "Article",
-    "block": "Block",
     "blog": "Blog",
+    "body_font": "Body Font",
+    "body_font_info": "Body Font Info",
     "cart": "Cart",
-    "collection": "Collection",
-    "collections": "Collections",
-    "collection_card": "Collection card",
-    "collections_grid": "Collections grid",
     "colors": "Colors",
-    "column": "Column",
-    "content": "Content",
-    "custom_section": "Custom section",
+    "custom_section": "Custom Section",
     "fonts": "Fonts",
     "footer": "Footer",
-    "group": "Group",
     "header": "Header",
+    "heading_font": "Heading Font",
+    "heading_font_info": "Heading Font Info",
     "layout": "Layout",
-    "main": "Main",
     "page": "Page",
     "password": "Password",
-    "primary": "Primary",
     "product": "Product",
-    "row": "Row",
     "search": "Search",
-    "secondary": "Secondary",
-    "section": "Section",
-    "settings": "Settings",
-    "sidebar": "Sidebar",
-    "text": "Text",
-    "theme": "Theme",
     "typography": "Typography"
   },
   "labels": {
-    "alignment": "Alignment",
     "background": "Background",
     "foreground": "Foreground",
-    "grid_gap": "Grid spacing",
-    "grid_item_width": "Grid item width",
-    "input_corner_radius": "Input corner radius",
-    "layout_direction": "Layout direction",
+    "input_corner_radius": "Input Corner Radius",
     "menu": "Menu",
-    "padding": "Padding",
-    "page_margin": "Page margin",
-    "page_width": "Page width",
-    "show_payment_icons": "Show payment icons",
-    "text_style": "Text style",
-    "text": "Text"
+    "page_margin": "Page Margin",
+    "page_width": "Page Width"
   },
   "options": {
-    "alignment": {
-      "left": "Left",
-      "center": "Center",
-      "right": "Right"
-    },
-    "direction": {
-      "horizontal": "Horizontal",
-      "vertical": "Vertical"
-    },
     "page_width": {
       "narrow": "Narrow",
       "wide": "Wide"
+    }
+  },
+  "sections": {
+    "banner": {
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "link": {
+          "label": "Label"
+        },
+        "link_text": {
+          "label": "Label"
+        },
+        "show_banner": {
+          "label": "Label"
+        },
+        "show_close_button": {
+          "label": "Label"
+        },
+        "show_icon": {
+          "label": "Label"
+        },
+        "show_timer": {
+          "label": "Label"
+        },
+        "style": {
+          "header": "Header"
+        },
+        "text": {
+          "label": "Label"
+        },
+        "text_color": {
+          "label": "Label"
+        },
+        "timer": {
+          "header": "Header"
+        },
+        "timer_end_date": {
+          "info": "Info",
+          "label": "Label"
+        }
+      }
     },
-    "size": {
-      "large": "Large",
-      "small": "Small"
+    "countdown": {
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "end_date": {
+          "info": "Info",
+          "label": "Label"
+        },
+        "label_days": {
+          "label": "Label"
+        },
+        "label_hours": {
+          "label": "Label"
+        },
+        "label_minutes": {
+          "label": "Label"
+        },
+        "label_seconds": {
+          "label": "Label"
+        },
+        "labels": {
+          "header": "Header"
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "spacing": {
+          "header": "Header"
+        },
+        "style": {
+          "header": "Header"
+        },
+        "subtitle": {
+          "label": "Label"
+        },
+        "text_color": {
+          "label": "Label"
+        },
+        "title": {
+          "label": "Label"
+        }
+      }
     },
-    "text_style": {
-      "title": "Title",
-      "subtitle": "Subtitle",
-      "normal": "Normal text"
+    "faq": {
+      "blocks": {
+        "item": {
+          "name": "Name",
+          "settings": {
+            "answer": {
+              "label": "Label"
+            },
+            "question": {
+              "label": "Label"
+            }
+          }
+        }
+      },
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "subtitle": {
+          "label": "Label"
+        },
+        "title": {
+          "label": "Label"
+        }
+      }
+    },
+    "footer": {
+      "settings": {
+        "company_menu": {
+          "label": "Label"
+        },
+        "customer_service_menu": {
+          "label": "Label"
+        },
+        "legal_menu": {
+          "label": "Label"
+        },
+        "menus": {
+          "header": "Header"
+        },
+        "newsletter": {
+          "header": "Header"
+        },
+        "payment": {
+          "header": "Header"
+        },
+        "show_newsletter": {
+          "label": "Label"
+        },
+        "show_payment_icons": {
+          "label": "Label"
+        },
+        "show_social_icons": {
+          "label": "Label"
+        },
+        "social": {
+          "header": "Header"
+        }
+      }
+    },
+    "hero": {
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "animation": {
+          "header": "Header",
+          "label": "Label",
+          "options": {
+            "fade": "Fade",
+            "none": "None",
+            "slide": "Slide"
+          }
+        },
+        "background": {
+          "header": "Header"
+        },
+        "background_image": {
+          "label": "Label"
+        },
+        "background_video": {
+          "info": "Info",
+          "label": "Label"
+        },
+        "button_link": {
+          "label": "Label"
+        },
+        "button_text": {
+          "label": "Label"
+        },
+        "buttons": {
+          "header": "Header"
+        },
+        "content": {
+          "header": "Header"
+        },
+        "custom_text_color": {
+          "info": "Info",
+          "label": "Label"
+        },
+        "description": {
+          "label": "Label"
+        },
+        "heading": {
+          "label": "Label"
+        },
+        "height": {
+          "label": "Label",
+          "options": {
+            "full_height": "Full Height",
+            "large": "Large",
+            "medium": "Medium",
+            "small": "Small"
+          }
+        },
+        "layout": {
+          "header": "Header"
+        },
+        "overlay_color": {
+          "label": "Label"
+        },
+        "overlay_opacity": {
+          "label": "Label"
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "secondary_button_link": {
+          "label": "Label"
+        },
+        "secondary_button_text": {
+          "label": "Label"
+        },
+        "spacing": {
+          "header": "Header"
+        },
+        "subtitle": {
+          "label": "Label"
+        },
+        "text_alignment": {
+          "label": "Label",
+          "options": {
+            "center": "Center",
+            "left": "Left",
+            "right": "Right"
+          }
+        },
+        "text_color_scheme": {
+          "label": "Label",
+          "options": {
+            "accent": "Accent",
+            "custom": "Custom",
+            "dark": "Dark",
+            "light": "Light"
+          }
+        },
+        "video_poster": {
+          "info": "Info",
+          "label": "Label"
+        }
+      }
+    },
+    "image_with_text": {
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "button_link": {
+          "label": "Label"
+        },
+        "button_text": {
+          "label": "Label"
+        },
+        "description": {
+          "label": "Label"
+        },
+        "image": {
+          "label": "Label"
+        },
+        "image_position": {
+          "label": "Label"
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "title": {
+          "label": "Label"
+        }
+      }
+    },
+    "newsletter_popup": {
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "button_text": {
+          "label": "Label"
+        },
+        "cookie_days": {
+          "label": "Label"
+        },
+        "delay": {
+          "label": "Label"
+        },
+        "description": {
+          "label": "Label"
+        },
+        "placeholder": {
+          "label": "Label"
+        },
+        "title": {
+          "label": "Label"
+        }
+      }
+    },
+    "product": {
+      "settings": {
+        "low_stock_threshold": {
+          "label": "Label"
+        },
+        "max_viewers": {
+          "label": "Label"
+        },
+        "min_viewers": {
+          "label": "Label"
+        },
+        "show_sticky_atc": {
+          "label": "Label"
+        },
+        "show_trust_badges": {
+          "label": "Label"
+        },
+        "show_urgency_signals": {
+          "label": "Label"
+        }
+      }
+    },
+    "testimonials": {
+      "blocks": {
+        "testimonial": {
+          "name": "Name",
+          "settings": {
+            "author": {
+              "label": "Label"
+            },
+            "image": {
+              "label": "Label"
+            },
+            "quote": {
+              "label": "Label"
+            },
+            "rating": {
+              "label": "Label"
+            },
+            "role": {
+              "label": "Label"
+            }
+          }
+        }
+      },
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "background_color_scheme": {
+          "label": "Label",
+          "options": {
+            "accent": "Accent",
+            "dark": "Dark",
+            "light": "Light"
+          }
+        },
+        "content": {
+          "header": "Header"
+        },
+        "description": {
+          "label": "Label"
+        },
+        "heading": {
+          "label": "Label"
+        },
+        "layout": {
+          "header": "Header",
+          "label": "Label",
+          "options": {
+            "four_columns": "Four Columns",
+            "one_column": "One Column",
+            "three_columns": "Three Columns",
+            "two_columns": "Two Columns"
+          }
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "spacing": {
+          "header": "Header"
+        }
+      }
+    },
+    "trust_badges": {
+      "blocks": {
+        "badge": {
+          "name": "Name",
+          "settings": {
+            "icon": {
+              "label": "Label"
+            },
+            "subtext": {
+              "label": "Label"
+            },
+            "text": {
+              "label": "Label"
+            }
+          }
+        }
+      },
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "title": {
+          "label": "Label"
+        }
+      }
+    },
+    "usp_bar": {
+      "blocks": {
+        "item": {
+          "name": "Name",
+          "settings": {
+            "icon": {
+              "label": "Label"
+            },
+            "subtext": {
+              "label": "Label"
+            },
+            "text": {
+              "label": "Label"
+            }
+          }
+        }
+      },
+      "name": "Name",
+      "presets": {
+        "name": "Name"
+      },
+      "settings": {
+        "bg_color": {
+          "label": "Label"
+        },
+        "padding_bottom": {
+          "label": "Label"
+        },
+        "padding_top": {
+          "label": "Label"
+        },
+        "text_color": {
+          "label": "Label"
+        }
+      }
     }
   }
 }

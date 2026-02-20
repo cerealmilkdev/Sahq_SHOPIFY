@@ -7,16 +7,53 @@
         "text": "🎉 Free shipping on orders over $50 ! Limited time offer.",
         "show_icon": true,
         "link": "/collections/all",
-        "link_text": "Shop Now"
+        "link_text": "Shop Now",
+        "show_close_button": true
       }
     },
-    "hello-world": {
-      "type": "hello-world",
-      "settings": {}
-    },
-    "collections": {
-      "type": "collections",
-      "settings": {}
+    "usp-bar": {
+      "type": "usp-bar",
+      "settings": {
+        "bg_color": "#f8f8f8",
+        "text_color": "#111111",
+        "padding_top": 12,
+        "padding_bottom": 12
+      },
+      "blocks": {
+        "usp-1": {
+          "type": "item",
+          "settings": {
+            "icon": "🚚",
+            "text": "Free Shipping",
+            "subtext": "On orders over $50"
+          }
+        },
+        "usp-2": {
+          "type": "item",
+          "settings": {
+            "icon": "↩️",
+            "text": "Easy Returns",
+            "subtext": "30-day return policy"
+          }
+        },
+        "usp-3": {
+          "type": "item",
+          "settings": {
+            "icon": "🔒",
+            "text": "Secure Payment",
+            "subtext": "SSL encrypted checkout"
+          }
+        },
+        "usp-4": {
+          "type": "item",
+          "settings": {
+            "icon": "💬",
+            "text": "24/7 Support",
+            "subtext": "We're here to help"
+          }
+        }
+      },
+      "block_order": ["usp-1", "usp-2", "usp-3", "usp-4"]
     },
     "hero": {
       "type": "hero",
@@ -34,9 +71,22 @@
         "text_alignment": "center"
       }
     },
-    "slider": {
-      "type": "slider",
+    "collections": {
+      "type": "collections",
       "settings": {}
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {
+        "image_position": "left",
+        "title": "Crafted with purpose.",
+        "description": "<p>We believe in creating products that make a real difference. Quality materials, thoughtful design, and exceptional service — that's our promise to you.</p>",
+        "button_text": "Learn More",
+        "button_link": "/pages/about",
+        "bg_color": "#ffffff",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     },
     "grid-product": {
       "type": "grid-product",
@@ -60,18 +110,110 @@
       },
       "block_order": ["image-1", "image-2", "image-3", "image-4"]
     },
+    "trust-badges": {
+      "type": "trust-badges",
+      "settings": {
+        "bg_color": "#f8f9fa",
+        "padding_top": 48,
+        "padding_bottom": 48
+      },
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "lock",
+            "text": "Secure Payment",
+            "subtext": "SSL encrypted checkout"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "text": "Free Delivery",
+            "subtext": "On orders over $50"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "refresh",
+            "text": "Easy Returns",
+            "subtext": "30-day hassle-free returns"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "text": "Money-Back Guarantee",
+            "subtext": "Not happy? Full refund"
+          }
+        }
+      },
+      "block_order": ["badge-1", "badge-2", "badge-3", "badge-4"]
+    },
     "testimonials": {
       "type": "testimonials",
       "settings": {}
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Got Questions?",
+        "bg_color": "#f8f9fa",
+        "padding_top": 60,
+        "padding_bottom": 60
+      },
+      "blocks": {
+        "faq-1": {
+          "type": "item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day hassle-free return policy. If you're not satisfied, contact our support team.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "item",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard shipping takes 3–7 business days. Express options are available at checkout.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "item",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes! We ship to over 50 countries worldwide. Shipping rates and times vary by destination.</p>"
+          }
+        }
+      },
+      "block_order": ["faq-1", "faq-2", "faq-3"]
+    },
+    "newsletter-popup": {
+      "type": "newsletter-popup",
+      "settings": {
+        "title": "Get 10% off your first order",
+        "description": "Subscribe to our newsletter and be the first to know about new products and exclusive offers.",
+        "placeholder": "Enter your email address",
+        "button_text": "Get my discount",
+        "delay": 5,
+        "cookie_days": 7,
+        "bg_color": "#ffffff"
+      }
     }
   },
   "order": [
     "banner",
-    "slider",
+    "usp-bar",
     "hero",
-    "hello-world",
     "collections",
+    "image-with-text",
+    "grid-product",
+    "trust-badges",
     "testimonials",
-    "grid-product"
+    "faq",
+    "newsletter-popup"
   ]
 }

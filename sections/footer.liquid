@@ -2,21 +2,21 @@
   <div class="footer__container">
     <!-- Newsletter Section -->
     <div class="footer__newsletter">
-      <h3 class="footer__newsletter-title">Stay in the loop</h3>
-      <p class="footer__newsletter-description">Get the latest updates on new products and upcoming sales.</p>
-      
+      <h3 class="footer__newsletter-title">{{ 'sections.footer.newsletter_title' | t }}</h3>
+      <p class="footer__newsletter-description">{{ 'sections.footer.newsletter_description' | t }}</p>
+
       {% if section.settings.show_newsletter %}
         <form class="footer__newsletter-form" action="/contact#contact_form" method="post">
           <div class="footer__newsletter-input-group">
-            <input 
-              type="email" 
-              name="contact[email]" 
-              placeholder="Enter your email"
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="{{ 'sections.footer.newsletter_placeholder' | t }}"
               class="footer__newsletter-input"
               required
             >
             <button type="submit" class="footer__newsletter-button">
-              Subscribe
+              {{ 'sections.footer.newsletter_button' | t }}
             </button>
           </div>
         </form>
@@ -27,7 +27,7 @@
     <div class="footer__main">
       <!-- Company Info -->
       <div class="footer__column">
-        <h4 class="footer__column-title">Company</h4>
+        <h4 class="footer__column-title">{{ 'sections.footer.company_title' | t }}</h4>
         <ul class="footer__links">
           {% if section.settings.company_menu.links %}
             {% for link in section.settings.company_menu.links %}
@@ -44,7 +44,7 @@
 
       <!-- Customer Service -->
       <div class="footer__column">
-        <h4 class="footer__column-title">Customer Service</h4>
+        <h4 class="footer__column-title">{{ 'sections.footer.customer_service_title' | t }}</h4>
         <ul class="footer__links">
           {% if section.settings.customer_service_menu.links %}
             {% for link in section.settings.customer_service_menu.links %}
@@ -61,7 +61,7 @@
 
       <!-- Legal -->
       <div class="footer__column">
-        <h4 class="footer__column-title">Legal</h4>
+        <h4 class="footer__column-title">{{ 'sections.footer.legal_title' | t }}</h4>
         <ul class="footer__links">
           {% if section.settings.legal_menu.links %}
             {% for link in section.settings.legal_menu.links %}
@@ -78,7 +78,7 @@
 
       <!-- Social Media -->
       <div class="footer__column">
-        <h4 class="footer__column-title">Follow Us</h4>
+        <h4 class="footer__column-title">{{ 'sections.footer.follow_us_title' | t }}</h4>
         <div class="footer__social">
           {% if section.settings.show_social_icons %}
             {% if settings.social_facebook_link != blank %}
@@ -122,7 +122,8 @@
   <div class="footer__bottom">
     <div class="footer__bottom-container">
       <div class="footer__copyright">
-        <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+        {%- assign current_year = 'now' | date: '%Y' -%}
+        <p>{{ 'sections.footer.copyright_html' | t: year: current_year, shop_name: shop.name }}</p>
       </div>
       
       <div class="footer__payment">

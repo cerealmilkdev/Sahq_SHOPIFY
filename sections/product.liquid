@@ -36,7 +36,7 @@
 
         {% if product.variants.size > 1 %}
           <div class="form-group">
-            <label for="variant-select" class="form-label">Variant</label>
+            <label for="variant-select" class="form-label">{{ 'product.variant_label' | t }}</label>
             <select name="id" id="variant-select" class="form-select">
               {% for variant in product.variants %}
                 <option
@@ -53,7 +53,7 @@
         {% endif %}
 
         <div class="form-group">
-          <label for="quantity" class="form-label">Quantité</label>
+          <label for="quantity" class="form-label">{{ 'product.quantity_label' | t }}</label>
           <input 
             type="number" 
             name="quantity" 
@@ -64,17 +64,93 @@
           >
         </div>
 
+        {% assign current_variant = product.selected_or_first_available_variant %}
+
+        {% if section.settings.show_urgency_signals %}
+          {% if current_variant.inventory_management and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= section.settings.low_stock_threshold %}
+            <div class="product-urgency product-urgency--stock">
+              <span class="urgency-icon">⚠️</span>
+              <span>{{ 'product.low_stock' | t: count: current_variant.inventory_quantity }}</span>
+            </div>
+          {% endif %}
+
+          {% assign viewers_count = section.settings.min_viewers | plus: 0 %}
+          <div class="product-urgency product-urgency--viewers" data-viewers
+            data-min="{{ section.settings.min_viewers }}"
+            data-max="{{ section.settings.max_viewers }}">
+            <span class="urgency-icon">🔥</span>
+            <span data-viewers-text>{{ 'product.viewers_count' | t: count: viewers_count }}</span>
+          </div>
+        {% endif %}
+
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">
-            <span class="btn-text">Ajouter au panier</span>
+          <button type="submit" class="btn btn-primary" data-add-to-cart
+            data-text-default="{{ 'product.add_to_cart' | t }}"
+            data-text-adding="{{ 'product.adding_to_cart' | t }}"
+            data-text-sold-out="{{ 'product.sold_out' | t }}"
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            <span class="btn-text">
+              {%- if current_variant.available -%}
+                {{ 'product.add_to_cart' | t }}
+              {%- else -%}
+                {{ 'product.sold_out' | t }}
+              {%- endif -%}
+            </span>
             <span class="btn-icon">🛒</span>
           </button>
           {{ form | payment_button }}
         </div>
+
+        {% if section.settings.show_trust_badges %}
+          <div class="product-trust-badges">
+            <div class="trust-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>{{ 'product.trust_secure' | t }}</span>
+            </div>
+            <div class="trust-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 6v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>{{ 'product.trust_delivery' | t }}</span>
+            </div>
+            <div class="trust-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              <span>{{ 'product.trust_returns' | t }}</span>
+            </div>
+            <div class="trust-badge">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+              <span>{{ 'product.trust_guarantee' | t }}</span>
+            </div>
+          </div>
+        {% endif %}
       {% endform %}
     </div>
   </div>
 </div>
+
+{% if section.settings.show_sticky_atc %}
+  {% assign sticky_variant = product.selected_or_first_available_variant %}
+  <div class="sticky-atc" data-sticky-atc aria-hidden="true">
+    <div class="sticky-atc__container">
+      {% if product.featured_image %}
+        <img
+          src="{{ product.featured_image | image_url: width: 80 }}"
+          alt="{{ product.title | escape }}"
+          class="sticky-atc__image"
+          width="40"
+          height="40"
+          loading="lazy"
+        >
+      {% endif %}
+      <div class="sticky-atc__info">
+        <span class="sticky-atc__title">{{ product.title }}</span>
+        <span class="sticky-atc__price">{{ sticky_variant.price | money }}</span>
+      </div>
+      <button type="button" class="sticky-atc__btn btn btn-primary" data-sticky-atc-btn>
+        {{ 'product.add_to_cart' | t }}
+      </button>
+    </div>
+  </div>
+{% endif %}
 
 {% stylesheet %}
   .product-page {
@@ -312,6 +388,127 @@
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
+
+  /* Urgency signals */
+  .product-urgency {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .product-urgency--stock {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+  }
+
+  .product-urgency--viewers {
+    background: #fff0f0;
+    color: #c0392b;
+    border: 1px solid #e74c3c;
+  }
+
+  .urgency-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* Trust badges */
+  .product-trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--color-foreground);
+    opacity: 0.75;
+  }
+
+  .trust-badge svg {
+    flex-shrink: 0;
+    color: var(--color-accent);
+    opacity: 1;
+  }
+
+  /* Sticky ATC bar */
+  .sticky-atc {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 150;
+    background: white;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sticky-atc.is-visible {
+    transform: translateY(0);
+  }
+
+  .sticky-atc__container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0.75rem var(--page-margin);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .sticky-atc__image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .sticky-atc__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sticky-atc__title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sticky-atc__price {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .sticky-atc__btn {
+    flex-shrink: 0;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 480px) {
+    .sticky-atc__image { display: none; }
+    .sticky-atc__btn { padding: 0.625rem 1rem; }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -320,54 +517,79 @@
       this.form = document.querySelector('.product-form form');
       this.variantSelect = document.querySelector('#variant-select');
       this.quantityInput = document.querySelector('#quantity');
-      this.submitButton = document.querySelector('.btn-primary');
+      this.submitButton = document.querySelector('[data-add-to-cart]');
+      this.stickyBar = document.querySelector('[data-sticky-atc]');
+      this.stickyBtn = document.querySelector('[data-sticky-atc-btn]');
+      this.viewersEl = document.querySelector('[data-viewers]');
       this.init();
     }
 
     init() {
       if (!this.form) return;
 
-      // Handle form submission
       this.form.addEventListener('submit', (e) => this.handleSubmit(e));
 
-      // Handle variant change
       if (this.variantSelect) {
         this.variantSelect.addEventListener('change', (e) => this.handleVariantChange(e));
       }
 
-      // Handle quantity change
       if (this.quantityInput) {
         this.quantityInput.addEventListener('change', (e) => this.handleQuantityChange(e));
       }
+
+      this.initStickyAtc();
+      this.initViewers();
     }
 
     handleSubmit(e) {
       if (!this.submitButton) return;
-
-      // Add loading state
       this.submitButton.disabled = true;
       this.form.classList.add('form-submitting');
-      
       const btnText = this.submitButton.querySelector('.btn-text');
-      if (btnText) {
-        btnText.textContent = 'Ajout en cours...';
-      }
+      if (btnText) btnText.textContent = this.submitButton.dataset.textAdding || 'Adding...';
     }
 
     handleVariantChange(e) {
-      console.log('Variant changed:', e.target.value);
-      // Add your variant change logic here
+      // Variant change logic placeholder
     }
 
     handleQuantityChange(e) {
       const quantity = parseInt(e.target.value);
-      if (quantity < 1) {
-        e.target.value = 1;
+      if (quantity < 1) e.target.value = 1;
+    }
+
+    initStickyAtc() {
+      if (!this.stickyBar || !this.submitButton) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const visible = !entry.isIntersecting;
+          this.stickyBar.classList.toggle('is-visible', visible);
+          this.stickyBar.setAttribute('aria-hidden', String(!visible));
+        });
+      }, { threshold: 0 });
+
+      observer.observe(this.submitButton);
+
+      if (this.stickyBtn) {
+        this.stickyBtn.addEventListener('click', () => {
+          this.submitButton.click();
+        });
+      }
+    }
+
+    initViewers() {
+      if (!this.viewersEl) return;
+      const min = parseInt(this.viewersEl.dataset.min) || 5;
+      const max = parseInt(this.viewersEl.dataset.max) || 25;
+      const count = Math.floor(Math.random() * (max - min + 1)) + min;
+      const textEl = this.viewersEl.querySelector('[data-viewers-text]');
+      if (textEl) {
+        textEl.textContent = textEl.textContent.replace(/\d+/, count);
       }
     }
   }
 
-  // Initialize product page
   document.addEventListener('DOMContentLoaded', () => {
     new ProductPage();
   });
@@ -376,7 +598,65 @@
 {% schema %}
 {
   "name": "t:general.product",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Urgency Signals"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_urgency_signals",
+      "label": "t:sections.product.settings.show_urgency_signals.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "t:sections.product.settings.low_stock_threshold.label",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "min_viewers",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "label": "t:sections.product.settings.min_viewers.label",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "max_viewers",
+      "min": 10,
+      "max": 200,
+      "step": 5,
+      "label": "t:sections.product.settings.max_viewers.label",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Trust Badges"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "t:sections.product.settings.show_trust_badges.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Sticky Add to Cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sticky_atc",
+      "label": "t:sections.product.settings.show_sticky_atc.label",
+      "default": true
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

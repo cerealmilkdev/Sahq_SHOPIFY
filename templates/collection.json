@@ -1,47 +1,11 @@
 {
   "sections": {
-    "slider": {
-      "type": "slider",
-      "settings": {
-        "height": 60,
-        "autoplay": true,
-        "interval": 5000
-      },
-      "blocks": {
-        "slide_1": {
-          "type": "slide",
-          "settings": {
-            "heading": "New Collection",
-            "text": "Discover our latest arrivals",
-            "button_text": "Shop Now"
-          }
-        },
-        "slide_2": {
-          "type": "slide",
-          "settings": {
-            "heading": "Summer Sale",
-            "text": "Up to 50% off selected items",
-            "button_text": "View Deals"
-          }
-        },
-        "slide_3": {
-          "type": "slide",
-          "settings": {
-            "heading": "Free Shipping",
-            "text": "On orders over $50",
-            "button_text": "Learn More"
-          }
-        }
-      },
-      "block_order": ["slide_1", "slide_2", "slide_3"]
-    },
     "main": {
       "type": "collections",
       "settings": {}
     }
   },
   "order": [
-    "slider",
     "main"
   ]
 }

@@ -11,7 +11,7 @@
   <!-- Header -->
   <div class="cart-drawer__header">
     <h2 class="cart-drawer__title">{{ 'cart.title' | t }}</h2>
-    <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="Fermer">
+    <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="{{ 'general.close' | t | default: 'Close' }}">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -45,18 +45,18 @@
             <p class="cart-drawer__item-price">{{ item.final_line_price | money }}</p>
           </div>
           <div class="cart-drawer__item-quantity">
-            <button type="button" class="qty-btn" data-action="decrease" data-key="{{ item.key }}" aria-label="Diminuer">−</button>
+            <button type="button" class="qty-btn" data-action="decrease" data-key="{{ item.key }}" aria-label="{{ 'cart.decrease_quantity' | t | default: 'Decrease quantity' }}">−</button>
             <input
               type="number"
               value="{{ item.quantity }}"
               min="0"
               data-quantity-input
               data-key="{{ item.key }}"
-              aria-label="Quantite"
+              aria-label="{{ 'product.quantity_label' | t | default: 'Quantity' }}"
             >
-            <button type="button" class="qty-btn" data-action="increase" data-key="{{ item.key }}" aria-label="Augmenter">+</button>
+            <button type="button" class="qty-btn" data-action="increase" data-key="{{ item.key }}" aria-label="{{ 'cart.increase_quantity' | t | default: 'Increase quantity' }}">+</button>
           </div>
-          <button type="button" class="cart-drawer__item-remove" data-action="remove" data-key="{{ item.key }}" aria-label="Supprimer">
+          <button type="button" class="cart-drawer__item-remove" data-action="remove" data-key="{{ item.key }}" aria-label="{{ 'cart.remove' | t | default: 'Remove' }}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -72,7 +72,7 @@
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
         </svg>
         <p>{{ 'cart.empty' | t }}</p>
-        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">Continuer les achats</a>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">{{ 'cart.continue_shopping' | t }}</a>
       </div>
     {% endif %}
   </div>
@@ -80,15 +80,15 @@
   <!-- Footer -->
   <div class="cart-drawer__footer" {% if cart.item_count == 0 %}style="display: none;"{% endif %}>
     <div class="cart-drawer__subtotal">
-      <span>Sous-total</span>
+      <span>{{ 'cart.subtotal' | t }}</span>
       <span data-cart-total>{{ cart.total_price | money }}</span>
     </div>
-    <p class="cart-drawer__note">Taxes et frais de livraison calcules a la commande</p>
+    <p class="cart-drawer__note">{{ 'cart.taxes_note' | t }}</p>
     <a href="{{ routes.cart_url }}" class="btn btn--secondary cart-drawer__view-cart">
-      Voir le panier
+      {{ 'cart.view_cart' | t }}
     </a>
     <a href="/checkout" class="btn btn--primary cart-drawer__checkout">
-      Commander
+      {{ 'cart.checkout' | t }}
     </a>
   </div>
 </aside>

@@ -1,0 +1,273 @@
+{% comment %}
+  Trust Badges — Standalone section with configurable SVG badges.
+  Can also be used as a snippet inside product forms.
+{% endcomment %}
+
+{% liquid
+  assign badge_icons = 'shield,truck,refresh,lock' | split: ','
+%}
+
+<section class="trust-badges-section" style="
+  background-color: {{ section.settings.bg_color }};
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+">
+  <div class="trust-badges-container">
+    {% if section.settings.title != blank %}
+      <h2 class="trust-badges-title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <ul class="trust-badges-list" role="list">
+        {% for block in section.blocks %}
+          <li class="trust-badge-item" {{ block.shopify_attributes }}>
+            <div class="trust-badge-icon" aria-hidden="true">
+              {% case block.settings.icon %}
+                {% when 'shield' %}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                {% when 'truck' %}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="3" width="15" height="13" rx="2"/>
+                    <path d="M16 8h4l3 6v3h-7V8z"/>
+                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                  </svg>
+                {% when 'refresh' %}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10"/>
+                    <polyline points="1 20 1 14 7 14"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                  </svg>
+                {% when 'lock' %}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                {% when 'star' %}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                {% else %}
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+              {% endcase %}
+            </div>
+            <div class="trust-badge-text">
+              {% if block.settings.text != blank %}
+                <span class="trust-badge-name">{{ block.settings.text }}</span>
+              {% endif %}
+              {% if block.settings.subtext != blank %}
+                <span class="trust-badge-desc">{{ block.settings.subtext }}</span>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .trust-badges-section {
+    text-align: center;
+  }
+
+  .trust-badges-container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .trust-badges-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 2rem;
+    color: var(--color-foreground);
+  }
+
+  .trust-badges-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .trust-badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 160px;
+    flex: 1 1 120px;
+  }
+
+  .trust-badge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: rgba(102, 126, 234, 0.08);
+    border-radius: 50%;
+    color: var(--color-accent, #667eea);
+    transition: transform 0.3s ease;
+  }
+
+  .trust-badge-item:hover .trust-badge-icon {
+    transform: scale(1.1);
+  }
+
+  .trust-badge-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .trust-badge-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+  }
+
+  .trust-badge-desc {
+    font-size: 0.8rem;
+    color: var(--color-foreground);
+    opacity: 0.65;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 480px) {
+    .trust-badges-list {
+      gap: 1.25rem;
+    }
+
+    .trust-badge-item {
+      flex: 1 1 80px;
+      max-width: 120px;
+    }
+
+    .trust-badge-icon {
+      width: 52px;
+      height: 52px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.trust_badges.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.trust_badges.settings.title.label"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.trust_badges.settings.bg_color.label",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.trust_badges.settings.padding_top.label",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.trust_badges.settings.padding_bottom.label",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "t:sections.trust_badges.blocks.badge.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:sections.trust_badges.blocks.badge.settings.icon.label",
+          "options": [
+            { "value": "shield", "label": "Shield (Secure)" },
+            { "value": "truck", "label": "Truck (Delivery)" },
+            { "value": "refresh", "label": "Refresh (Returns)" },
+            { "value": "lock", "label": "Lock (Payment)" },
+            { "value": "star", "label": "Star (Quality)" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.trust_badges.blocks.badge.settings.text.label",
+          "default": "Secure Payment"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "t:sections.trust_badges.blocks.badge.settings.subtext.label",
+          "default": "SSL encrypted checkout"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.trust_badges.presets.name",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "lock",
+            "text": "Secure Payment",
+            "subtext": "SSL encrypted checkout"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "text": "Free Delivery",
+            "subtext": "On orders over $50"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "refresh",
+            "text": "Easy Returns",
+            "subtext": "30-day hassle-free returns"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "shield",
+            "text": "Money-Back Guarantee",
+            "subtext": "Not happy? Full refund"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

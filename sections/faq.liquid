@@ -1,0 +1,331 @@
+{% comment %}
+  FAQ Section — Accordion with smooth open/close animation.
+  Add FAQ Item blocks in the theme editor.
+{% endcomment %}
+
+<section class="faq-section" style="
+  background-color: {{ section.settings.bg_color }};
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+">
+  <div class="faq-container">
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+      <div class="faq-header">
+        {% if section.settings.subtitle != blank %}
+          <p class="faq-subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="faq-title">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <dl class="faq-list">
+        {% for block in section.blocks %}
+          <div class="faq-item" data-faq-item {{ block.shopify_attributes }}>
+            <dt class="faq-question">
+              <button
+                type="button"
+                class="faq-question__btn"
+                aria-expanded="false"
+                aria-controls="faq-answer-{{ block.id }}"
+                data-faq-trigger
+              >
+                <span class="faq-question__text">{{ block.settings.question }}</span>
+                <span class="faq-question__icon" aria-hidden="true">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </button>
+            </dt>
+            <dd
+              class="faq-answer"
+              id="faq-answer-{{ block.id }}"
+              hidden
+            >
+              <div class="faq-answer__inner">
+                {{ block.settings.answer }}
+              </div>
+            </dd>
+          </div>
+        {% endfor %}
+      </dl>
+    {% elsif request.design_mode %}
+      <p class="faq-empty">Add FAQ Item blocks in the theme editor to display questions.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .faq-section {
+  }
+
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .faq-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .faq-subtitle {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+  }
+
+  .faq-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--color-foreground);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  .faq-item {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    background: white;
+  }
+
+  .faq-item.is-open {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .faq-question__btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    gap: 1rem;
+    font-family: inherit;
+  }
+
+  .faq-question__btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+    border-radius: 12px;
+  }
+
+  .faq-question__text {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    line-height: 1.4;
+  }
+
+  .faq-question__icon {
+    flex-shrink: 0;
+    color: var(--color-foreground);
+    opacity: 0.5;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item.is-open .faq-question__icon {
+    transform: rotate(180deg);
+    opacity: 1;
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    overflow: hidden;
+  }
+
+  .faq-answer__inner {
+    padding: 0 1.5rem 1.25rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-foreground);
+    opacity: 0.8;
+  }
+
+  .faq-answer__inner p:first-child {
+    margin-top: 0;
+  }
+
+  .faq-answer__inner p:last-child {
+    margin-bottom: 0;
+  }
+
+  .faq-empty {
+    text-align: center;
+    opacity: 0.5;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .faq-question__btn {
+      padding: 1rem 1.25rem;
+    }
+
+    .faq-answer__inner {
+      padding: 0 1.25rem 1rem;
+    }
+  }
+{% endstylesheet %}
+
+<script>
+  (function() {
+    document.querySelectorAll('[data-faq-trigger]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = btn.closest('[data-faq-item]');
+        var answer = document.getElementById(btn.getAttribute('aria-controls'));
+        var isOpen = item.classList.contains('is-open');
+
+        if (isOpen) {
+          item.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          // Animate close
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          answer.hidden = false;
+          requestAnimationFrame(function() {
+            answer.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
+            answer.style.maxHeight = '0';
+            answer.style.opacity = '0';
+          });
+          setTimeout(function() {
+            answer.hidden = true;
+            answer.style.maxHeight = '';
+            answer.style.opacity = '';
+            answer.style.transition = '';
+          }, 300);
+        } else {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          // Animate open
+          answer.hidden = false;
+          answer.style.maxHeight = '0';
+          answer.style.opacity = '0';
+          answer.style.overflow = 'hidden';
+          requestAnimationFrame(function() {
+            answer.style.transition = 'max-height 0.35s ease, opacity 0.35s ease';
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            answer.style.opacity = '1';
+          });
+          setTimeout(function() {
+            answer.style.maxHeight = '';
+            answer.style.overflow = '';
+          }, 350);
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.faq.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.faq.settings.title.label",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:sections.faq.settings.subtitle.label",
+      "default": "Got Questions?"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.faq.settings.bg_color.label",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.faq.settings.padding_top.label",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.faq.settings.padding_bottom.label",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.faq.blocks.item.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "t:sections.faq.blocks.item.settings.question.label",
+          "default": "What is your return policy?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "t:sections.faq.blocks.item.settings.answer.label",
+          "default": "<p>We offer a 30-day hassle-free return policy. If you're not completely satisfied, contact us and we'll make it right.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.faq.presets.name",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day hassle-free return policy. If you're not satisfied, contact our support team.</p>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "question": "How long does shipping take?",
+            "answer": "<p>Standard shipping takes 3–7 business days. Express options are available at checkout.</p>"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "<p>Yes! We ship to over 50 countries worldwide. Shipping rates and times vary by destination.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

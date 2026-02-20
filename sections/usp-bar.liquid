@@ -1,0 +1,207 @@
+{% comment %}
+  USP Bar — Configurable icons + text for key selling points.
+  Place under header or above footer.
+{% endcomment %}
+
+{% if section.blocks.size > 0 %}
+  <div class="usp-bar full-width" style="
+    background-color: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  ">
+    <div class="usp-bar__container">
+      <ul class="usp-bar__list" role="list">
+        {% for block in section.blocks %}
+          <li class="usp-bar__item" {{ block.shopify_attributes }}>
+            {% if block.settings.icon != blank %}
+              <span class="usp-bar__icon" aria-hidden="true">{{ block.settings.icon }}</span>
+            {% endif %}
+            <div class="usp-bar__text-group">
+              {% if block.settings.text != blank %}
+                <span class="usp-bar__text">{{ block.settings.text }}</span>
+              {% endif %}
+              {% if block.settings.subtext != blank %}
+                <span class="usp-bar__subtext">{{ block.settings.subtext }}</span>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .usp-bar {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .usp-bar__container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .usp-bar__container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .usp-bar__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-width: max-content;
+  }
+
+  .usp-bar__item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+  }
+
+  .usp-bar__icon {
+    font-size: 1.375rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .usp-bar__text-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .usp-bar__text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .usp-bar__subtext {
+    font-size: 0.75rem;
+    opacity: 0.65;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 768px) {
+    .usp-bar__list {
+      justify-content: flex-start;
+      gap: 1.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.usp_bar.name",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.usp_bar.settings.bg_color.label",
+      "default": "#f8f8f8"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:sections.usp_bar.settings.text_color.label",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.usp_bar.settings.padding_top.label",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.usp_bar.settings.padding_bottom.label",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.usp_bar.blocks.item.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "t:sections.usp_bar.blocks.item.settings.icon.label",
+          "default": "🚚"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.usp_bar.blocks.item.settings.text.label",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "t:sections.usp_bar.blocks.item.settings.subtext.label",
+          "default": "On orders over $50"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.usp_bar.presets.name",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "icon": "🚚",
+            "text": "Free Shipping",
+            "subtext": "On orders over $50"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "↩️",
+            "text": "Easy Returns",
+            "subtext": "30-day return policy"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "🔒",
+            "text": "Secure Payment",
+            "subtext": "SSL encrypted checkout"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "💬",
+            "text": "24/7 Support",
+            "subtext": "We're here to help"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

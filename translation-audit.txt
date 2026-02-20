@@ -1,0 +1,300 @@
+Used translation keys: 266
+Existing in locales/en.default.json: 2
+Missing keys: 266
+
+Missing keys by file:
+- sections\hero.liquid: 44
+- sections\testimonials.liquid: 25
+- sections\footer.liquid: 20
+- sections\countdown.liquid: 18
+- sections\product.liquid: 18
+- config\settings_schema.json: 17
+- sections\banner.liquid: 17
+- sections\cart.liquid: 15
+- sections\newsletter-popup.liquid: 12
+- snippets\cart-drawer.liquid: 12
+- sections\image-with-text.liquid: 11
+- sections\faq.liquid: 10
+- sections\trust-badges.liquid: 10
+- sections\usp-bar.liquid: 10
+- sections\article.liquid: 8
+- sections\search.liquid: 6
+- sections\header.liquid: 5
+- templates\gift_card.liquid: 5
+- sections\404.liquid: 4
+- sections\password.liquid: 4
+- sections\blog.liquid: 2
+- sections\collections.liquid: 2
+- sections\custom-section.liquid: 2
+- layout\theme.liquid: 1
+- sections\footer-group.json: 1
+- sections\header-group.json: 1
+- sections\page.liquid: 1
+
+All missing keys:
+- 404.back_to_shopping | sections\404.liquid
+- 404.not_found | sections\404.liquid
+- 404.title | sections\404.liquid
+- blog.article_comments | sections\article.liquid
+- blog.article_metadata_html | sections\article.liquid, sections\blog.liquid
+- blog.comment_form_body | sections\article.liquid
+- blog.comment_form_email | sections\article.liquid
+- blog.comment_form_name | sections\article.liquid
+- blog.comment_form_submit | sections\article.liquid
+- blog.comment_form_title | sections\article.liquid
+- cart.checkout | sections\cart.liquid, snippets\cart-drawer.liquid
+- cart.continue_shopping | sections\cart.liquid, snippets\cart-drawer.liquid
+- cart.decrease_quantity | snippets\cart-drawer.liquid
+- cart.discover_products | sections\cart.liquid
+- cart.empty | snippets\cart-drawer.liquid
+- cart.empty_description | sections\cart.liquid
+- cart.empty_title | sections\cart.liquid
+- cart.increase_quantity | snippets\cart-drawer.liquid
+- cart.item_count | sections\cart.liquid
+- cart.order_summary | sections\cart.liquid
+- cart.remove | sections\cart.liquid, snippets\cart-drawer.liquid
+- cart.subtotal | sections\cart.liquid, snippets\cart-drawer.liquid
+- cart.taxes_included_note | sections\cart.liquid
+- cart.taxes_note | snippets\cart-drawer.liquid
+- cart.title | sections\cart.liquid, snippets\cart-drawer.liquid
+- cart.total | sections\cart.liquid
+- cart.update | sections\cart.liquid
+- cart.view_cart | snippets\cart-drawer.liquid
+- collections.items | sections\collections.liquid
+- collections.view | sections\collections.liquid
+- general.404 | sections\404.liquid
+- general.accent_font | config\settings_schema.json
+- general.accent_font_info | config\settings_schema.json
+- general.account | sections\header.liquid
+- general.article | sections\article.liquid
+- general.blog | sections\blog.liquid
+- general.body_font | config\settings_schema.json
+- general.body_font_info | config\settings_schema.json
+- general.cart | sections\cart.liquid, sections\header.liquid
+- general.close | sections\banner.liquid, snippets\cart-drawer.liquid, sections\newsletter-popup.liquid
+- general.colors | config\settings_schema.json
+- general.custom_section | sections\custom-section.liquid
+- general.fonts | config\settings_schema.json
+- general.footer | sections\footer.liquid, sections\footer-group.json
+- general.header | sections\header.liquid, sections\header-group.json
+- general.heading_font | config\settings_schema.json
+- general.heading_font_info | config\settings_schema.json
+- general.layout | config\settings_schema.json
+- general.page | sections\page.liquid
+- general.password | sections\password.liquid
+- general.product | sections\product.liquid
+- general.search | sections\header.liquid, sections\search.liquid
+- general.search_placeholder | layout\theme.liquid
+- general.typography | config\settings_schema.json
+- gift_card.add_to_apple_wallet | templates\gift_card.liquid
+- gift_card.card | templates\gift_card.liquid
+- gift_card.expired | templates\gift_card.liquid
+- gift_card.expires_on | templates\gift_card.liquid
+- gift_card.use_at_checkout | templates\gift_card.liquid
+- labels.background | config\settings_schema.json, sections\custom-section.liquid
+- labels.foreground | config\settings_schema.json
+- labels.input_corner_radius | config\settings_schema.json
+- labels.menu | sections\header.liquid
+- labels.page_margin | config\settings_schema.json
+- labels.page_width | config\settings_schema.json
+- options.page_width.narrow | config\settings_schema.json
+- options.page_width.wide | config\settings_schema.json
+- password.enter | sections\password.liquid
+- password.password | sections\password.liquid
+- password.title | sections\password.liquid
+- product.add_to_cart | sections\product.liquid
+- product.adding_to_cart | sections\product.liquid
+- product.low_stock | sections\product.liquid
+- product.quantity_label | sections\cart.liquid, snippets\cart-drawer.liquid, sections\product.liquid
+- product.sold_out | sections\product.liquid
+- product.trust_delivery | sections\product.liquid
+- product.trust_guarantee | sections\product.liquid
+- product.trust_returns | sections\product.liquid
+- product.trust_secure | sections\product.liquid
+- product.variant_label | sections\product.liquid
+- product.viewers_count | sections\product.liquid
+- search.no_results_html | sections\search.liquid
+- search.placeholder | sections\search.liquid
+- search.results_for_html | sections\search.liquid
+- search.submit | sections\search.liquid
+- search.title | sections\search.liquid
+- sections.banner.name | sections\banner.liquid
+- sections.banner.presets.name | sections\banner.liquid
+- sections.banner.settings.bg_color.label | sections\banner.liquid
+- sections.banner.settings.link.label | sections\banner.liquid
+- sections.banner.settings.link_text.label | sections\banner.liquid
+- sections.banner.settings.show_banner.label | sections\banner.liquid
+- sections.banner.settings.show_close_button.label | sections\banner.liquid
+- sections.banner.settings.show_icon.label | sections\banner.liquid
+- sections.banner.settings.show_timer.label | sections\banner.liquid
+- sections.banner.settings.style.header | sections\banner.liquid
+- sections.banner.settings.text.label | sections\banner.liquid
+- sections.banner.settings.text_color.label | sections\banner.liquid
+- sections.banner.settings.timer.header | sections\banner.liquid
+- sections.banner.settings.timer_end_date.info | sections\banner.liquid
+- sections.banner.settings.timer_end_date.label | sections\banner.liquid
+- sections.banner.timer_label | sections\banner.liquid
+- sections.countdown.expired | sections\countdown.liquid
+- sections.countdown.name | sections\countdown.liquid
+- sections.countdown.presets.name | sections\countdown.liquid
+- sections.countdown.settings.bg_color.label | sections\countdown.liquid
+- sections.countdown.settings.end_date.info | sections\countdown.liquid
+- sections.countdown.settings.end_date.label | sections\countdown.liquid
+- sections.countdown.settings.label_days.label | sections\countdown.liquid
+- sections.countdown.settings.label_hours.label | sections\countdown.liquid
+- sections.countdown.settings.label_minutes.label | sections\countdown.liquid
+- sections.countdown.settings.label_seconds.label | sections\countdown.liquid
+- sections.countdown.settings.labels.header | sections\countdown.liquid
+- sections.countdown.settings.padding_bottom.label | sections\countdown.liquid
+- sections.countdown.settings.padding_top.label | sections\countdown.liquid
+- sections.countdown.settings.spacing.header | sections\countdown.liquid
+- sections.countdown.settings.style.header | sections\countdown.liquid
+- sections.countdown.settings.subtitle.label | sections\countdown.liquid
+- sections.countdown.settings.text_color.label | sections\countdown.liquid
+- sections.countdown.settings.title.label | sections\countdown.liquid
+- sections.faq.blocks.item.name | sections\faq.liquid
+- sections.faq.blocks.item.settings.answer.label | sections\faq.liquid
+- sections.faq.blocks.item.settings.question.label | sections\faq.liquid
+- sections.faq.name | sections\faq.liquid
+- sections.faq.presets.name | sections\faq.liquid
+- sections.faq.settings.bg_color.label | sections\faq.liquid
+- sections.faq.settings.padding_bottom.label | sections\faq.liquid
+- sections.faq.settings.padding_top.label | sections\faq.liquid
+- sections.faq.settings.subtitle.label | sections\faq.liquid
+- sections.faq.settings.title.label | sections\faq.liquid
+- sections.footer.company_title | sections\footer.liquid
+- sections.footer.copyright_html | sections\footer.liquid
+- sections.footer.customer_service_title | sections\footer.liquid
+- sections.footer.follow_us_title | sections\footer.liquid
+- sections.footer.legal_title | sections\footer.liquid
+- sections.footer.newsletter_button | sections\footer.liquid
+- sections.footer.newsletter_description | sections\footer.liquid
+- sections.footer.newsletter_placeholder | sections\footer.liquid
+- sections.footer.newsletter_title | sections\footer.liquid
+- sections.footer.settings.company_menu.label | sections\footer.liquid
+- sections.footer.settings.customer_service_menu.label | sections\footer.liquid
+- sections.footer.settings.legal_menu.label | sections\footer.liquid
+- sections.footer.settings.menus.header | sections\footer.liquid
+- sections.footer.settings.newsletter.header | sections\footer.liquid
+- sections.footer.settings.payment.header | sections\footer.liquid
+- sections.footer.settings.show_newsletter.label | sections\footer.liquid
+- sections.footer.settings.show_payment_icons.label | sections\footer.liquid
+- sections.footer.settings.show_social_icons.label | sections\footer.liquid
+- sections.footer.settings.social.header | sections\footer.liquid
+- sections.hero.name | sections\hero.liquid
+- sections.hero.presets.name | sections\hero.liquid
+- sections.hero.settings.animation.header | sections\hero.liquid
+- sections.hero.settings.animation.label | sections\hero.liquid
+- sections.hero.settings.animation.options.fade | sections\hero.liquid
+- sections.hero.settings.animation.options.none | sections\hero.liquid
+- sections.hero.settings.animation.options.slide | sections\hero.liquid
+- sections.hero.settings.background.header | sections\hero.liquid
+- sections.hero.settings.background_image.label | sections\hero.liquid
+- sections.hero.settings.background_video.info | sections\hero.liquid
+- sections.hero.settings.background_video.label | sections\hero.liquid
+- sections.hero.settings.button_link.label | sections\hero.liquid
+- sections.hero.settings.button_text.label | sections\hero.liquid
+- sections.hero.settings.buttons.header | sections\hero.liquid
+- sections.hero.settings.content.header | sections\hero.liquid
+- sections.hero.settings.custom_text_color.info | sections\hero.liquid
+- sections.hero.settings.custom_text_color.label | sections\hero.liquid
+- sections.hero.settings.description.label | sections\hero.liquid
+- sections.hero.settings.heading.label | sections\hero.liquid
+- sections.hero.settings.height.label | sections\hero.liquid
+- sections.hero.settings.height.options.full_height | sections\hero.liquid
+- sections.hero.settings.height.options.large | sections\hero.liquid
+- sections.hero.settings.height.options.medium | sections\hero.liquid
+- sections.hero.settings.height.options.small | sections\hero.liquid
+- sections.hero.settings.layout.header | sections\hero.liquid
+- sections.hero.settings.overlay_color.label | sections\hero.liquid
+- sections.hero.settings.overlay_opacity.label | sections\hero.liquid
+- sections.hero.settings.padding_bottom.label | sections\hero.liquid
+- sections.hero.settings.padding_top.label | sections\hero.liquid
+- sections.hero.settings.secondary_button_link.label | sections\hero.liquid
+- sections.hero.settings.secondary_button_text.label | sections\hero.liquid
+- sections.hero.settings.spacing.header | sections\hero.liquid
+- sections.hero.settings.subtitle.label | sections\hero.liquid
+- sections.hero.settings.text_alignment.label | sections\hero.liquid
+- sections.hero.settings.text_alignment.options.center | sections\hero.liquid
+- sections.hero.settings.text_alignment.options.left | sections\hero.liquid
+- sections.hero.settings.text_alignment.options.right | sections\hero.liquid
+- sections.hero.settings.text_color_scheme.label | sections\hero.liquid
+- sections.hero.settings.text_color_scheme.options.accent | sections\hero.liquid
+- sections.hero.settings.text_color_scheme.options.custom | sections\hero.liquid
+- sections.hero.settings.text_color_scheme.options.dark | sections\hero.liquid
+- sections.hero.settings.text_color_scheme.options.light | sections\hero.liquid
+- sections.hero.settings.video_poster.info | sections\hero.liquid
+- sections.hero.settings.video_poster.label | sections\hero.liquid
+- sections.image_with_text.name | sections\image-with-text.liquid
+- sections.image_with_text.presets.name | sections\image-with-text.liquid
+- sections.image_with_text.settings.bg_color.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.button_link.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.button_text.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.description.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.image.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.image_position.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.padding_bottom.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.padding_top.label | sections\image-with-text.liquid
+- sections.image_with_text.settings.title.label | sections\image-with-text.liquid
+- sections.newsletter_popup.name | sections\newsletter-popup.liquid
+- sections.newsletter_popup.no_thanks | sections\newsletter-popup.liquid
+- sections.newsletter_popup.presets.name | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.bg_color.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.button_text.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.cookie_days.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.delay.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.description.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.placeholder.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.settings.title.label | sections\newsletter-popup.liquid
+- sections.newsletter_popup.success | sections\newsletter-popup.liquid
+- sections.product.settings.low_stock_threshold.label | sections\product.liquid
+- sections.product.settings.max_viewers.label | sections\product.liquid
+- sections.product.settings.min_viewers.label | sections\product.liquid
+- sections.product.settings.show_sticky_atc.label | sections\product.liquid
+- sections.product.settings.show_trust_badges.label | sections\product.liquid
+- sections.product.settings.show_urgency_signals.label | sections\product.liquid
+- sections.testimonials.blocks.testimonial.name | sections\testimonials.liquid
+- sections.testimonials.blocks.testimonial.settings.author.label | sections\testimonials.liquid
+- sections.testimonials.blocks.testimonial.settings.image.label | sections\testimonials.liquid
+- sections.testimonials.blocks.testimonial.settings.quote.label | sections\testimonials.liquid
+- sections.testimonials.blocks.testimonial.settings.rating.label | sections\testimonials.liquid
+- sections.testimonials.blocks.testimonial.settings.role.label | sections\testimonials.liquid
+- sections.testimonials.empty | sections\testimonials.liquid
+- sections.testimonials.name | sections\testimonials.liquid
+- sections.testimonials.presets.name | sections\testimonials.liquid
+- sections.testimonials.settings.background_color_scheme.label | sections\testimonials.liquid
+- sections.testimonials.settings.background_color_scheme.options.accent | sections\testimonials.liquid
+- sections.testimonials.settings.background_color_scheme.options.dark | sections\testimonials.liquid
+- sections.testimonials.settings.background_color_scheme.options.light | sections\testimonials.liquid
+- sections.testimonials.settings.content.header | sections\testimonials.liquid
+- sections.testimonials.settings.description.label | sections\testimonials.liquid
+- sections.testimonials.settings.heading.label | sections\testimonials.liquid
+- sections.testimonials.settings.layout.header | sections\testimonials.liquid
+- sections.testimonials.settings.layout.label | sections\testimonials.liquid
+- sections.testimonials.settings.layout.options.four_columns | sections\testimonials.liquid
+- sections.testimonials.settings.layout.options.one_column | sections\testimonials.liquid
+- sections.testimonials.settings.layout.options.three_columns | sections\testimonials.liquid
+- sections.testimonials.settings.layout.options.two_columns | sections\testimonials.liquid
+- sections.testimonials.settings.padding_bottom.label | sections\testimonials.liquid
+- sections.testimonials.settings.padding_top.label | sections\testimonials.liquid
+- sections.testimonials.settings.spacing.header | sections\testimonials.liquid
+- sections.trust_badges.blocks.badge.name | sections\trust-badges.liquid
+- sections.trust_badges.blocks.badge.settings.icon.label | sections\trust-badges.liquid
+- sections.trust_badges.blocks.badge.settings.subtext.label | sections\trust-badges.liquid
+- sections.trust_badges.blocks.badge.settings.text.label | sections\trust-badges.liquid
+- sections.trust_badges.name | sections\trust-badges.liquid
+- sections.trust_badges.presets.name | sections\trust-badges.liquid
+- sections.trust_badges.settings.bg_color.label | sections\trust-badges.liquid
+- sections.trust_badges.settings.padding_bottom.label | sections\trust-badges.liquid
+- sections.trust_badges.settings.padding_top.label | sections\trust-badges.liquid
+- sections.trust_badges.settings.title.label | sections\trust-badges.liquid
+- sections.usp_bar.blocks.item.name | sections\usp-bar.liquid
+- sections.usp_bar.blocks.item.settings.icon.label | sections\usp-bar.liquid
+- sections.usp_bar.blocks.item.settings.subtext.label | sections\usp-bar.liquid
+- sections.usp_bar.blocks.item.settings.text.label | sections\usp-bar.liquid
+- sections.usp_bar.name | sections\usp-bar.liquid
+- sections.usp_bar.presets.name | sections\usp-bar.liquid
+- sections.usp_bar.settings.bg_color.label | sections\usp-bar.liquid
+- sections.usp_bar.settings.padding_bottom.label | sections\usp-bar.liquid
+- sections.usp_bar.settings.padding_top.label | sections\usp-bar.liquid
+- sections.usp_bar.settings.text_color.label | sections\usp-bar.liquid

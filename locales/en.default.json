@@ -1,359 +1,105 @@
 {
   "404": {
-    "title": "404",
-    "not_found": "Page not found.",
-    "back_to_shopping": "Back to shopping"
+    "back_to_shopping": "Back To Shopping",
+    "not_found": "Not Found",
+    "title": "Title"
   },
   "blog": {
-    "article_comments": "Comments",
-    "article_metadata_html": "{{ date }} by {{ author }}",
-    "comment_form_body": "Comment",
-    "comment_form_email": "Email",
-    "comment_form_name": "Name",
-    "comment_form_submit": "Post",
-    "comment_form_title": "Add a comment"
+    "article_comments": "Article Comments",
+    "article_metadata_html": "Article Metadata HTML",
+    "comment_form_body": "Comment Form Body",
+    "comment_form_email": "Comment Form Email",
+    "comment_form_name": "Comment Form Name",
+    "comment_form_submit": "Comment Form Submit",
+    "comment_form_title": "Comment Form Title"
   },
   "cart": {
     "checkout": "Checkout",
-    "title": "Cart",
-    "update": "Update",
+    "continue_shopping": "Continue Shopping",
+    "decrease_quantity": "Decrease Quantity",
+    "discover_products": "Discover Products",
+    "empty": "Empty",
+    "empty_description": "Empty Description",
+    "empty_title": "Empty Title",
+    "increase_quantity": "Increase Quantity",
+    "item_count": "Item Count",
+    "order_summary": "Order Summary",
     "remove": "Remove",
-    "empty": "Your cart is empty",
     "subtotal": "Subtotal",
-    "view_cart": "View cart",
-    "continue_shopping": "Continue shopping",
-    "taxes_note": "Taxes and shipping calculated at checkout"
-  },
-  "customers": {
-    "login": {
-      "email": "Email",
-      "password": "Password",
-      "submit": "Sign in",
-      "title": "Login"
-    }
+    "taxes_included_note": "Taxes Included Note",
+    "taxes_note": "Taxes Note",
+    "title": "Title",
+    "total": "Total",
+    "update": "Update",
+    "view_cart": "View Cart"
   },
   "collections": {
-    "title": "Collections",
-    "explore": "Explore",
-    "items": "items",
-    "view": "View collection"
-  },
-  "gift_card": {
-    "add_to_apple_wallet": "Add to Apple Wallet",
-    "card": "Gift card",
-    "expired": "This gift card has expired",
-    "expires_on": "Expires on {{ expires_on }}",
-    "use_at_checkout": "Use this gift card at checkout"
-  },
-  "password": {
-    "title": "This shop is private",
-    "password": "Password",
-    "enter": "Enter"
-  },
-  "search": {
-    "title": "Search",
-    "placeholder": "Search articles, pages, or products",
-    "submit": "Search",
-    "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}",
-    "no_results": "No results found for",
-    "results_for": "Results for"
+    "items": "Items",
+    "view": "View"
   },
   "general": {
-    "menu": "Menu",
-    "search": "Search",
     "account": "Account",
     "cart": "Cart",
-    "search_placeholder": "Search...",
-    "fonts": "Fonts",
-    "heading_font": "Heading font",
-    "heading_font_info": "Used for titles and headings. Default: Poppins",
-    "body_font": "Body font",
-    "body_font_info": "Used for main text content. Default: Roboto",
-    "accent_font": "Accent font",
-    "accent_font_info": "Used for buttons and highlights. Default: Poppins SemiBold",
-    "404": {
-      "title": "Page not found",
-      "subtext": "The page you requested does not exist.",
-      "link": "Continue shopping"
-    },
-    "footer": "Footer",
-    "header": "Header",
-    "newsletter": "Newsletter",
-    "social": "Social",
-    "payment": "Payment"
+    "close": "Close",
+    "search": "Search",
+    "search_placeholder": "Search Placeholder"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Add To Apple Wallet",
+    "card": "Card",
+    "expired": "Expired",
+    "expires_on": "Expires On",
+    "use_at_checkout": "Use At Checkout"
+  },
+  "password": {
+    "enter": "Enter",
+    "password": "Password",
+    "title": "Title"
+  },
+  "product": {
+    "add_to_cart": "Add To Cart",
+    "adding_to_cart": "Adding To Cart",
+    "low_stock": "Low Stock",
+    "quantity_label": "Quantity Label",
+    "sold_out": "Sold Out",
+    "trust_delivery": "Trust Delivery",
+    "trust_guarantee": "Trust Guarantee",
+    "trust_returns": "Trust Returns",
+    "trust_secure": "Trust Secure",
+    "variant_label": "Variant Label",
+    "viewers_count": "Viewers Count"
+  },
+  "search": {
+    "no_results_html": "No Results HTML",
+    "placeholder": "Placeholder",
+    "results_for_html": "Results For HTML",
+    "submit": "Submit",
+    "title": "Title"
   },
   "sections": {
-    "hero": {
-      "name": "Hero",
-      "presets": {
-        "name": "Hero"
-      },
-      "settings": {
-        "content": {
-          "header": "Content"
-        },
-        "subtitle": {
-          "label": "Subtitle"
-        },
-        "heading": {
-          "label": "Heading"
-        },
-        "description": {
-          "label": "Description"
-        },
-        "buttons": {
-          "header": "Buttons"
-        },
-        "button_text": {
-          "label": "Primary button text"
-        },
-        "button_link": {
-          "label": "Primary button link"
-        },
-        "secondary_button_text": {
-          "label": "Secondary button text"
-        },
-        "secondary_button_link": {
-          "label": "Secondary button link"
-        },
-        "background": {
-          "header": "Background"
-        },
-        "background_image": {
-          "label": "Background image"
-        },
-        "background_video": {
-          "label": "Background video URL",
-          "info": "MP4 format recommended. Will override background image if both are set."
-        },
-        "video_poster": {
-          "label": "Video poster image",
-          "info": "Image shown before video loads. Recommended for better performance."
-        },
-        "overlay_color": {
-          "label": "Overlay color"
-        },
-        "overlay_opacity": {
-          "label": "Overlay opacity"
-        },
-        "layout": {
-          "header": "Layout"
-        },
-        "height": {
-          "label": "Height",
-          "options": {
-            "full_height": "Full height",
-            "large": "Large",
-            "medium": "Medium",
-            "small": "Small"
-          }
-        },
-        "text_alignment": {
-          "label": "Text alignment",
-          "options": {
-            "center": "Center",
-            "left": "Left",
-            "right": "Right"
-          }
-        },
-        "text_color_scheme": {
-          "label": "Text color",
-          "options": {
-            "light": "Light",
-            "dark": "Dark",
-            "accent": "Accent",
-            "custom": "Custom"
-          }
-        },
-        "custom_text_color": {
-          "label": "Custom text color",
-          "info": "Only applies when 'Custom' is selected above"
-        },
-        "animation": {
-          "header": "Animation",
-          "label": "Content animation",
-          "options": {
-            "none": "None",
-            "fade": "Fade in",
-            "slide": "Slide up"
-          }
-        },
-        "spacing": {
-          "header": "Spacing"
-        },
-        "padding_top": {
-          "label": "Padding top"
-        },
-        "padding_bottom": {
-          "label": "Padding bottom"
-        }
-      }
+    "banner": {
+      "timer_label": "Timer Label"
+    },
+    "countdown": {
+      "expired": "Expired"
     },
     "footer": {
-      "settings": {
-        "newsletter": {
-          "header": "Newsletter"
-        },
-        "show_newsletter": {
-          "label": "Show newsletter signup"
-        },
-        "menus": {
-          "header": "Footer Menus"
-        },
-        "company_menu": {
-          "label": "Company menu"
-        },
-        "customer_service_menu": {
-          "label": "Customer service menu"
-        },
-        "legal_menu": {
-          "label": "Legal menu"
-        },
-        "social": {
-          "header": "Social Media"
-        },
-        "show_social_icons": {
-          "label": "Show social media icons"
-        },
-        "payment": {
-          "header": "Payment Methods"
-        },
-        "show_payment_icons": {
-          "label": "Show payment method icons"
-        }
-      }
+      "company_title": "Company Title",
+      "copyright_html": "Copyright HTML",
+      "customer_service_title": "Customer Service Title",
+      "follow_us_title": "Follow Us Title",
+      "legal_title": "Legal Title",
+      "newsletter_button": "Newsletter Button",
+      "newsletter_description": "Newsletter Description",
+      "newsletter_placeholder": "Newsletter Placeholder",
+      "newsletter_title": "Newsletter Title"
     },
-    "banner": {
-      "name": "Announcement Banner",
-      "settings": {
-        "show_banner": {
-          "label": "Show banner"
-        },
-        "text": {
-          "label": "Banner text"
-        },
-        "show_icon": {
-          "label": "Show sparkle icon"
-        },
-        "link": {
-          "label": "Link URL"
-        },
-        "link_text": {
-          "label": "Link text"
-        },
-        "show_close_button": {
-          "label": "Show close button"
-        },
-        "style": {
-          "header": "Style",
-          "label": "Banner style",
-          "options": {
-            "gradient": "Gradient",
-            "solid": "Solid color",
-            "glass": "Glass effect"
-          }
-        }
-      },
-      "presets": {
-        "name": "Announcement Banner"
-      }
+    "newsletter_popup": {
+      "no_thanks": "No Thanks",
+      "success": "Success"
     },
     "testimonials": {
-      "name": "Testimonials",
-      "empty": "No testimonials added yet. Add testimonial blocks to display customer reviews.",
-      "presets": {
-        "name": "Testimonials"
-      },
-      "settings": {
-        "content": {
-          "header": "Content"
-        },
-        "heading": {
-          "label": "Heading"
-        },
-        "description": {
-          "label": "Description"
-        },
-        "layout": {
-          "header": "Layout",
-          "label": "Columns",
-          "options": {
-            "one_column": "1 column",
-            "two_columns": "2 columns",
-            "three_columns": "3 columns",
-            "four_columns": "4 columns"
-          }
-        },
-        "background_color_scheme": {
-          "label": "Background",
-          "options": {
-            "light": "Light",
-            "dark": "Dark",
-            "accent": "Accent"
-          }
-        },
-        "spacing": {
-          "header": "Spacing"
-        },
-        "padding_top": {
-          "label": "Padding top"
-        },
-        "padding_bottom": {
-          "label": "Padding bottom"
-        }
-      },
-      "blocks": {
-        "testimonial": {
-          "name": "Testimonial",
-          "settings": {
-            "image": {
-              "label": "Image"
-            },
-            "quote": {
-              "label": "Quote"
-            },
-            "author": {
-              "label": "Author name"
-            },
-            "role": {
-              "label": "Author role"
-            },
-            "rating": {
-              "label": "Rating"
-            }
-          }
-        }
-      }
-    },
-    "gallery": {
-      "name": "Image Gallery",
-      "settings": {
-        "show_section": "Show section",
-        "header_content": "Content",
-        "subtitle": "Subtitle",
-        "title": "Title",
-        "header_layout": "Layout",
-        "gap": "Spacing",
-        "border_radius": "Corner radius"
-      },
-      "blocks": {
-        "image": {
-          "name": "Image",
-          "settings": {
-            "image": "Image",
-            "caption": "Caption",
-            "link": "Link"
-          }
-        }
-      },
-      "presets": {
-        "name": "Image Gallery"
-      }
+      "empty": "Empty"
     }
-  },
-  "labels": {
-    "menu": "Menu",
-    "show_payment_icons": "Show payment icons"
   }
 }

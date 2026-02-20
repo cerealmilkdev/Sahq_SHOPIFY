@@ -1,398 +1,508 @@
 {% comment %}
-  Modern image gallery with masonry-style layout
-  Consistent with collections.liquid styling
+  Modern Grid Product/Gallery Section
+  A highly customizable grid for showcasing products or curated images.
 {% endcomment %}
 
-{% if section.settings.show_section %}
-  <section 
-    class="image-grid"
-    style="
-      --grid-radius: {{ section.settings.border_radius }}px;
-      --grid-gap: {{ section.settings.gap | default: 16 }}px;
-    "
-  >
-    <div class="image-grid__container">
-      {% if section.settings.title != blank %}
-          <h2 class="image-grid__title">{{ section.settings.title }}</h2>
-        {% endif %}
+{% liquid
+  assign columns_desktop = section.settings.columns_desktop
+  assign columns_mobile = section.settings.columns_mobile
+  assign gap = section.settings.gap
+  assign border_radius = section.settings.border_radius
+  assign aspect_ratio = section.settings.aspect_ratio
+  assign hover_effect = section.settings.hover_effect
+  assign card_style = section.settings.card_style
+%}
 
-      <div class="image-grid__gallery">
-        {% for block in section.blocks %}
-          {% case block.type %}
-            {% when 'image' %}
-              <figure class="image-grid__item" {{ block.shopify_attributes }}>
-                {% if block.settings.link != blank %}
-                  <a href="{{ block.settings.link }}" class="image-grid__link">
-                {% endif %}
-                
-                <div class="image-grid__media">
-                  {% if block.settings.image %}
-                    {% render 'image',
-                      class: 'image-grid__image',
-                      image: block.settings.image,
-                      width: 800,
-                      height: 800,
-                      crop: 'center'
-                    %}
-                  {% else %}
-                    <div class="image-grid__placeholder">
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-                        <rect x="3" y="3" width="18" height="18" rx="3" ry="3"/>
-                        <circle cx="8.5" cy="8.5" r="1.5"/>
-                        <polyline points="21,15 16,10 5,21"/>
-                      </svg>
-                    </div>
-                  {% endif %}
-                  
-                  <div class="image-grid__overlay"></div>
-                </div>
-
-                {% if block.settings.caption != blank %}
-                  <figcaption class="image-grid__caption">
-                    {{ block.settings.caption }}
-                  </figcaption>
-                {% endif %}
-                
-                {% if block.settings.link != blank %}
-                  </a>
-                {% endif %}
-              </figure>
-          {% endcase %}
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-{% endif %}
-
-{% stylesheet %}
-  .image-grid {
-    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-    
-    padding: clamp(2rem, 4vw, 5rem) 0 clamp(3rem, 6vw, 8rem);
-    background: #f8f8f8;
-    overflow-x: hidden;
+<style>
+  .section-{{ section.id }} {
+    --grid-gap: {{ gap }}px;
+    --card-radius: {{ border_radius }}px;
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
   }
 
-  .image-grid__container {
-    max-width: var(--content-width, 1600px);
-    margin: 0 auto;
-    padding: 0 clamp(1rem, 4vw, 3rem);
+  .grid-product__container {
+    display: grid;
+    gap: var(--grid-gap);
+    grid-template-columns: repeat({{ columns_mobile }}, minmax(0, 1fr));
   }
 
-  /* Titre - même style que collections.liquid */
-  .image-grid__title {
-    font-size: clamp(1.75rem, 5vw, 3.5rem);
-    font-weight: 700;
-    color: var(--color-foreground, #1a1a1a);
-    margin: 0 0 clamp(1.5rem, 4vw, 3rem);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    text-align: center;
+  @media screen and (min-width: 768px) {
+    .grid-product__container {
+      grid-template-columns: repeat({{ columns_desktop | minus: 1 | at_least: 2 }}, minmax(0, 1fr));
+    }
   }
 
-  /* ========================================
-     GRID - Masonry avec CSS columns
-     ======================================== */
-  .image-grid__gallery {
-    columns: 2;
-    column-gap: var(--grid-gap);
+  @media screen and (min-width: 1024px) {
+    .grid-product__container {
+      grid-template-columns: repeat({{ columns_desktop }}, minmax(0, 1fr));
+    }
   }
 
-  .image-grid__item {
-    break-inside: avoid;
-    margin: 0 0 var(--grid-gap);
+  .grid-product__item {
     position: relative;
-  }
-
-  .image-grid__link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  /* Media container - même style que collection-card */
-  .image-grid__media {
-    position: relative;
+    border-radius: var(--card-radius);
     overflow: hidden;
-    border-radius: var(--grid-radius);
-    background: linear-gradient(145deg, #eee 0%, #ddd 100%);
-  }
-
-  .image-grid__image {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    transition: transform 0.5s var(--transition-smooth);
-  }
-
-  .image-grid__placeholder {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 4/5;
+    flex-direction: column;
+  }
+
+  .grid-product__image-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #f3f4f6;
+    {% if aspect_ratio != 'auto' %}
+      aspect-ratio: {{ aspect_ratio }};
+    {% endif %}
+  }
+
+  .grid-product__image {
     width: 100%;
     height: 100%;
-    color: rgba(0, 0, 0, 0.15);
-    background: linear-gradient(145deg, #f5f5f5 0%, #e8e8e8 100%);
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Overlay - même style que collection-card */
-  .image-grid__overlay {
+  /* Hover Effects */
+  {% if hover_effect == 'zoom' %}
+    .grid-product__item:hover .grid-product__image {
+      transform: scale(1.1);
+    }
+  {% elsif hover_effect == 'lift' %}
+    .grid-product__item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+  {% endif %}
+
+  /* Card Styles */
+  {% if card_style == 'outline' %}
+    .grid-product__item {
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+  {% elsif card_style == 'shadow' %}
+    .grid-product__item {
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    }
+  {% endif %}
+
+  .grid-product__badge {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.4s var(--transition-smooth);
-    pointer-events: none;
+    top: 12px;
+    left: 12px;
+    z-index: 10;
+    padding: 4px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 99px;
+    background: {{ section.settings.badge_bg_color }};
+    color: {{ section.settings.badge_text_color }};
   }
 
-  .image-grid__item:hover .image-grid__overlay {
-    opacity: 1;
+  .grid-product__content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: {{ section.settings.content_alignment }};
+    text-align: {{ section.settings.content_alignment }};
   }
 
-  .image-grid__item:hover .image-grid__image {
-    transform: scale(1.04);
-  }
-
-  /* Caption */
-  .image-grid__caption {
-    padding: 1rem 0.25rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--color-foreground, #1a1a1a);
-    opacity: 0.6;
+  .grid-product__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--color-foreground);
     line-height: 1.4;
   }
 
-  /* ========================================
-     TV / Ultra-wide (>1920px)
-     ======================================== */
-  @media (min-width: 1920px) {
-    .image-grid__container {
-      max-width: 2000px;
-    }
-
-    .image-grid__title {
-      font-size: 4rem;
-      margin-bottom: 4rem;
-    }
-
-    .image-grid__gallery {
-      columns: 3;
-      column-gap: calc(var(--grid-gap) * 1.5);
-    }
-
-    .image-grid__item {
-      margin-bottom: calc(var(--grid-gap) * 1.5);
-    }
-
-    .image-grid__caption {
-      font-size: 1rem;
-      padding: 1.25rem 0.5rem;
-    }
+  .grid-product__price {
+    font-weight: 500;
+    color: var(--color-accent);
   }
 
-  /* ========================================
-     DESKTOP (1024px - 1919px)
-     ======================================== */
-  @media (min-width: 1024px) and (max-width: 1919px) {
-    .image-grid__gallery {
-      columns: 2;
-    }
+  .grid-product__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+    color: white;
   }
 
-  /* ========================================
-     LAPTOP (1024px - 1440px)
-     ======================================== */
-  @media (min-width: 1024px) and (max-width: 1440px) {
-    .image-grid__gallery {
-      column-gap: clamp(12px, 1.5vw, 20px);
-    }
-
-    .image-grid__item {
-      margin-bottom: clamp(12px, 1.5vw, 20px);
-    }
-
-    .image-grid__caption {
-      font-size: 0.8rem;
-      padding: 0.75rem 0.25rem;
-    }
+  .grid-product__item:hover .grid-product__overlay {
+    opacity: 1;
   }
+</style>
 
-  /* ========================================
-     TABLET (768px - 1023px)
-     ======================================== */
-  @media (min-width: 768px) and (max-width: 1023px) {
-    .image-grid__gallery {
-      columns: 2;
-      column-gap: 16px;
-    }
+<div class="section-{{ section.id }} overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-4 md:px-8">
+    
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+      <div class="mb-10 md:mb-16 text-{{ section.settings.heading_align }}">
+        {% if section.settings.subtitle != blank %}
+          <span class="inline-block text-primary font-bold tracking-widest uppercase text-xs md:text-sm mb-3">{{ section.settings.subtitle }}</span>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground mb-6">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
 
-    .image-grid__item {
-      margin-bottom: 16px;
-    }
+    <div class="grid-product__container">
+      {% for block in section.blocks %}
+        <div class="grid-product__item group" {{ block.shopify_attributes }}>
+          {% case block.type %}
+            {% when 'image' %}
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link }}" class="absolute inset-0 z-20"></a>
+              {% endif %}
+              
+              <div class="grid-product__image-wrapper">
+                {% if block.settings.badge != blank %}
+                  <span class="grid-product__badge">{{ block.settings.badge }}</span>
+                {% endif %}
 
-    .image-grid__caption {
-      font-size: 0.8rem;
-      padding: 0.75rem 0.25rem;
-    }
-  }
+                {% if block.settings.image %}
+                  {% render 'image',
+                    image: block.settings.image,
+                    class: 'grid-product__image',
+                    width: 800
+                  %}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
+                {% endif %}
 
-  /* ========================================
-     MOBILE (<768px)
-     ======================================== */
-  @media (max-width: 767px) {
-    .image-grid {
-      padding: 1.5rem 0 2.5rem;
-    }
+                {% if section.settings.style == 'overlay' %}
+                  <div class="grid-product__overlay">
+                    <div>
+                      <h3 class="text-xl font-bold mb-1">{{ block.settings.title }}</h3>
+                      <p class="text-sm opacity-80">{{ block.settings.caption }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
 
-    .image-grid__container {
-      padding: 0 1rem;
-    }
+              {% if section.settings.style == 'standard' %}
+                <div class="grid-product__content">
+                  <h3 class="grid-product__title">{{ block.settings.title }}</h3>
+                  {% if block.settings.caption != blank %}
+                    <p class="text-sm opacity-60 line-clamp-2">{{ block.settings.caption }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
 
-    .image-grid__title {
-      font-size: 1.5rem;
-      margin-bottom: 1.25rem;
-      text-align: left;
-    }
+            {% when 'product' %}
+              {% assign product = block.settings.product %}
+              {% if product != blank %}
+                <a href="{{ product.url }}" class="absolute inset-0 z-20"></a>
+                
+                <div class="grid-product__image-wrapper">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="grid-product__badge">Sale</span>
+                  {% endif %}
 
-    .image-grid__gallery {
-      columns: 1;
-    }
+                  {% render 'image',
+                    image: product.featured_image,
+                    class: 'grid-product__image',
+                    width: 800
+                  %}
+                </div>
 
-    .image-grid__item {
-      margin-bottom: 1rem;
-    }
+                <div class="grid-product__content">
+                  <h3 class="grid-product__title">{{ product.title }}</h3>
+                  <div class="grid-product__price">
+                    {{ product.price | money }}
+                    {% if product.compare_at_price > product.price %}
+                      <span class="text-sm line-through opacity-50 ml-2">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              {% else %}
+                <div class="grid-product__image-wrapper">
+                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
+                </div>
+                <div class="grid-product__content">
+                  <h3 class="grid-product__title">Sample Product</h3>
+                  <p class="grid-product__price">$19.99</p>
+                </div>
+              {% endif %}
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
 
-    .image-grid__media {
-      border-radius: calc(var(--grid-radius) * 0.75);
-    }
-
-    .image-grid__caption {
-      font-size: 0.8rem;
-      padding: 0.75rem 0;
-    }
-
-    /* Désactiver hover sur touch */
-    .image-grid__item:hover .image-grid__image {
-      transform: none;
-    }
-
-    .image-grid__item:hover .image-grid__overlay {
-      opacity: 0;
-    }
-  }
-
-  /* ========================================
-     SMALL MOBILE (<400px)
-     ======================================== */
-  @media (max-width: 399px) {
-    .image-grid__caption {
-      font-size: 0.75rem;
-    }
-  }
-
-  /* Focus states */
-  .image-grid__link:focus-visible {
-    outline: 2px solid var(--color-foreground, #1a1a1a);
-    outline-offset: 3px;
-    border-radius: var(--grid-radius);
-  }
-
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .image-grid__image,
-    .image-grid__overlay {
-      transition: none;
-    }
-
-    .image-grid__item:hover .image-grid__image {
-      transform: none;
-    }
-  }
-{% endstylesheet %}
+    {% if section.settings.button_label != blank %}
+      <div class="mt-12 md:mt-20 text-center">
+        <a href="{{ section.settings.button_link }}" class="inline-flex items-center justify-center px-10 py-4 bg-primary text-white font-bold rounded-full transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-primary/20">
+          {{ section.settings.button_label }}
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
 
 {% schema %}
 {
-  "name": "t:sections.gallery.name",
+  "name": "Modern Product Grid",
   "tag": "section",
   "settings": [
     {
-      "type": "checkbox",
-      "id": "show_section",
-      "label": "t:sections.gallery.settings.show_section",
-      "default": true
-    },
-    {
       "type": "header",
-      "content": "t:sections.gallery.settings.header_content"
+      "content": "Content"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "t:sections.gallery.settings.title",
-      "default": "Our Gallery"
+      "label": "Heading",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sub-heading",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
     },
     {
       "type": "header",
-      "content": "t:sections.gallery.settings.header_layout"
+      "content": "Grid Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Columns (Desktop)",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Columns (Mobile)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
     },
     {
       "type": "range",
       "id": "gap",
-      "label": "t:sections.gallery.settings.gap",
-      "min": 8,
-      "max": 40,
+      "min": 0,
+      "max": 60,
       "step": 4,
-      "default": 16,
+      "label": "Gap between items",
+      "default": 24,
       "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Card Style"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Card Layout",
+      "options": [
+        { "value": "standard", "label": "Standard (Info below)" },
+        { "value": "overlay", "label": "Overlay (Info on hover)" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "select",
+      "id": "card_style",
+      "label": "Card Visual Style",
+      "options": [
+        { "value": "none", "label": "Clean" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "shadow", "label": "Soft Shadow" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Image Aspect Ratio",
+      "options": [
+        { "value": "auto", "label": "Natural" },
+        { "value": "1/1", "label": "Square (1:1)" },
+        { "value": "4/5", "label": "Portrait (4:5)" },
+        { "value": "16/9", "label": "Landscape (16:9)" }
+      ],
+      "default": "4/5"
+    },
+    {
+      "type": "select",
+      "id": "hover_effect",
+      "label": "Hover Effect",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "zoom", "label": "Zoom Image" },
+        { "value": "lift", "label": "Lift Card" }
+      ],
+      "default": "zoom"
     },
     {
       "type": "range",
       "id": "border_radius",
-      "label": "t:sections.gallery.settings.border_radius",
       "min": 0,
-      "max": 32,
+      "max": 40,
       "step": 4,
-      "default": 16,
+      "label": "Corner Radius",
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "options": [
+        { "value": "flex-start", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background",
+      "default": "transparent"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge Background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Footer Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "label": "Padding Top",
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "label": "Padding Bottom",
+      "default": 60,
       "unit": "px"
     }
   ],
   "blocks": [
     {
       "type": "image",
-      "name": "t:sections.gallery.blocks.image.name",
+      "name": "Custom Card",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:sections.gallery.blocks.image.settings.image"
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Curated Item"
         },
         {
           "type": "text",
           "id": "caption",
-          "label": "t:sections.gallery.blocks.image.settings.caption"
+          "label": "Caption",
+          "default": "Short description here"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge Text",
+          "placeholder": "NEW"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.gallery.blocks.image.settings.link"
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select Product"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.gallery.presets.name",
+      "name": "Modern Product Grid",
       "blocks": [
-        { "type": "image" },
-        { "type": "image" },
-        { "type": "image" },
-        { "type": "image" }
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
       ]
     }
-  ],
-  "max_blocks": 24
+  ]
 }
 {% endschema %}
