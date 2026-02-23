@@ -36,20 +36,71 @@
 
         {% if product.variants.size > 1 %}
           <div class="form-group">
-            <label for="variant-select" class="form-label">{{ 'product.variant_label' | t }}</label>
-            <select name="id" id="variant-select" class="form-select">
+            <label class="form-label">{{ 'product.variant_label' | t }}</label>
+
+            {% comment %} Hidden real select (kept for form submission) {% endcomment %}
+            <select name="id" id="variant-select" class="form-select" style="display:none;" aria-hidden="true">
               {% for variant in product.variants %}
                 <option
                   value="{{ variant.id }}"
-                  {% if variant == current_variant %}
-                    selected="selected"
-                  {% endif %}
+                  data-price="{{ variant.price }}"
+                  data-available="{{ variant.available }}"
+                  {% if variant == current_variant %}selected="selected"{% endif %}
                 >
-                  {{ variant.title }} - {{ variant.price | money }}
+                  {{ variant.title }}
                 </option>
               {% endfor %}
             </select>
+
+            {% comment %} Swatch UI {% endcomment %}
+            {% for option in product.options_with_values %}
+              <div class="swatch-group" data-option-index="{{ forloop.index0 }}">
+                <span class="swatch-group__label">
+                  {{ option.name }}:
+                  <span class="swatch-group__selected" id="swatch-val-{{ forloop.index0 }}">
+                    {{ option.selected_value }}
+                  </span>
+                </span>
+                <div class="swatch-list">
+                  {% assign opt_name_lower = option.name | downcase %}
+                  {% for value in option.values %}
+                    {% assign value_lower = value | downcase %}
+                    {% comment %} Check availability {% endcomment %}
+                    {% assign is_available = false %}
+                    {% for variant in product.variants %}
+                      {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                        {% if variant.available %}{% assign is_available = true %}{% endif %}
+                      {% endif %}
+                    {% endfor %}
+
+                    {% if opt_name_lower == 'couleur' or opt_name_lower == 'color' or opt_name_lower == 'colour' %}
+                      <button
+                        type="button"
+                        class="swatch swatch--color {% if value == option.selected_value %}is-selected{% endif %} {% unless is_available %}is-unavailable{% endunless %}"
+                        data-swatch-value="{{ value | escape }}"
+                        data-option-index="{{ forloop.parentloop.index0 }}"
+                        title="{{ value | escape }}"
+                        aria-label="{{ value | escape }}"
+                        style="background-color: {{ value | downcase | replace: ' ', '' }};"
+                      ></button>
+                    {% else %}
+                      <button
+                        type="button"
+                        class="swatch swatch--label {% if value == option.selected_value %}is-selected{% endif %} {% unless is_available %}is-unavailable{% endunless %}"
+                        data-swatch-value="{{ value | escape }}"
+                        data-option-index="{{ forloop.parentloop.index0 }}"
+                        aria-label="{{ value | escape }}"
+                      >
+                        {{ value }}
+                      </button>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
           </div>
+        {% else %}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
         {% endif %}
 
         <div class="form-group">
@@ -83,7 +134,10 @@
           </div>
         {% endif %}
 
-        <div class="form-actions">
+        {% comment %} Back-in-Stock Form (auto shown if variant unavailable) {% endcomment %}
+        {% render 'back-in-stock', variant: current_variant %}
+
+        <div class="form-actions" {% unless current_variant.available %}style="display:none;"{% endunless %} id="product-form-actions">
           <button type="submit" class="btn btn-primary" data-add-to-cart
             data-text-default="{{ 'product.add_to_cart' | t }}"
             data-text-adding="{{ 'product.adding_to_cart' | t }}"
@@ -99,7 +153,7 @@
             </span>
             <span class="btn-icon">🛒</span>
           </button>
-          {{ form | payment_button }}
+          {% if current_variant.available %}{{ form | payment_button }}{% endif %}
         </div>
 
         {% if section.settings.show_trust_badges %}
@@ -509,6 +563,107 @@
     .sticky-atc__image { display: none; }
     .sticky-atc__btn { padding: 0.625rem 1rem; }
   }
+
+  /* Variant Swatches */
+  .swatch-group {
+    margin-bottom: 1rem;
+  }
+
+  .swatch-group__label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .swatch-group__selected {
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #555;
+  }
+
+  .swatch-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .swatch {
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+    position: relative;
+    background: none;
+    font-family: inherit;
+  }
+
+  .swatch:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+  }
+
+  /* Color swatches */
+  .swatch--color {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.15);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3);
+  }
+
+  .swatch--color.is-selected {
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #667eea;
+  }
+
+  .swatch--color.is-unavailable {
+    opacity: 0.35;
+    cursor: not-allowed;
+    position: relative;
+  }
+
+  .swatch--color.is-unavailable::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(to bottom right, transparent calc(50% - 1px), rgba(0,0,0,0.4) 50%, transparent calc(50% + 1px));
+  }
+
+  /* Label swatches (size, etc.) */
+  .swatch--label {
+    padding: 0.35rem 0.75rem;
+    border: 2px solid rgba(0,0,0,0.12);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    background: #fff;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  .swatch--label.is-selected {
+    border-color: #667eea;
+    background: #667eea;
+    color: #fff;
+  }
+
+  .swatch--label:hover:not(.is-unavailable):not(.is-selected) {
+    border-color: #667eea;
+    color: #667eea;
+  }
+
+  .swatch--label.is-unavailable {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -550,7 +705,49 @@
     }
 
     handleVariantChange(e) {
-      // Variant change logic placeholder
+      const select = this.variantSelect;
+      if (!select) return;
+      const selectedOption = select.options[select.selectedIndex];
+      const price = selectedOption ? parseInt(selectedOption.dataset.price) : 0;
+      const available = selectedOption ? selectedOption.dataset.available !== 'false' : false;
+
+      // Update price display
+      const priceEl = document.querySelector('.product-price');
+      if (priceEl && price) {
+        const formatted = this.formatMoney(price);
+        priceEl.textContent = formatted;
+      }
+
+      // Update ATC button state
+      if (this.submitButton) {
+        this.submitButton.disabled = !available;
+        const btnText = this.submitButton.querySelector('.btn-text');
+        if (btnText) {
+          btnText.textContent = available
+            ? (this.submitButton.dataset.textDefault || 'Add to Cart')
+            : (this.submitButton.dataset.textSoldOut || 'Sold Out');
+        }
+      }
+
+      // Update form-actions visibility
+      const formActions = document.getElementById('product-form-actions');
+      if (formActions) formActions.style.display = available ? '' : 'none';
+
+      // Update sticky ATC price
+      const stickyPrice = document.querySelector('.sticky-atc__price');
+      if (stickyPrice && price) stickyPrice.textContent = this.formatMoney(price);
+
+      // Fire custom event for volume discounts, etc.
+      document.dispatchEvent(new CustomEvent('variant:change', { detail: { price: price, available: available } }));
+    }
+
+    formatMoney(cents) {
+      if (window.Shopify && window.Shopify.money_format) {
+        return window.Shopify.money_format
+          .replace(/\{\{\s*amount\s*\}\}/, (cents / 100).toFixed(2))
+          .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100));
+      }
+      return (cents / 100).toFixed(2) + ' €';
     }
 
     handleQuantityChange(e) {
@@ -588,10 +785,61 @@
         textEl.textContent = textEl.textContent.replace(/\d+/, count);
       }
     }
+
+    initSwatches() {
+      const swatches = document.querySelectorAll('[data-swatch-value]');
+      const variantSelect = this.variantSelect;
+      if (!swatches.length || !variantSelect) return;
+
+      const variants = Array.from(variantSelect.options).map(opt => ({
+        id: opt.value,
+        title: opt.textContent.trim(),
+        price: parseInt(opt.dataset.price) || 0,
+        available: opt.dataset.available !== 'false'
+      }));
+
+      swatches.forEach(swatch => {
+        swatch.addEventListener('click', () => {
+          if (swatch.classList.contains('is-unavailable')) return;
+
+          const optIdx = parseInt(swatch.dataset.optionIndex);
+          const value  = swatch.dataset.swatchValue;
+
+          // Update selected in group
+          document.querySelectorAll(`.swatch-list [data-option-index="${optIdx}"]`).forEach(s => s.classList.remove('is-selected'));
+          swatch.classList.add('is-selected');
+
+          // Update label display
+          const labelEl = document.getElementById('swatch-val-' + optIdx);
+          if (labelEl) labelEl.textContent = value;
+
+          // Build current selection across all option groups
+          const currentOptions = {};
+          document.querySelectorAll('.swatch.is-selected').forEach(s => {
+            currentOptions[parseInt(s.dataset.optionIndex)] = s.dataset.swatchValue;
+          });
+
+          // Match variant
+          const matched = variants.find(v => {
+            const parts = v.title.split(' / ');
+            return Object.keys(currentOptions).every(i => parts[i] === currentOptions[i]);
+          });
+
+          if (matched) {
+            // Update hidden select
+            Array.from(variantSelect.options).forEach(opt => {
+              opt.selected = opt.value === matched.id;
+            });
+            variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    new ProductPage();
+    const page = new ProductPage();
+    page.initSwatches();
   });
 {% endjavascript %}
 

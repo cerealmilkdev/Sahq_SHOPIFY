@@ -1,0 +1,142 @@
+{% comment %}
+  Wishlist — 100% localStorage, no account needed.
+  Include this snippet on product cards:
+    {% render 'wishlist', product: product %}
+  Include on the wishlist page template via sections/wishlist.liquid.
+{% endcomment %}
+
+{% if product %}
+<button
+  class="wishlist-btn"
+  data-wishlist-btn
+  data-handle="{{ product.handle }}"
+  data-title="{{ product.title | escape }}"
+  data-price="{{ product.price }}"
+  data-image="{{ product.featured_image | image_url: width: 400 | default: '' }}"
+  data-url="{{ product.url }}"
+  aria-label="Ajouter aux favoris"
+  title="Ajouter aux favoris"
+>
+  <svg class="wishlist-icon wishlist-icon--empty" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+  </svg>
+  <svg class="wishlist-icon wishlist-icon--filled" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" style="display:none;">
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+  </svg>
+</button>
+{% endif %}
+
+<style>
+  .wishlist-btn {
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    color: #888;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .wishlist-btn:hover {
+    transform: scale(1.1);
+    color: #e74c3c;
+    background: #fff;
+  }
+
+  .wishlist-btn.is-wishlisted {
+    color: #e74c3c;
+    background: #fff0f0;
+  }
+
+  .wishlist-btn.is-wishlisted .wishlist-icon--empty { display: none !important; }
+  .wishlist-btn.is-wishlisted .wishlist-icon--filled { display: block !important; }
+
+  .wishlist-btn:not(.is-wishlisted) .wishlist-icon--empty { display: block !important; }
+  .wishlist-btn:not(.is-wishlisted) .wishlist-icon--filled { display: none !important; }
+</style>
+
+<script>
+(function() {
+  var WL_KEY = 'wishlist_handles';
+
+  function getWishlist() {
+    try { return JSON.parse(localStorage.getItem(WL_KEY)) || []; }
+    catch(e) { return []; }
+  }
+
+  function saveWishlist(arr) {
+    try { localStorage.setItem(WL_KEY, JSON.stringify(arr)); }
+    catch(e) {}
+  }
+
+  function getProductData(btn) {
+    return {
+      handle: btn.dataset.handle,
+      title: btn.dataset.title,
+      price: parseInt(btn.dataset.price) || 0,
+      image: btn.dataset.image,
+      url: btn.dataset.url
+    };
+  }
+
+  function isWishlisted(handle) {
+    return getWishlist().some(function(p) { return p.handle === handle; });
+  }
+
+  function updateBtn(btn) {
+    var handle = btn.dataset.handle;
+    btn.classList.toggle('is-wishlisted', isWishlisted(handle));
+  }
+
+  function initButtons() {
+    document.querySelectorAll('[data-wishlist-btn]').forEach(function(btn) {
+      updateBtn(btn);
+      // Remove duplicate listeners
+      btn.removeEventListener('click', onWishlistClick);
+      btn.addEventListener('click', onWishlistClick);
+    });
+  }
+
+  function onWishlistClick(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var btn = e.currentTarget;
+    var handle = btn.dataset.handle;
+    var wl = getWishlist();
+
+    if (isWishlisted(handle)) {
+      wl = wl.filter(function(p) { return p.handle !== handle; });
+    } else {
+      wl.unshift(getProductData(btn));
+    }
+
+    saveWishlist(wl);
+    updateBtn(btn);
+    document.dispatchEvent(new CustomEvent('wishlist:update', { detail: { count: wl.length } }));
+  }
+
+  // Expose global API
+  window.Wishlist = {
+    get: getWishlist,
+    isWishlisted: isWishlisted,
+    remove: function(handle) {
+      var wl = getWishlist().filter(function(p) { return p.handle !== handle; });
+      saveWishlist(wl);
+      document.querySelectorAll('[data-wishlist-btn][data-handle="' + handle + '"]').forEach(updateBtn);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', initButtons);
+  // Re-init after dynamic content loads (quick view, etc.)
+  document.addEventListener('section:load', initButtons);
+})();
+</script>

@@ -1,0 +1,493 @@
+{% comment %}
+  Native Reviews Section
+  Static reviews configurable via blocks in the customizer.
+  Includes JSON-LD structured data for SEO rich snippets.
+{% endcomment %}
+
+{% if section.blocks.size > 0 %}
+
+{% comment %} Calculate average rating {% endcomment %}
+{% assign total_rating = 0 %}
+{% assign valid_reviews = 0 %}
+{% for block in section.blocks %}
+  {% if block.type == 'review' %}
+    {% assign total_rating = total_rating | plus: block.settings.rating %}
+    {% assign valid_reviews = valid_reviews | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% assign avg_rating = 0 %}
+{% if valid_reviews > 0 %}
+  {% assign avg_rating = total_rating | divided_by: valid_reviews | times: 10 | round | divided_by: 10.0 %}
+{% endif %}
+
+<div class="reviews-section section-{{ section.id }}">
+  <div class="reviews-container">
+
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+      <div class="reviews-header">
+        {% if section.settings.subtitle != blank %}
+          <span class="reviews-subtitle">{{ section.settings.subtitle }}</span>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="reviews-title">{{ section.settings.title }}</h2>
+        {% endif %}
+
+        {% if section.settings.show_summary and valid_reviews > 0 %}
+          <div class="reviews-summary">
+            <div class="reviews-summary__stars">
+              {% assign full_stars = avg_rating | floor %}
+              {% assign half_star = avg_rating | minus: full_stars %}
+              {% assign next_star = full_stars | plus: 1 %}
+              {% for i in (1..5) %}
+                {% if i <= full_stars %}
+                  <svg class="star star--full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% elsif i == next_star and half_star >= 0.5 %}
+                  <svg class="star star--half" viewBox="0 0 24 24"><defs><linearGradient id="half-{{ section.id }}-{{ i }}"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="transparent"/></linearGradient></defs><path fill="url(#half-{{ section.id }}-{{ i }})" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path fill="none" stroke="currentColor" stroke-width="1" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% else %}
+                  <svg class="star star--empty" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <span class="reviews-summary__score">{{ avg_rating }}</span>
+            <span class="reviews-summary__count">/ 5 ({{ valid_reviews }} avis)</span>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="reviews-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'review' %}
+          {% assign initials = block.settings.name | slice: 0, 1 | upcase %}
+          {% assign color_index = forloop.index | modulo: 6 %}
+          <div class="review-card" {{ block.shopify_attributes }}>
+            <div class="review-card__top">
+              <div class="review-card__avatar" data-color="{{ color_index }}">{{ initials }}</div>
+              <div class="review-card__meta">
+                <span class="review-card__name">{{ block.settings.name }}</span>
+                {% if block.settings.location != blank %}
+                  <span class="review-card__location">{{ block.settings.location }}</span>
+                {% endif %}
+              </div>
+              {% if block.settings.verified %}
+                <span class="review-card__verified">✓ Vérifié</span>
+              {% endif %}
+            </div>
+
+            <div class="review-card__stars">
+              {% assign rating = block.settings.rating %}
+              {% for i in (1..5) %}
+                {% if i <= rating %}
+                  <svg class="star star--full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% else %}
+                  <svg class="star star--empty" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.5" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            {% if block.settings.review_title != blank %}
+              <p class="review-card__review-title">{{ block.settings.review_title }}</p>
+            {% endif %}
+
+            <p class="review-card__body">{{ block.settings.body }}</p>
+
+            {% if block.settings.date != blank %}
+              <span class="review-card__date">{{ block.settings.date }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  .reviews-container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .reviews-header {
+    text-align: {{ section.settings.heading_align }};
+    margin-bottom: 2.5rem;
+  }
+
+  .reviews-subtitle {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+  }
+
+  .reviews-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--color-foreground);
+    margin: 0 0 1rem;
+    line-height: 1.2;
+  }
+
+  .reviews-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff8e1;
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .reviews-summary__stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .reviews-summary__score {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #333;
+  }
+
+  .reviews-summary__count {
+    font-size: 0.8rem;
+    color: #666;
+  }
+
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .review-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .review-card__top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .review-card__avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .review-card__avatar[data-color="0"] { background: linear-gradient(135deg, #667eea, #764ba2); }
+  .review-card__avatar[data-color="1"] { background: linear-gradient(135deg, #f093fb, #f5576c); }
+  .review-card__avatar[data-color="2"] { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+  .review-card__avatar[data-color="3"] { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+  .review-card__avatar[data-color="4"] { background: linear-gradient(135deg, #fa709a, #fee140); }
+  .review-card__avatar[data-color="5"] { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+
+  .review-card__meta {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .review-card__name {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .review-card__location {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+  }
+
+  .review-card__verified {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #28a745;
+    background: #f0fff4;
+    padding: 2px 8px;
+    border-radius: 50px;
+    white-space: nowrap;
+  }
+
+  .review-card__stars {
+    display: flex;
+    gap: 2px;
+  }
+
+  .review-card__review-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  .review-card__body {
+    font-size: 0.875rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+  }
+
+  .review-card__date {
+    font-size: 0.72rem;
+    color: #aaa;
+    margin-top: auto;
+  }
+
+  /* Stars */
+  .star {
+    width: 16px;
+    height: 16px;
+    color: #f59e0b;
+    fill: #f59e0b;
+    flex-shrink: 0;
+  }
+
+  .star--empty {
+    fill: transparent;
+    color: #d1d5db;
+  }
+
+  .star--half { fill: url(#half); }
+
+  @media (max-width: 600px) {
+    .reviews-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{% comment %} JSON-LD structured data {% endcomment %}
+{% if section.settings.show_jsonld and valid_reviews > 0 %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | default: shop.name | json }},
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ avg_rating }}",
+    "reviewCount": "{{ valid_reviews }}"
+  },
+  "review": [
+    {% for block in section.blocks %}
+      {% if block.type == 'review' %}
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "{{ block.settings.rating }}"
+          },
+          "name": {{ block.settings.review_title | default: block.settings.name | json }},
+          "author": {
+            "@type": "Person",
+            "name": {{ block.settings.name | json }}
+          },
+          "reviewBody": {{ block.settings.body | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Reviews",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Ce que disent nos clients"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Sous-titre",
+      "default": "Avis vérifiés"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Alignement",
+      "options": [
+        { "value": "left", "label": "Gauche" },
+        { "value": "center", "label": "Centre" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_summary",
+      "label": "Afficher la note globale",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_jsonld",
+      "label": "Activer les données structurées (SEO)",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Couleur de fond",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espace haut",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espace bas",
+      "default": 60
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Avis client",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nom",
+          "default": "Sophie M."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Localisation",
+          "placeholder": "Paris, France"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Note",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "review_title",
+          "label": "Titre de l'avis",
+          "placeholder": "Produit excellent !"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Texte de l'avis",
+          "default": "Vraiment satisfait(e) de mon achat. La qualité est au rendez-vous et la livraison a été rapide !"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date",
+          "placeholder": "12 janvier 2025"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Achat vérifié",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "name": "Sophie M.",
+            "location": "Lyon",
+            "rating": 5,
+            "review_title": "Absolument parfait !",
+            "body": "Je suis ravie de mon achat ! La qualité dépasse mes attentes et la livraison était ultra rapide. Je recommande sans hésiter.",
+            "date": "15 janvier 2025",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Lucas D.",
+            "location": "Paris",
+            "rating": 5,
+            "review_title": "Rapport qualité/prix imbattable",
+            "body": "Commande reçue en 3 jours, emballage soigné et produit conforme à la description. Très bonne expérience d'achat.",
+            "date": "8 janvier 2025",
+            "verified": true
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Emma B.",
+            "location": "Bordeaux",
+            "rating": 4,
+            "review_title": "Très bon produit",
+            "body": "Contente de mon achat, la qualité est vraiment bonne. Le service client a été réactif pour répondre à mes questions.",
+            "date": "20 décembre 2024",
+            "verified": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

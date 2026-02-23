@@ -94,5 +94,120 @@
         "default": 4
       }
     ]
+  },
+  {
+    "name": "Shipping Progress Bar",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Barre livraison gratuite"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "Seuil livraison gratuite (€)",
+        "info": "Montant en euros. 0 = désactivé.",
+        "default": 50
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_label",
+        "label": "Message en cours",
+        "default": "Plus que {amount} pour la livraison gratuite !"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_unlocked",
+        "label": "Message débloqué",
+        "default": "🎉 Livraison gratuite débloquée !"
+      }
+    ]
+  },
+  {
+    "name": "Social Proof Toast",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Notification d'achat récent"
+      },
+      {
+        "type": "checkbox",
+        "id": "sp_toast_enabled",
+        "label": "Activer le Social Proof Toast",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "sp_toast_names",
+        "label": "Noms & villes (un par ligne)",
+        "default": "Sophie de Lyon\nLucas de Paris\nEmma de Bordeaux\nNoa de Marseille\nThéo de Lyon\nClara de Nantes\nMaxime de Toulouse\nLéa de Strasbourg\nJulie de Nice\nAntoine de Rennes"
+      },
+      {
+        "type": "text",
+        "id": "sp_toast_product_title",
+        "label": "Titre produit (si hors page produit)",
+        "default": "ce produit"
+      },
+      {
+        "type": "range",
+        "id": "sp_toast_first_delay",
+        "min": 3,
+        "max": 60,
+        "step": 1,
+        "unit": "s",
+        "label": "Délai avant première notification",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "sp_toast_interval",
+        "min": 10,
+        "max": 120,
+        "step": 5,
+        "unit": "s",
+        "label": "Intervalle entre notifications",
+        "default": 25
+      }
+    ]
+  },
+  {
+    "name": "Upsell Modal",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Modal upsell post-ATC"
+      },
+      {
+        "type": "checkbox",
+        "id": "upsell_enabled",
+        "label": "Activer le modal upsell",
+        "default": false,
+        "info": "Le produit upsell est configuré depuis les paramètres de section Produit."
+      },
+      {
+        "type": "text",
+        "id": "upsell_pretitle",
+        "label": "Pré-titre",
+        "default": "Super choix !"
+      },
+      {
+        "type": "text",
+        "id": "upsell_title",
+        "label": "Titre modal",
+        "default": "Vous pourriez aussi aimer…"
+      },
+      {
+        "type": "text",
+        "id": "upsell_cta_yes",
+        "label": "Bouton Oui",
+        "default": "Oui, ajouter !"
+      },
+      {
+        "type": "text",
+        "id": "upsell_cta_no",
+        "label": "Bouton Non",
+        "default": "Non merci"
+      }
+    ]
   }
 ]

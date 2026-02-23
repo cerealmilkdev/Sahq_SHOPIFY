@@ -19,6 +19,35 @@
     </button>
   </div>
 
+  <!-- Shipping Progress Bar -->
+  {% assign threshold = settings.free_shipping_threshold | default: 0 | times: 100 %}
+  {% if threshold > 0 %}
+    {% assign progress = cart.total_price | times: 100 | divided_by: threshold %}
+    {% if progress > 100 %}{% assign progress = 100 %}{% endif %}
+    {% assign remaining = threshold | minus: cart.total_price %}
+    {% assign remaining_money = remaining | money %}
+    <div class="shipping-bar" id="shipping-bar" data-threshold="{{ threshold }}" data-cart-price="{{ cart.total_price }}">
+      {% if cart.total_price >= threshold %}
+        <p class="shipping-bar__msg shipping-bar__msg--done" id="shipping-bar-msg">
+          {{ settings.free_shipping_unlocked | default: '🎉 Livraison gratuite débloquée !' }}
+        </p>
+      {% else %}
+        <p class="shipping-bar__msg" id="shipping-bar-msg">
+          {% assign free_shipping_label = settings.free_shipping_label %}
+          {% if free_shipping_label == blank %}
+            Plus que {{ remaining_money }} pour la livraison gratuite !
+          {% else %}
+            {% capture amount_token %}{% raw %}{amount}{% endraw %}{% endcapture %}
+            {{ free_shipping_label | replace: amount_token, remaining_money }}
+          {% endif %}
+        </p>
+      {% endif %}
+      <div class="shipping-bar__track">
+        <div class="shipping-bar__fill" id="shipping-bar-fill" style="width:{{ progress }}%"></div>
+      </div>
+    </div>
+  {% endif %}
+
   <!-- Cart Items (rendered by JS) -->
   <div class="cart-drawer__content" data-cart-items>
     {% if cart.item_count > 0 %}
@@ -383,6 +412,43 @@
     background: rgba(0, 0, 0, 0.05);
   }
 
+  /* Shipping Bar */
+  .shipping-bar {
+    padding: 0.75rem 1.25rem 0.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    background: #fff;
+  }
+
+  .shipping-bar__msg {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #444;
+    margin: 0 0 0.5rem;
+    text-align: center;
+  }
+
+  .shipping-bar__msg--done {
+    color: #28a745;
+  }
+
+  .shipping-bar__track {
+    height: 6px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 50px;
+    overflow: hidden;
+  }
+
+  .shipping-bar__fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    transition: width 0.5s ease;
+  }
+
+  .shipping-bar__fill.is-complete {
+    background: linear-gradient(90deg, #28a745, #20c997);
+  }
+
   /* Responsive */
   @media (max-width: 480px) {
     .cart-drawer__item {
@@ -406,3 +472,50 @@
     }
   }
 </style>
+
+<script>
+(function() {
+  function updateShippingBar(cartTotal) {
+    var bar = document.getElementById('shipping-bar');
+    if (!bar) return;
+
+    var threshold = parseInt(bar.dataset.threshold) || 0;
+    if (!threshold) return;
+
+    var fill = document.getElementById('shipping-bar-fill');
+    var msg  = document.getElementById('shipping-bar-msg');
+
+    var progress = Math.min(100, Math.round((cartTotal / threshold) * 100));
+
+    if (fill) {
+      fill.style.width = progress + '%';
+      fill.classList.toggle('is-complete', cartTotal >= threshold);
+    }
+
+    if (msg) {
+      if (cartTotal >= threshold) {
+        msg.classList.add('shipping-bar__msg--done');
+        msg.textContent = {{ settings.free_shipping_unlocked | default: '🎉 Livraison gratuite débloquée !' | json }};
+      } else {
+        msg.classList.remove('shipping-bar__msg--done');
+        var remaining = threshold - cartTotal;
+        var label = {{ settings.free_shipping_label | json }};
+        var formatted = remaining / 100;
+        var amount = formatted.toFixed(2) + ' €';
+        if (label) {
+          msg.textContent = label.replace('{amount}', amount).replace('[amount]', amount);
+        } else {
+          msg.textContent = 'Plus que ' + amount + ' pour la livraison gratuite !';
+        }
+      }
+    }
+  }
+
+  // Hook into cart updates
+  document.addEventListener('cart:updated', function(e) {
+    if (e.detail && typeof e.detail.total_price !== 'undefined') {
+      updateShippingBar(e.detail.total_price);
+    }
+  });
+})();
+</script>

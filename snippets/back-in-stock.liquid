@@ -1,0 +1,154 @@
+{% comment %}
+  Back-in-Stock Capture
+  Automatically shown when current_variant.available == false.
+  Include in sections/product.liquid inside the product form area.
+  Usage: {% render 'back-in-stock', variant: current_variant %}
+{% endcomment %}
+
+{% assign show_bis = false %}
+{% if variant.available == false %}
+  {% assign show_bis = true %}
+{% endif %}
+
+{% if show_bis %}
+<div class="bis-wrap" id="bis-wrap">
+  <p class="bis-message">
+    <span class="bis-icon">🔔</span>
+    {{ 'product.bis_message' | t | default: 'Ce produit est actuellement épuisé.' }}
+  </p>
+  <div class="bis-form" id="bis-form">
+    <input
+      type="email"
+      class="bis-input"
+      id="bis-email"
+      placeholder="{{ 'product.bis_placeholder' | t | default: 'Votre adresse e-mail' }}"
+      autocomplete="email"
+      required
+    >
+    <button type="button" class="bis-btn" id="bis-submit">
+      {{ 'product.bis_cta' | t | default: 'Me prévenir' }}
+    </button>
+  </div>
+  <p class="bis-success" id="bis-success" style="display:none;">
+    ✅ {{ 'product.bis_success' | t | default: 'Vous serez notifié(e) dès que ce produit sera disponible !' }}
+  </p>
+</div>
+
+<style>
+  .bis-wrap {
+    border: 2px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    background: #fafafa;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .bis-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #555;
+    margin: 0 0 1rem;
+  }
+
+  .bis-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  .bis-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .bis-input {
+    flex: 1;
+    min-width: 180px;
+    padding: 0.7rem 1rem;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: #fff;
+    transition: border-color 0.2s ease;
+    outline: none;
+  }
+
+  .bis-input:focus { border-color: #667eea; }
+
+  .bis-btn {
+    padding: 0.7rem 1.25rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  .bis-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.35); }
+  .bis-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .bis-success {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #28a745;
+    margin: 0;
+  }
+</style>
+
+<script>
+(function() {
+  var form    = document.getElementById('bis-form');
+  var input   = document.getElementById('bis-email');
+  var btn     = document.getElementById('bis-submit');
+  var success = document.getElementById('bis-success');
+
+  if (!btn || !input || !form) return;
+
+  btn.addEventListener('click', function() {
+    var email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.style.borderColor = '#dc3545';
+      input.focus();
+      return;
+    }
+
+    input.style.borderColor = '';
+    btn.disabled = true;
+    btn.textContent = '⏳…';
+
+    // Optional: send to Klaviyo identify + list subscribe
+    // For now, dispatch a custom event that can be caught by Klaviyo JS API or any third-party
+    var variantId = {{ variant.id | default: 'null' | json }};
+    var productId = {{ product.id | default: 'null' | json }};
+
+    var payload = {
+      email: email,
+      variant_id: variantId,
+      product_id: productId,
+      product_title: {{ product.title | default: '' | json }}
+    };
+
+    // Try Klaviyo if available
+    if (window._learnq) {
+      window._learnq.push(['identify', { '$email': email }]);
+      window._learnq.push(['track', 'Back In Stock Request', payload]);
+    }
+
+    // Dispatch event for custom integrations
+    document.dispatchEvent(new CustomEvent('bis:submit', { detail: payload }));
+
+    // Show success
+    form.style.display = 'none';
+    success.style.display = 'block';
+  });
+})();
+</script>
+
+{% endif %}

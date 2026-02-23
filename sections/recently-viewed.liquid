@@ -1,0 +1,227 @@
+{% comment %}
+  Recently Viewed Products
+  Tracks product page visits in localStorage (max 8).
+  Renders a horizontal carousel populated client-side.
+{% endcomment %}
+
+<div class="rv-section section-{{ section.id }}" id="rv-section-{{ section.id }}" style="display:none;">
+  <div class="rv-container">
+    {% if section.settings.title != blank %}
+      <h3 class="rv-title">{{ section.settings.title }}</h3>
+    {% endif %}
+    <div class="rv-track" id="rv-track-{{ section.id }}">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  .rv-container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .rv-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin: 0 0 1.25rem;
+  }
+
+  .rv-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.5rem;
+  }
+
+  .rv-track::-webkit-scrollbar { display: none; }
+
+  .rv-card {
+    flex: 0 0 auto;
+    width: 160px;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.25s ease;
+  }
+
+  .rv-card:hover { transform: translateY(-4px); }
+
+  .rv-card__img-wrap {
+    width: 160px;
+    height: 160px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f5f5f5;
+    margin-bottom: 0.6rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .rv-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .rv-card:hover .rv-card__img { transform: scale(1.05); }
+
+  .rv-card__title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-foreground);
+    margin: 0 0 0.25rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.3;
+  }
+
+  .rv-card__price {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-accent, #667eea);
+  }
+
+  @media (min-width: 768px) {
+    .rv-card { width: 190px; }
+    .rv-card__img-wrap { width: 190px; height: 190px; }
+  }
+</style>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'rv_products';
+  var MAX_ITEMS   = 8;
+  var sectionId   = {{ section.id | json }};
+  var currentHandle = {{ product.handle | default: '' | json }};
+  var currentProduct = {
+    handle: currentHandle,
+    title: {{ product.title | default: '' | json }},
+    price: {{ product.price | default: 0 | json }},
+    image: {{ product.featured_image | image_url: width: 400 | default: '' | json }},
+    url: {{ product.url | default: '' | json }}
+  };
+
+  function formatMoney(cents) {
+    if (window.Shopify && window.Shopify.money_format) {
+      return window.Shopify.money_format
+        .replace(/\{\{\s*amount\s*\}\}/, (cents / 100).toFixed(2))
+        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100));
+    }
+    return (cents / 100).toFixed(2) + ' €';
+  }
+
+  function getStored() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch(e) { return []; }
+  }
+
+  function saveStored(arr) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+    catch(e) {}
+  }
+
+  // Track current product page
+  if (currentHandle) {
+    var stored = getStored();
+    // Remove if already present
+    stored = stored.filter(function(p) { return p.handle !== currentHandle; });
+    // Prepend current product
+    stored.unshift(currentProduct);
+    // Keep max items
+    stored = stored.slice(0, MAX_ITEMS);
+    saveStored(stored);
+  }
+
+  // Render section — skip current product
+  function render() {
+    var stored = getStored();
+    var toShow = stored.filter(function(p) { return p.handle !== currentHandle; });
+
+    if (toShow.length === 0) return;
+
+    var section = document.getElementById('rv-section-' + sectionId);
+    var track   = document.getElementById('rv-track-' + sectionId);
+    if (!section || !track) return;
+
+    track.innerHTML = toShow.map(function(p) {
+      var imgHtml = p.image
+        ? '<img src="' + p.image + '" alt="' + (p.title || '').replace(/"/g, '&quot;') + '" class="rv-card__img" loading="lazy">'
+        : '<div style="width:100%;height:100%;background:#e9ecef;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:2rem;">📦</div>';
+
+      return '<a href="' + p.url + '" class="rv-card">' +
+        '<div class="rv-card__img-wrap">' + imgHtml + '</div>' +
+        '<p class="rv-card__title">' + (p.title || '') + '</p>' +
+        '<p class="rv-card__price">' + formatMoney(p.price || 0) + '</p>' +
+      '</a>';
+    }).join('');
+
+    section.style.display = '';
+  }
+
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Recently Viewed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Vus récemment"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Couleur de fond",
+      "default": "transparent"
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espace haut",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Espace bas",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently Viewed"
+    }
+  ]
+}
+{% endschema %}

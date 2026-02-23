@@ -62,6 +62,12 @@
       </div>
     </div>
 
+    {% # Social Proof Toast (global) %}
+    {% render 'social-proof-toast' %}
+
+    {% # Upsell Post-ATC Modal (global) %}
+    {% render 'upsell-modal' %}
+
     {% # Theme JavaScript %}
     <script src="{{ 'theme.js' | asset_url }}" defer></script>
 

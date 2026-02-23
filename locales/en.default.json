@@ -59,15 +59,19 @@
   "product": {
     "add_to_cart": "Add To Cart",
     "adding_to_cart": "Adding To Cart",
-    "low_stock": "Low Stock",
-    "quantity_label": "Quantity Label",
+    "low_stock": "Only {{count}} left in stock!",
+    "quantity_label": "Quantity",
     "sold_out": "Sold Out",
-    "trust_delivery": "Trust Delivery",
-    "trust_guarantee": "Trust Guarantee",
-    "trust_returns": "Trust Returns",
-    "trust_secure": "Trust Secure",
-    "variant_label": "Variant Label",
-    "viewers_count": "Viewers Count"
+    "trust_delivery": "Fast Delivery",
+    "trust_guarantee": "Satisfaction Guaranteed",
+    "trust_returns": "Easy Returns",
+    "trust_secure": "Secure Payment",
+    "variant_label": "Options",
+    "viewers_count": "{{count}} people are looking at this",
+    "bis_message": "This product is currently out of stock.",
+    "bis_placeholder": "Your email address",
+    "bis_cta": "Notify me",
+    "bis_success": "You'll be notified as soon as this product is back in stock!"
   },
   "search": {
     "no_results_html": "No Results HTML",
@@ -81,25 +85,49 @@
       "timer_label": "Timer Label"
     },
     "countdown": {
-      "expired": "Expired"
+      "expired": "Offer Expired"
     },
     "footer": {
-      "company_title": "Company Title",
-      "copyright_html": "Copyright HTML",
-      "customer_service_title": "Customer Service Title",
-      "follow_us_title": "Follow Us Title",
-      "legal_title": "Legal Title",
-      "newsletter_button": "Newsletter Button",
-      "newsletter_description": "Newsletter Description",
-      "newsletter_placeholder": "Newsletter Placeholder",
-      "newsletter_title": "Newsletter Title"
+      "company_title": "Company",
+      "copyright_html": "© {{year}} {{shop_name}}. All rights reserved.",
+      "customer_service_title": "Customer Service",
+      "follow_us_title": "Follow Us",
+      "legal_title": "Legal",
+      "newsletter_button": "Subscribe",
+      "newsletter_description": "Subscribe to our newsletter for exclusive deals.",
+      "newsletter_placeholder": "Your email address",
+      "newsletter_title": "Stay in the loop"
     },
     "newsletter_popup": {
-      "no_thanks": "No Thanks",
-      "success": "Success"
+      "no_thanks": "No thanks",
+      "success": "Thank you for subscribing!"
     },
     "testimonials": {
-      "empty": "Empty"
+      "empty": "No testimonials yet."
+    },
+    "reviews": {
+      "verified": "Verified Purchase",
+      "summary_label": "out of 5"
+    },
+    "wishlist": {
+      "add": "Add to Wishlist",
+      "remove": "Remove from Wishlist",
+      "empty": "Your wishlist is empty.",
+      "title": "My Wishlist"
+    },
+    "volume_discounts": {
+      "title": "Buy more, save more",
+      "popular": "POPULAR",
+      "normal_price": "Regular price"
+    },
+    "fbt": {
+      "badge": "Frequently Bought Together",
+      "total": "Total:",
+      "cta": "Add all to cart"
+    },
+    "shipping_bar": {
+      "label": "Only {amount} away from free shipping!",
+      "unlocked": "🎉 Free shipping unlocked!"
     }
   }
 }

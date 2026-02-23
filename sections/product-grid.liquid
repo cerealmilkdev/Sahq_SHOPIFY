@@ -142,6 +142,209 @@
   .grid-product__item:hover .grid-product__overlay {
     opacity: 1;
   }
+
+  /* Quick View Button */
+  .grid-product__quick-view {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: rgba(255,255,255,0.95);
+    color: #333;
+    border: none;
+    border-radius: 50px;
+    padding: 0.4rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.25s ease;
+    z-index: 25;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-family: inherit;
+  }
+
+  .grid-product__item:hover .grid-product__quick-view {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .grid-product__quick-view:hover {
+    background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  }
+
+  /* Quick View Modal */
+  .qv-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 9000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .qv-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .qv-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 780px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  }
+
+  .qv-overlay.is-open .qv-modal { transform: scale(1); }
+
+  .qv-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: rgba(0,0,0,0.07);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    transition: background 0.2s ease;
+  }
+
+  .qv-close:hover { background: rgba(0,0,0,0.13); }
+
+  .qv-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .qv-image-wrap {
+    background: #f8f9fa;
+    border-radius: 20px 0 0 20px;
+    overflow: hidden;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .qv-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .qv-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .qv-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-foreground, #333);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .qv-price {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #667eea;
+  }
+
+  .qv-compare {
+    font-size: 1rem;
+    color: #999;
+    text-decoration: line-through;
+    margin-left: 0.5rem;
+  }
+
+  .qv-variants { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .qv-variant-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #555;
+  }
+
+  .qv-variant-select {
+    padding: 0.6rem 0.75rem;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    background: #fff;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .qv-variant-select:focus { border-color: #667eea; }
+
+  .qv-atc-btn {
+    padding: 0.9rem 1.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    margin-top: auto;
+    box-shadow: 0 4px 16px rgba(102,126,234,0.3);
+  }
+
+  .qv-atc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(102,126,234,0.4); }
+  .qv-atc-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .qv-view-link {
+    display: block;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    text-decoration: none;
+    margin-top: 0.25rem;
+  }
+  .qv-view-link:hover { color: #667eea; }
+
+  .qv-loader {
+    padding: 3rem;
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    grid-column: 1/-1;
+  }
+
+  @media (max-width: 600px) {
+    .qv-inner { grid-template-columns: 1fr; }
+    .qv-image-wrap { border-radius: 20px 20px 0 0; min-height: 220px; }
+  }
 </style>
 
 <div class="section-{{ section.id }} overflow-hidden">
@@ -150,7 +353,7 @@
     {% if section.settings.title != blank or section.settings.subtitle != blank %}
       <div class="mb-10 md:mb-16 text-{{ section.settings.heading_align }}">
         {% if section.settings.subtitle != blank %}
-          <span class="inline-block text-primary font-bold tracking-widest uppercase text-xs md:text-sm mb-3">{{ section.settings.subtitle }}</span>
+          <span class="inline-block text-primary font-bold tracking-widest uppercase text-xs md:text-sm mb-6">{{ section.settings.subtitle }}</span>
         {% endif %}
         {% if section.settings.title != blank %}
           <h2 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground mb-6">{{ section.settings.title }}</h2>
@@ -205,7 +408,7 @@
               {% assign product = block.settings.product %}
               {% if product != blank %}
                 <a href="{{ product.url }}" class="absolute inset-0 z-20"></a>
-                
+
                 <div class="grid-product__image-wrapper">
                   {% if product.compare_at_price > product.price %}
                     <span class="grid-product__badge">Sale</span>
@@ -216,6 +419,18 @@
                     class: 'grid-product__image',
                     width: 800
                   %}
+
+                  {% if section.settings.show_quick_view %}
+                    <button
+                      type="button"
+                      class="grid-product__quick-view"
+                      data-qv-btn
+                      data-handle="{{ product.handle }}"
+                      aria-label="Aperçu rapide : {{ product.title | escape }}"
+                    >
+                      👁 Aperçu rapide
+                    </button>
+                  {% endif %}
                 </div>
 
                 <div class="grid-product__content">
@@ -251,6 +466,159 @@
     {% endif %}
   </div>
 </div>
+
+{% if section.settings.show_quick_view %}
+<!-- Quick View Modal (shared, rendered once per page) -->
+<div class="qv-overlay" id="qv-overlay-{{ section.id }}" role="dialog" aria-modal="true" aria-label="Aperçu rapide" style="display:none;">
+  <div class="qv-modal" id="qv-modal-{{ section.id }}">
+    <button class="qv-close" id="qv-close-{{ section.id }}" aria-label="Fermer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="qv-inner" id="qv-inner-{{ section.id }}">
+      <div class="qv-loader">Chargement…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var sectionId = {{ section.id | json }};
+  var overlay   = document.getElementById('qv-overlay-' + sectionId);
+  var modal     = document.getElementById('qv-modal-' + sectionId);
+  var inner     = document.getElementById('qv-inner-' + sectionId);
+  var closeBtn  = document.getElementById('qv-close-' + sectionId);
+
+  if (!overlay) return;
+
+  function formatMoney(cents) {
+    if (window.Shopify && window.Shopify.money_format) {
+      return window.Shopify.money_format
+        .replace(/\{\{\s*amount\s*\}\}/, (cents / 100).toFixed(2))
+        .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100));
+    }
+    return (cents / 100).toFixed(2) + ' €';
+  }
+
+  function open(handle) {
+    overlay.style.display = 'flex';
+    requestAnimationFrame(function() { overlay.classList.add('is-open'); });
+    inner.innerHTML = '<div class="qv-loader">Chargement…</div>';
+
+    fetch('/products/' + handle + '.js')
+      .then(function(r) { return r.json(); })
+      .then(function(p) { render(p); })
+      .catch(function() { inner.innerHTML = '<div class="qv-loader">Erreur de chargement.</div>'; });
+  }
+
+  function render(p) {
+    var variant = p.variants[0];
+    var imgSrc  = p.featured_image ? p.featured_image.replace(/\.jpg/, '_600x600.jpg').replace(/\.png/, '_600x600.png').replace(/\.webp/, '_600x600.webp') : '';
+    if (p.featured_image && !imgSrc.includes('_600x600')) imgSrc = p.featured_image;
+
+    var compareHtml = (variant.compare_at_price && variant.compare_at_price > variant.price)
+      ? '<span class="qv-compare">' + formatMoney(variant.compare_at_price) + '</span>'
+      : '';
+
+    var variantsHtml = '';
+    if (p.options && p.options.length === 1 && p.options[0] === 'Title') {
+      // no variant selector needed
+    } else if (p.variants.length > 1) {
+      variantsHtml = '<div class="qv-variants">' +
+        p.options.map(function(opt, oi) {
+          var vals = p.variants.map(function(v) { return v['option' + (oi+1)]; }).filter(function(v, i, a) { return a.indexOf(v) === i; });
+          return '<label class="qv-variant-label">' + opt + '</label>' +
+            '<select class="qv-variant-select" data-option-index="' + oi + '">' +
+            vals.map(function(v) { return '<option>' + v + '</option>'; }).join('') +
+            '</select>';
+        }).join('') +
+      '</div>';
+    }
+
+    inner.innerHTML =
+      '<div class="qv-image-wrap">' +
+        (imgSrc ? '<img src="' + imgSrc + '" alt="' + p.title.replace(/"/g, '&quot;') + '" loading="lazy">' : '') +
+      '</div>' +
+      '<div class="qv-content">' +
+        '<h2 class="qv-title">' + p.title + '</h2>' +
+        '<div class="qv-price" id="qv-price-' + sectionId + '">' +
+          '<span class="qv-price-current">' + formatMoney(variant.price) + '</span>' + compareHtml +
+        '</div>' +
+        variantsHtml +
+        '<button type="button" class="qv-atc-btn" id="qv-atc-' + sectionId + '" data-variant-id="' + variant.id + '">🛒 Ajouter au panier</button>' +
+        '<a href="' + p.url + '" class="qv-view-link">Voir le produit complet →</a>' +
+      '</div>';
+
+    // Variant change
+    var selects = inner.querySelectorAll('.qv-variant-select');
+    selects.forEach(function(sel) {
+      sel.addEventListener('change', function() {
+        var chosen = {};
+        selects.forEach(function(s, i) { chosen['option' + (i+1)] = s.value; });
+        var matched = p.variants.find(function(v) {
+          return Object.keys(chosen).every(function(k) { return v[k] === chosen[k]; });
+        });
+        if (matched) {
+          document.getElementById('qv-atc-' + sectionId).dataset.variantId = matched.id;
+          var priceEl = document.getElementById('qv-price-' + sectionId);
+          if (priceEl) {
+            var cmp = (matched.compare_at_price && matched.compare_at_price > matched.price)
+              ? '<span class="qv-compare">' + formatMoney(matched.compare_at_price) + '</span>' : '';
+            priceEl.innerHTML = '<span class="qv-price-current">' + formatMoney(matched.price) + '</span>' + cmp;
+          }
+        }
+      });
+    });
+
+    // ATC
+    var atcBtn = document.getElementById('qv-atc-' + sectionId);
+    atcBtn && atcBtn.addEventListener('click', function() {
+      var vid = parseInt(atcBtn.dataset.variantId);
+      if (!vid) return;
+      atcBtn.disabled = true;
+      atcBtn.textContent = '⏳ Ajout…';
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: vid, quantity: 1 })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        close();
+        if (window.CartDrawer && typeof window.CartDrawer.open === 'function') {
+          window.CartDrawer.open();
+        } else {
+          document.dispatchEvent(new CustomEvent('cart:open'));
+        }
+      })
+      .catch(function() {
+        atcBtn.textContent = '⚠️ Erreur';
+        setTimeout(function() { atcBtn.disabled = false; atcBtn.textContent = '🛒 Ajouter au panier'; }, 2000);
+      });
+    });
+  }
+
+  function close() {
+    overlay.classList.remove('is-open');
+    setTimeout(function() { overlay.style.display = 'none'; }, 300);
+  }
+
+  closeBtn && closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
+
+  document.querySelectorAll('[data-qv-btn]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      open(btn.dataset.handle);
+    });
+  });
+})();
+</script>
+{% endif %}
 
 {% schema %}
 {
@@ -384,6 +752,16 @@
         { "value": "center", "label": "Center" }
       ],
       "default": "flex-start"
+    },
+    {
+      "type": "header",
+      "content": "Quick View"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_view",
+      "label": "Activer l'aperçu rapide",
+      "default": true
     },
     {
       "type": "header",

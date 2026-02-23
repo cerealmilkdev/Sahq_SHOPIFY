@@ -1,0 +1,332 @@
+{% comment %}
+  Volume Discounts / Quantity Breaks
+  Place this section on the product template via the customizer.
+  Each block = one pricing tier.
+{% endcomment %}
+
+{% assign tiers = section.blocks %}
+{% if tiers.size > 0 %}
+
+<div class="vd-section section-{{ section.id }}">
+  <div class="vd-container">
+    {% if section.settings.title != blank %}
+      <h3 class="vd-title">{{ section.settings.title }}</h3>
+    {% endif %}
+
+    <div class="vd-grid" id="vd-grid-{{ section.id }}" data-vd-grid>
+      {% for block in tiers %}
+        {% assign is_popular = false %}
+        {% if block.settings.is_popular %}{% assign is_popular = true %}{% endif %}
+
+        <div
+          class="vd-tier {% if is_popular %}vd-tier--popular{% endif %} {% if forloop.first %}vd-tier--active{% endif %}"
+          data-vd-tier
+          data-quantity="{{ block.settings.quantity }}"
+          data-discount="{{ block.settings.discount }}"
+          {{ block.shopify_attributes }}
+        >
+          {% if is_popular %}
+            <span class="vd-popular-badge">{{ section.settings.popular_label | default: 'POPULAIRE' }}</span>
+          {% endif %}
+
+          <div class="vd-tier__qty">
+            {% if block.settings.quantity == 1 %}
+              {{ section.settings.label_single | default: '1 unité' }}
+            {% else %}
+              {{ block.settings.quantity }} {{ section.settings.label_units | default: 'unités' }}
+            {% endif %}
+          </div>
+
+          <div class="vd-tier__price-unit" data-vd-unit-price>—</div>
+
+          {% if block.settings.discount > 0 %}
+            <div class="vd-tier__discount">
+              -{{ block.settings.discount }}% <span class="vd-tier__saving" data-vd-saving></span>
+            </div>
+          {% else %}
+            <div class="vd-tier__discount vd-tier__discount--normal">{{ section.settings.label_normal_price | default: 'Prix normal' }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .vd-container {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .vd-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    color: var(--color-foreground);
+  }
+
+  .vd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .vd-tier {
+    position: relative;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: #fff;
+    user-select: none;
+  }
+
+  .vd-tier:hover {
+    border-color: #667eea;
+    box-shadow: 0 4px 16px rgba(102,126,234,0.15);
+  }
+
+  .vd-tier--active {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea08, #764ba208);
+    box-shadow: 0 4px 16px rgba(102,126,234,0.2);
+  }
+
+  .vd-tier--popular {
+    border-color: #667eea;
+  }
+
+  .vd-popular-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 50px;
+    white-space: nowrap;
+  }
+
+  .vd-tier__qty {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin-bottom: 0.35rem;
+  }
+
+  .vd-tier__price-unit {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #667eea;
+    margin-bottom: 0.25rem;
+  }
+
+  .vd-tier__discount {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #28a745;
+    background: #f0fff4;
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: inline-block;
+    margin-top: 0.25rem;
+  }
+
+  .vd-tier__discount--normal {
+    color: #666;
+    background: #f5f5f5;
+  }
+
+  @media (max-width: 480px) {
+    .vd-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+
+<script>
+(function() {
+  var grid = document.querySelector('[data-vd-grid]');
+  if (!grid) return;
+
+  var tiers = Array.from(grid.querySelectorAll('[data-vd-tier]'));
+  var qtyInput = document.querySelector('input[name="quantity"]');
+  var basePrice = {{ product.selected_or_first_available_variant.price | default: 0 }};
+
+  function formatMoney(cents) {
+    if (window.Shopify && window.Shopify.money_format) {
+      var formatted = window.Shopify.money_format.replace('{{amount}}', (cents / 100).toFixed(2));
+      return formatted.replace('{{amount_no_decimals}}', Math.round(cents / 100));
+    }
+    return (cents / 100).toFixed(2) + ' €';
+  }
+
+  function updatePrices(selectedTier) {
+    tiers.forEach(function(tier) {
+      var discount = parseFloat(tier.dataset.discount) || 0;
+      var qty = parseInt(tier.dataset.quantity) || 1;
+      var discountedUnit = Math.round(basePrice * (1 - discount / 100));
+      var saving = basePrice - discountedUnit;
+
+      var unitEl = tier.querySelector('[data-vd-unit-price]');
+      var savingEl = tier.querySelector('[data-vd-saving]');
+
+      if (unitEl) unitEl.textContent = formatMoney(discountedUnit) + '/un.';
+      if (savingEl && saving > 0) {
+        savingEl.textContent = '(−' + formatMoney(saving * qty) + ')';
+      }
+    });
+  }
+
+  function activate(tier) {
+    tiers.forEach(function(t) { t.classList.remove('vd-tier--active'); });
+    tier.classList.add('vd-tier--active');
+    var qty = parseInt(tier.dataset.quantity) || 1;
+    if (qtyInput) {
+      qtyInput.value = qty;
+      qtyInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  tiers.forEach(function(tier) {
+    tier.addEventListener('click', function() { activate(tier); });
+  });
+
+  // Init prices
+  updatePrices();
+
+  // Listen for variant changes to update base price
+  document.addEventListener('variant:change', function(e) {
+    if (e.detail && e.detail.price) {
+      basePrice = e.detail.price;
+      updatePrices();
+    }
+  });
+
+  // Activate first by default
+  if (tiers.length > 0) activate(tiers[0]);
+})();
+</script>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Volume Discounts",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titre",
+      "default": "Achetez plus, économisez plus"
+    },
+    {
+      "type": "text",
+      "id": "popular_label",
+      "label": "Texte badge populaire",
+      "default": "POPULAIRE"
+    },
+    {
+      "type": "text",
+      "id": "label_single",
+      "label": "Libellé 1 unité",
+      "default": "1 unité"
+    },
+    {
+      "type": "text",
+      "id": "label_units",
+      "label": "Libellé unités (pluriel)",
+      "default": "unités"
+    },
+    {
+      "type": "text",
+      "id": "label_normal_price",
+      "label": "Libellé prix normal",
+      "default": "Prix normal"
+    },
+    {
+      "type": "header",
+      "content": "Espacement"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espace haut",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Espace bas",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Palier de prix",
+      "settings": [
+        {
+          "type": "range",
+          "id": "quantity",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "label": "Quantité",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "discount",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "%",
+          "label": "Réduction (%)",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "is_popular",
+          "label": "Marquer comme populaire",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Volume Discounts",
+      "blocks": [
+        { "type": "tier", "settings": { "quantity": 1, "discount": 0, "is_popular": false } },
+        { "type": "tier", "settings": { "quantity": 2, "discount": 10, "is_popular": false } },
+        { "type": "tier", "settings": { "quantity": 3, "discount": 15, "is_popular": true } },
+        { "type": "tier", "settings": { "quantity": 5, "discount": 20, "is_popular": false } }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  }
+}
+{% endschema %}
