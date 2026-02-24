@@ -13,6 +13,142 @@
   assign card_style = section.settings.card_style
 %}
 
+<div class="section-{{ section.id }} overflow-hidden">
+  <div class="max-w-[1400px] mx-auto px-4 md:px-8">
+    
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+      <div style="margin-bottom: {{ section.settings.header_margin }}px;" class="text-{{ section.settings.heading_align }}">
+        {% if section.settings.subtitle != blank %}
+          <span class="inline-block text-primary font-bold tracking-widest uppercase text-xs md:text-sm mb-6">{{ section.settings.subtitle }}</span>
+        {% endif %}
+        {% if section.settings.title != blank %}
+          <h2 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground mb-6">{{ section.settings.title }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="grid-product__container">
+      {% for block in section.blocks %}
+        <div class="grid-product__item group" {{ block.shopify_attributes }}>
+          {% case block.type %}
+            {% when 'image' %}
+              {% if block.settings.link != blank %}
+                <a href="{{ block.settings.link }}" class="absolute inset-0 z-20"></a>
+              {% endif %}
+              
+              <div class="grid-product__image-wrapper">
+                {% if block.settings.badge != blank %}
+                  <span class="grid-product__badge">{{ block.settings.badge }}</span>
+                {% endif %}
+
+                {% if block.settings.image %}
+                  {% render 'image',
+                    image: block.settings.image,
+                    class: 'grid-product__image',
+                    width: 800
+                  %}
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
+                {% endif %}
+
+                {% if section.settings.style == 'overlay' %}
+                  <div class="grid-product__overlay">
+                    <div>
+                      <h3 class="text-xl font-bold mb-1">{{ block.settings.title }}</h3>
+                      <p class="text-sm opacity-80">{{ block.settings.caption }}</p>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if section.settings.style == 'standard' %}
+                <div class="grid-product__content">
+                  <h3 class="grid-product__title">{{ block.settings.title }}</h3>
+                  {% if block.settings.caption != blank %}
+                    <p class="text-sm opacity-60 line-clamp-2">{{ block.settings.caption }}</p>
+                  {% endif %}
+                </div>
+              {% endif %}
+
+            {% when 'product' %}
+              {% assign product = block.settings.product %}
+              {% if product != blank %}
+                <a href="{{ product.url }}" class="absolute inset-0 z-20"></a>
+
+                <div class="grid-product__image-wrapper">
+                  {% if product.compare_at_price > product.price %}
+                    <span class="grid-product__badge">Sale</span>
+                  {% endif %}
+
+                  {% render 'image',
+                    image: product.featured_image,
+                    class: 'grid-product__image',
+                    width: 800
+                  %}
+
+                  {% if section.settings.show_quick_view %}
+                    <button
+                      type="button"
+                      class="grid-product__quick-view"
+                      data-qv-btn
+                      data-handle="{{ product.handle }}"
+                      aria-label="Aperçu rapide : {{ product.title | escape }}"
+                    >
+                      👁 Aperçu rapide
+                    </button>
+                  {% endif %}
+                </div>
+
+                <div class="grid-product__content">
+                  <h3 class="grid-product__title">{{ product.title }}</h3>
+                  <div class="grid-product__price">
+                    {{ product.price | money }}
+                    {% if product.compare_at_price > product.price %}
+                      <span class="text-sm line-through opacity-50 ml-2">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+              {% else %}
+                <div class="grid-product__image-wrapper">
+                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
+                </div>
+                <div class="grid-product__content">
+                  <h3 class="grid-product__title">Sample Product</h3>
+                  <p class="grid-product__price">$19.99</p>
+                </div>
+              {% endif %}
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.button_label != blank %}
+      <div class="mt-12 md:mt-20 text-center">
+        <a href="{{ section.settings.button_link }}" class="inline-flex items-center justify-center px-10 py-4 bg-primary text-white font-bold rounded-full transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-primary/20">
+          {{ section.settings.button_label }}
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if section.settings.show_quick_view %}
+<!-- Quick View Modal (shared, rendered once per page) -->
+<div class="qv-overlay" id="qv-overlay-{{ section.id }}" role="dialog" aria-modal="true" aria-label="Aperçu rapide" style="display:none;">
+  <div class="qv-modal" id="qv-modal-{{ section.id }}">
+    <button class="qv-close" id="qv-close-{{ section.id }}" aria-label="Fermer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="qv-inner" id="qv-inner-{{ section.id }}">
+      <div class="qv-loader">Chargement…</div>
+    </div>
+  </div>
+</div>
+
 <style>
   .section-{{ section.id }} {
     --grid-gap: {{ gap }}px;
@@ -347,141 +483,6 @@
   }
 </style>
 
-<div class="section-{{ section.id }} overflow-hidden">
-  <div class="max-w-[1400px] mx-auto px-4 md:px-8">
-    
-    {% if section.settings.title != blank or section.settings.subtitle != blank %}
-      <div class="mb-10 md:mb-16 text-{{ section.settings.heading_align }}">
-        {% if section.settings.subtitle != blank %}
-          <span class="inline-block text-primary font-bold tracking-widest uppercase text-xs md:text-sm mb-6">{{ section.settings.subtitle }}</span>
-        {% endif %}
-        {% if section.settings.title != blank %}
-          <h2 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight text-foreground mb-6">{{ section.settings.title }}</h2>
-        {% endif %}
-      </div>
-    {% endif %}
-
-    <div class="grid-product__container">
-      {% for block in section.blocks %}
-        <div class="grid-product__item group" {{ block.shopify_attributes }}>
-          {% case block.type %}
-            {% when 'image' %}
-              {% if block.settings.link != blank %}
-                <a href="{{ block.settings.link }}" class="absolute inset-0 z-20"></a>
-              {% endif %}
-              
-              <div class="grid-product__image-wrapper">
-                {% if block.settings.badge != blank %}
-                  <span class="grid-product__badge">{{ block.settings.badge }}</span>
-                {% endif %}
-
-                {% if block.settings.image %}
-                  {% render 'image',
-                    image: block.settings.image,
-                    class: 'grid-product__image',
-                    width: 800
-                  %}
-                {% else %}
-                  {{ 'image' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
-                {% endif %}
-
-                {% if section.settings.style == 'overlay' %}
-                  <div class="grid-product__overlay">
-                    <div>
-                      <h3 class="text-xl font-bold mb-1">{{ block.settings.title }}</h3>
-                      <p class="text-sm opacity-80">{{ block.settings.caption }}</p>
-                    </div>
-                  </div>
-                {% endif %}
-              </div>
-
-              {% if section.settings.style == 'standard' %}
-                <div class="grid-product__content">
-                  <h3 class="grid-product__title">{{ block.settings.title }}</h3>
-                  {% if block.settings.caption != blank %}
-                    <p class="text-sm opacity-60 line-clamp-2">{{ block.settings.caption }}</p>
-                  {% endif %}
-                </div>
-              {% endif %}
-
-            {% when 'product' %}
-              {% assign product = block.settings.product %}
-              {% if product != blank %}
-                <a href="{{ product.url }}" class="absolute inset-0 z-20"></a>
-
-                <div class="grid-product__image-wrapper">
-                  {% if product.compare_at_price > product.price %}
-                    <span class="grid-product__badge">Sale</span>
-                  {% endif %}
-
-                  {% render 'image',
-                    image: product.featured_image,
-                    class: 'grid-product__image',
-                    width: 800
-                  %}
-
-                  {% if section.settings.show_quick_view %}
-                    <button
-                      type="button"
-                      class="grid-product__quick-view"
-                      data-qv-btn
-                      data-handle="{{ product.handle }}"
-                      aria-label="Aperçu rapide : {{ product.title | escape }}"
-                    >
-                      👁 Aperçu rapide
-                    </button>
-                  {% endif %}
-                </div>
-
-                <div class="grid-product__content">
-                  <h3 class="grid-product__title">{{ product.title }}</h3>
-                  <div class="grid-product__price">
-                    {{ product.price | money }}
-                    {% if product.compare_at_price > product.price %}
-                      <span class="text-sm line-through opacity-50 ml-2">{{ product.compare_at_price | money }}</span>
-                    {% endif %}
-                  </div>
-                </div>
-              {% else %}
-                <div class="grid-product__image-wrapper">
-                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
-                </div>
-                <div class="grid-product__content">
-                  <h3 class="grid-product__title">Sample Product</h3>
-                  <p class="grid-product__price">$19.99</p>
-                </div>
-              {% endif %}
-          {% endcase %}
-        </div>
-      {% endfor %}
-    </div>
-
-    {% if section.settings.button_label != blank %}
-      <div class="mt-12 md:mt-20 text-center">
-        <a href="{{ section.settings.button_link }}" class="inline-flex items-center justify-center px-10 py-4 bg-primary text-white font-bold rounded-full transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-primary/20">
-          {{ section.settings.button_label }}
-          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-        </a>
-      </div>
-    {% endif %}
-  </div>
-</div>
-
-{% if section.settings.show_quick_view %}
-<!-- Quick View Modal (shared, rendered once per page) -->
-<div class="qv-overlay" id="qv-overlay-{{ section.id }}" role="dialog" aria-modal="true" aria-label="Aperçu rapide" style="display:none;">
-  <div class="qv-modal" id="qv-modal-{{ section.id }}">
-    <button class="qv-close" id="qv-close-{{ section.id }}" aria-label="Fermer">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
-    <div class="qv-inner" id="qv-inner-{{ section.id }}">
-      <div class="qv-loader">Chargement…</div>
-    </div>
-  </div>
-</div>
 
 <script>
 (function() {
@@ -651,6 +652,16 @@
         { "value": "right", "label": "Right" }
       ],
       "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "header_margin",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "label": "Space below header",
+      "default": 48,
+      "unit": "px"
     },
     {
       "type": "header",

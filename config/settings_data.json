@@ -8,5 +8,9 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "sp_toast_first_delay": 3,
+    "sp_toast_interval": 10,
+    "content_for_index": []
+  }
 }

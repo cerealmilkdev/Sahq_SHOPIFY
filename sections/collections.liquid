@@ -1,290 +1,294 @@
-{% comment %}
-  Ultra-Modern Collections List Section
-  Designed for high conversion with "Wow" effects, glassmorphism, and dynamic layouts.
-{% endcomment %}
-
 {% liquid
-  assign container_width = section.settings.container_width
-  assign card_radius = section.settings.card_radius
-  assign show_count = section.settings.show_count
-  assign hover_animation = section.settings.hover_animation
+  assign overlay_style = section.settings.overlay_style
+  assign show_count    = section.settings.show_count
+  assign header_align  = section.settings.header_align
+
+  assign text_align_class = 'text-left'
+  assign items_class      = 'items-start'
+  if header_align == 'center'
+    assign text_align_class = 'text-center'
+    assign items_class      = 'items-center'
+  elsif header_align == 'right'
+    assign text_align_class = 'text-right'
+    assign items_class      = 'items-end'
+  endif
 %}
 
-<style>
-  .collections-{{ section.id }} {
-    --primary-gradient: {{ section.settings.accent_gradient | default: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }};
-    --card-radius: {{ card_radius }}px;
-    --grid-gap: {{ section.settings.grid_gap }}px;
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-    background-color: {{ section.settings.bg_color }};
-  }
+<div class="collections-{{ section.id }}">
+  <div class="max-w-[{{ section.settings.container_width }}px] mx-auto px-4 md:px-8">
 
-  /* Bento Grid Logic */
-  .collections-grid {
-    display: grid;
-    gap: var(--grid-gap);
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-  }
-
-  @media screen and (min-width: 768px) {
-    .collections-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .collection-card--large {
-      grid-column: span 2;
-      grid-row: span 1;
-    }
-  }
-
-  @media screen and (min-width: 1024px) {
-    .collections-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-    .collection-card--large {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-    .collection-card--wide {
-      grid-column: span 2;
-    }
-  }
-
-  /* Card Base */
-  .collection-card {
-    position: relative;
-    border-radius: var(--card-radius);
-    overflow: hidden;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    border: 1px solid rgba(0,0,0,0.05);
-  }
-
-  .collection-card__image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 300px;
-    overflow: hidden;
-  }
-
-  .collection-card--large .collection-card__image-wrapper {
-    min-height: 500px;
-  }
-
-  .collection-card__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  /* Glassmorphism Overlay */
-  .collection-card__overlay {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    padding: 24px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: calc(var(--card-radius) * 0.8);
-    z-index: 2;
-    transition: all 0.4s ease;
-    transform: translateY(0);
-  }
-
-  .collection-card__content {
-    position: relative;
-    z-index: 3;
-  }
-
-  .collection-card__count {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: white;
-    background: var(--primary-gradient);
-    padding: 4px 12px;
-    border-radius: 50px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-
-  .collection-card__title {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-    margin: 0;
-    line-height: 1.1;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  }
-
-  .collection-card__cta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 16px;
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: white;
-    opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s ease;
-  }
-
-  /* Animations */
-  {% if hover_animation == 'float' %}
-    .collection-card:hover {
-      transform: translateY(-10px) scale(1.01);
-      box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
-      border-color: rgba(255,255,255,0.5);
-    }
-  {% endif %}
-
-  .collection-card:hover .collection-card__image {
-    transform: scale(1.1);
-  }
-
-  .collection-card:hover .collection-card__cta {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
-  .collection-card:hover .collection-card__overlay {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-5px);
-  }
-
-  /* Badge "Trending" style */
-  .trending-badge {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: white;
-    color: #000;
-    padding: 6px 14px;
-    border-radius: 50px;
-    font-size: 11px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    z-index: 10;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-
-  .pulse-dot {
-    width: 6px;
-    height: 6px;
-    background: #ff4b2b;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 75, 43, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); }
-  }
-</style>
-
-<div class="collections-{{ section.id }} overflow-hidden">
-  <div class="max-w-[{{ container_width }}px] mx-auto px-4 md:px-8">
-    
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-      <div class="max-w-2xl">
-        {% if section.settings.subtitle != blank %}
-          <span class="text-primary font-bold tracking-[0.2em] uppercase text-xs block mb-3">{{ section.settings.subtitle }}</span>
-        {% endif %}
-        <h2 class="text-4xl md:text-6xl font-black tracking-tighter text-foreground leading-none">
-          {{ section.settings.title | default: 'Explore Collections' }}
-        </h2>
-      </div>
+    <!-- Header -->
+    <div class="col-header {{ text_align_class }} {{ items_class }}">
+      {% if section.settings.subtitle != blank %}
+        <span class="col-subtitle">{{ section.settings.subtitle }}</span>
+      {% endif %}
+      {% if section.settings.title != blank %}
+        <h2 class="col-title">{{ section.settings.title }}</h2>
+      {% endif %}
       {% if section.settings.description != blank %}
-        <p class="text-lg opacity-60 md:max-w-xs">{{ section.settings.description }}</p>
+        <p class="col-desc">{{ section.settings.description }}</p>
       {% endif %}
     </div>
 
+    <!-- Grid -->
     <div class="collections-grid">
       {% for collection in collections %}
         {% liquid
-          assign is_large = false
+          assign card_class = ''
           if forloop.first
-            assign is_large = true
-          endif
-          
-          assign card_class = ""
-          if is_large
-            assign card_class = "collection-card--large"
+            assign card_class = 'collection-card--large'
           elsif forloop.index == 2 or forloop.index == 3
-            assign card_class = "collection-card--wide"
+            assign card_class = 'collection-card--wide'
           endif
         %}
 
         <a href="{{ collection.url }}" class="collection-card {{ card_class }} group">
-          <div class="collection-card__image-wrapper">
+          <div class="col-img-wrap">
             {% if collection.featured_image %}
-              {% render 'image',
-                image: collection.featured_image,
-                class: 'collection-card__image',
-                width: 1200
-              %}
+              {% render 'image', image: collection.featured_image, class: 'col-img', width: 1200 %}
             {% else %}
-              {{ 'collection-1' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
+              {{ 'collection-1' | placeholder_svg_tag: 'col-img bg-gray-200' }}
             {% endif %}
 
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-            
-            {% if is_large %}
-              <div class="trending-badge">
+            <div class="col-scrim"></div>
+
+            {% if forloop.first %}
+              <div class="col-badge">
                 <span class="pulse-dot"></span>
                 NEW ARRIVALS
               </div>
             {% endif %}
 
-            <div class="collection-card__overlay">
-              <div class="collection-card__content">
-                {% if show_count and collection.products_count > 0 %}
-                  <span class="collection-card__count">
-                    {{ collection.products_count }} {{ 'collections.items' | t | default: 'items' }}
-                  </span>
-                {% endif %}
-                
-                <h3 class="collection-card__title {% if is_large %}text-3xl md:text-4xl{% else %}text-xl{% endif %}">
-                  {{ collection.title }}
-                </h3>
-
-                <div class="collection-card__cta">
-                  <span>{{ 'collections.view' | t | default: 'Explore Now' }}</span>
-                  <svg class="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                  </svg>
-                </div>
+            <div class="col-overlay">
+              {% if show_count and collection.products_count > 0 %}
+                <span class="col-count">{{ collection.products_count }} {{ 'collections.items' | t | default: 'items' }}</span>
+              {% endif %}
+              <h3 class="col-name {% if forloop.first %}col-name--large{% endif %}">{{ collection.title }}</h3>
+              <div class="col-cta">
+                <span>{{ 'collections.view' | t | default: 'Explore Now' }}</span>
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
               </div>
             </div>
           </div>
         </a>
       {% endfor %}
     </div>
+
   </div>
 </div>
 
+<style>
+  .collections-{{ section.id }} {
+    --gradient:      {{ section.settings.accent_gradient | default: 'linear-gradient(135deg, #667eea, #764ba2)' }};
+    --radius:        {{ section.settings.card_radius }}px;
+    --gap:           {{ section.settings.grid_gap }}px;
+    --blur:          {{ section.settings.overlay_blur }}px;
+    padding-top:     {{ section.settings.padding_top }}px;
+    padding-bottom:  {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.bg_color }};
+  }
+
+  /* ── Header ── */
+  .col-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: {{ section.settings.header_margin }}px;
+  }
+  .col-subtitle {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--color-primary, #6366f1);
+  }
+  .col-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .col-desc {
+    font-size: 1rem;
+    opacity: 0.6;
+    max-width: 46ch;
+    margin: 0;
+  }
+
+  /* ── Grid ── */
+  .collections-grid {
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 768px) {
+    .collections-grid { grid-template-columns: repeat(2, 1fr); }
+    .collection-card--large { grid-column: span 2; }
+  }
+  @media (min-width: 1024px) {
+    .collections-grid { grid-template-columns: repeat(4, 1fr); }
+    .collection-card--large { grid-column: span 2; }
+    .collection-card--wide  { grid-column: span 2; }
+  }
+
+  /* ── Card ── */
+  .collection-card {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: block;
+    text-decoration: none;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: transform 0.45s cubic-bezier(0.23,1,0.32,1),
+                box-shadow 0.45s cubic-bezier(0.23,1,0.32,1);
+  }
+  {% if section.settings.hover_animation == 'float' %}
+    .collection-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 48px -8px rgba(0,0,0,0.2);
+    }
+  {% endif %}
+
+  /* ── Image ── */
+  .col-img-wrap {
+    position: relative;
+    width: 100%;
+    min-height: 300px;
+    height: 100%;
+    overflow: hidden;
+  }
+  .collection-card--large .col-img-wrap { min-height: 480px; }
+
+  .col-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.23,1,0.32,1);
+  }
+  .collection-card:hover .col-img { transform: scale(1.08); }
+
+  .col-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 60%);
+  }
+
+  /* ── Badge ── */
+  .col-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #fff;
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 5px 12px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff4b2b;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(255,75,43,0.7); }
+    70%  { box-shadow: 0 0 0 6px rgba(255,75,43,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,75,43,0); }
+  }
+
+  /* ── Overlay card ── */
+  .col-overlay {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    padding: 20px;
+    border-radius: calc(var(--radius) * 0.75);
+    z-index: 2;
+    backdrop-filter: blur(var(--blur)) saturate(130%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(130%);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    {% if overlay_style == 'glass' %}
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.28);
+    {% elsif overlay_style == 'matte' %}
+      background: rgba(15,16,20,0.85);
+      border: 1px solid rgba(255,255,255,0.12);
+    {% else %}
+      background: rgba(18,20,28,0.62);
+      border: 1px solid rgba(255,255,255,0.2);
+    {% endif %}
+  }
+  .collection-card:hover .col-overlay {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.26);
+  }
+
+  .col-count {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: var(--gradient);
+    padding: 3px 10px;
+    border-radius: 50px;
+    margin-bottom: 10px;
+  }
+  .col-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    line-height: 1.1;
+  }
+  .col-name--large { font-size: clamp(1.5rem, 3vw, 2rem); }
+
+  .col-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #fff;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .collection-card:hover .col-cta {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  .col-cta svg {
+    transition: transform 0.25s ease;
+  }
+  .collection-card:hover .col-cta svg {
+    transform: translateX(4px);
+  }
+</style>
+
 {% schema %}
 {
-  "name": "High-Impact Collections",
+  "name": "Collections",
   "settings": [
     {
       "type": "header",
-      "content": "Typography"
+      "content": "Header"
     },
     {
       "type": "text",
@@ -302,7 +306,28 @@
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Discover our curated selections designed for your lifestyle."
+      "default": "Discover our curated selections."
+    },
+    {
+      "type": "select",
+      "id": "header_align",
+      "label": "Header Alignment",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "header_margin",
+      "min": 16,
+      "max": 96,
+      "step": 4,
+      "label": "Space below header",
+      "default": 48,
+      "unit": "px"
     },
     {
       "type": "header",
@@ -314,28 +339,28 @@
       "min": 1000,
       "max": 1600,
       "step": 100,
-      "label": "Container Max Width",
+      "label": "Max Width",
       "default": 1400,
       "unit": "px"
     },
     {
       "type": "range",
       "id": "grid_gap",
-      "min": 12,
+      "min": 8,
       "max": 40,
       "step": 4,
       "label": "Grid Gap",
-      "default": 24,
+      "default": 20,
       "unit": "px"
     },
     {
       "type": "range",
       "id": "card_radius",
       "min": 0,
-      "max": 60,
+      "max": 48,
       "step": 4,
-      "label": "Card Border Radius",
-      "default": 32,
+      "label": "Card Radius",
+      "default": 24,
       "unit": "px"
     },
     {
@@ -349,8 +374,8 @@
       "id": "hover_animation",
       "label": "Hover Effect",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "float", "label": "Float & Shadow" }
+        { "value": "none",  "label": "None" },
+        { "value": "float", "label": "Float" }
       ],
       "default": "float"
     },
@@ -361,7 +386,7 @@
     {
       "type": "color",
       "id": "bg_color",
-      "label": "Background Color",
+      "label": "Background",
       "default": "#ffffff"
     },
     {
@@ -369,6 +394,27 @@
       "id": "accent_gradient",
       "label": "Accent Gradient",
       "default": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Overlay Style",
+      "options": [
+        { "value": "premium", "label": "Premium" },
+        { "value": "glass",   "label": "Glass" },
+        { "value": "matte",   "label": "Matte" }
+      ],
+      "default": "premium"
+    },
+    {
+      "type": "range",
+      "id": "overlay_blur",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "label": "Overlay Blur",
+      "default": 4,
+      "unit": "px"
     },
     {
       "type": "header",
@@ -397,7 +443,7 @@
   ],
   "presets": [
     {
-      "name": "High-Impact Collections"
+      "name": "Collections"
     }
   ]
 }

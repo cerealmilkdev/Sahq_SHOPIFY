@@ -13,10 +13,17 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "menu": "main-menu",
+        "show_title": true,
+        "show_announcement": false,
+        "announcement_text": "Free shipping on orders over $100",
+        "sticky_header": true,
+        "header_style": "minimal"
+      }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }

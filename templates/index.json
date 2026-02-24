@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
@@ -8,24 +17,25 @@
         "show_icon": true,
         "link": "/collections/all",
         "link_text": "Shop Now",
-        "show_close_button": true
+        "show_close_button": true,
+        "show_timer": false,
+        "timer_end_date": "",
+        "bg_color": "linear-gradient(135deg, rgba(63, 71, 108, 1), rgba(118, 75, 162, 1) 100%)",
+        "text_color": "#ffffff"
       }
     },
     "usp-bar": {
       "type": "usp-bar",
-      "settings": {
-        "bg_color": "#f8f8f8",
-        "text_color": "#111111",
-        "padding_top": 12,
-        "padding_bottom": 12
-      },
       "blocks": {
         "usp-1": {
           "type": "item",
           "settings": {
             "icon": "🚚",
             "text": "Free Shipping",
-            "subtext": "On orders over $50"
+            "subtext": "On orders over $50",
+            "link": "",
+            "show_countdown": false,
+            "countdown_end": ""
           }
         },
         "usp-2": {
@@ -33,7 +43,10 @@
           "settings": {
             "icon": "↩️",
             "text": "Easy Returns",
-            "subtext": "30-day return policy"
+            "subtext": "30-day return policy",
+            "link": "",
+            "show_countdown": false,
+            "countdown_end": ""
           }
         },
         "usp-3": {
@@ -41,7 +54,10 @@
           "settings": {
             "icon": "🔒",
             "text": "Secure Payment",
-            "subtext": "SSL encrypted checkout"
+            "subtext": "SSL encrypted checkout",
+            "link": "",
+            "show_countdown": false,
+            "countdown_end": ""
           }
         },
         "usp-4": {
@@ -49,36 +65,78 @@
           "settings": {
             "icon": "💬",
             "text": "24/7 Support",
-            "subtext": "We're here to help"
+            "subtext": "We're here to help",
+            "link": "",
+            "show_countdown": false,
+            "countdown_end": ""
           }
         }
       },
-      "block_order": ["usp-1", "usp-2", "usp-3", "usp-4"]
+      "block_order": [
+        "usp-1",
+        "usp-2",
+        "usp-3",
+        "usp-4"
+      ],
+      "settings": {
+        "rotation_enabled": true,
+        "rotation_interval": 4,
+        "dismissible": false,
+        "bg_color": "#f8f8f8",
+        "text_color": "#111111",
+        "padding_top": 12,
+        "padding_bottom": 12
+      }
     },
     "hero": {
       "type": "hero",
       "settings": {
-        "subtitle": "Discover our first e-commerce theme",
+        "subtitle": "Discover our premium ecom template",
         "heading": "Sahq",
-        "description": "<p>The commerce new era, just right here.</p>",
+        "description": "<p>Built for modern aesthetics.</p>",
         "button_text": "Shop Now",
         "button_link": "/collections/all",
         "secondary_button_text": "Learn More",
         "secondary_button_link": "/pages/about",
+        "background_video": "",
         "overlay_color": "#000000",
         "overlay_opacity": 30,
         "height": "large",
-        "text_alignment": "center"
+        "text_alignment": "center",
+        "text_color_scheme": "light",
+        "custom_text_color": "",
+        "animation": "fade",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "collections": {
       "type": "collections",
-      "settings": {}
+      "settings": {
+        "title": "Shop by Sahq",
+        "subtitle": "The Essentials",
+        "description": "Discover our curated selections designed for your lifestyle.",
+        "header_align": "left",
+        "header_margin": 60,
+        "container_width": 1400,
+        "grid_gap": 24,
+        "card_radius": 32,
+        "show_count": true,
+        "hover_animation": "float",
+        "bg_color": "#ffffff",
+        "accent_gradient": "linear-gradient(135deg, rgba(18, 34, 106, 1) 7%, rgba(38, 4, 72, 1) 100%)",
+        "overlay_style": "glass",
+        "overlay_blur": 7,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
     },
     "image-with-text": {
       "type": "image-with-text",
       "settings": {
+        "image": "shopify://shop_images/man-in-white-and-light-tan-outfit.jpg",
         "image_position": "left",
+        "subtitle": "Our Story",
         "title": "Crafted with purpose.",
         "description": "<p>We believe in creating products that make a real difference. Quality materials, thoughtful design, and exceptional service — that's our promise to you.</p>",
         "button_text": "Learn More",
@@ -90,33 +148,79 @@
     },
     "product-grid": {
       "type": "product-grid",
-      "settings": {
-        "show_section": true,
-        "title": "Our Gallery"
-      },
       "blocks": {
         "image-1": {
-          "type": "image"
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/man-dressed-in-monochrome-by-white-wall.jpg",
+            "title": "Curated Item",
+            "caption": "Short description here",
+            "badge": "",
+            "link": ""
+          }
         },
         "image-2": {
-          "type": "image"
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/smiling-man-in-formalwear.jpg",
+            "title": "Curated Item",
+            "caption": "Short description here",
+            "badge": "",
+            "link": ""
+          }
         },
         "image-3": {
-          "type": "image"
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/three-piece-suit.jpg",
+            "title": "Curated Item",
+            "caption": "Short description here",
+            "badge": "",
+            "link": ""
+          }
         },
         "image-4": {
-          "type": "image"
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/man-leans-on-railing-in-fall-fashion.jpg",
+            "title": "Curated Item",
+            "caption": "Short description here",
+            "badge": "",
+            "link": ""
+          }
         }
       },
-      "block_order": ["image-1", "image-2", "image-3", "image-4"]
+      "block_order": [
+        "image-1",
+        "image-2",
+        "image-3",
+        "image-4"
+      ],
+      "settings": {
+        "title": "Our Gallery",
+        "subtitle": "New Arrivals",
+        "heading_align": "left",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "gap": 24,
+        "style": "overlay",
+        "card_style": "shadow",
+        "aspect_ratio": "auto",
+        "hover_effect": "zoom",
+        "border_radius": 12,
+        "content_alignment": "flex-start",
+        "show_quick_view": true,
+        "bg_color": "rgba(0,0,0,0)",
+        "badge_bg_color": "#000000",
+        "badge_text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     },
     "trust-badges": {
       "type": "trust-badges",
-      "settings": {
-        "bg_color": "#f8f9fa",
-        "padding_top": 48,
-        "padding_bottom": 48
-      },
       "blocks": {
         "badge-1": {
           "type": "badge",
@@ -151,21 +255,72 @@
           }
         }
       },
-      "block_order": ["badge-1", "badge-2", "badge-3", "badge-4"]
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "badge-4"
+      ],
+      "settings": {
+        "title": "",
+        "bg_color": "#f8f9fa",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     },
     "testimonials": {
       "type": "testimonials",
-      "settings": {}
+      "blocks": {
+        "testimonial_9NFCdM": {
+          "type": "testimonial",
+          "name": "Review",
+          "settings": {
+            "image": "shopify://shop_images/portrait-of-man-with-plant.jpg",
+            "quote": "<p>The theme is powerful, but the support team makes it exceptional. Every question we had was answered quickly and professionally. Updates are consistent and the documentation is clear. Highly recommended for serious Shopify businesses.<br/><br/></p>",
+            "author": "John Doe",
+            "role": "Customer",
+            "rating": 5
+          }
+        },
+        "testimonial_Uew7EU": {
+          "type": "testimonial",
+          "name": "Review",
+          "settings": {
+            "image": "shopify://shop_images/men-look-at-sun.jpg",
+            "quote": "<p><br/>What I love most about this theme is how flexible it is. Without touching code, we were able to customize layouts, product pages, and sections to match our brand perfectly. It feels premium and gives us full creative control.<br/><br/></p>",
+            "author": "John Doe",
+            "role": "Customer",
+            "rating": 5
+          }
+        },
+        "testimonial_BT7LX6": {
+          "type": "testimonial",
+          "name": "Review",
+          "settings": {
+            "image": "shopify://shop_images/model-deep-in-thought.jpg",
+            "quote": "<p>This theme completely elevated our store. The design is clean, fast, and optimized for conversions. We saw an immediate increase in engagement and checkout completion after switching. Setup was straightforward and performance has been flawless.<br/><br/></p>",
+            "author": "John Doe",
+            "role": "Customer",
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_9NFCdM",
+        "testimonial_Uew7EU",
+        "testimonial_BT7LX6"
+      ],
+      "settings": {
+        "heading": "What Our Customers Say",
+        "description": "",
+        "layout": "grid-3",
+        "background_color_scheme": "light",
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
     },
     "faq": {
       "type": "faq",
-      "settings": {
-        "title": "Frequently Asked Questions",
-        "subtitle": "Got Questions?",
-        "bg_color": "#f8f9fa",
-        "padding_top": 60,
-        "padding_bottom": 60
-      },
       "blocks": {
         "faq-1": {
           "type": "item",
@@ -189,10 +344,22 @@
           }
         }
       },
-      "block_order": ["faq-1", "faq-2", "faq-3"]
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3"
+      ],
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "subtitle": "Got Questions?",
+        "bg_color": "#f8f9fa",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
     },
     "newsletter-popup": {
       "type": "newsletter-popup",
+      "disabled": true,
       "settings": {
         "title": "Get 10% off your first order",
         "description": "Subscribe to our newsletter and be the first to know about new products and exclusive offers.",

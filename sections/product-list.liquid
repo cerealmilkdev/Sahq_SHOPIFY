@@ -1,0 +1,264 @@
+{% comment %}
+  Product List section inspired by Shopify/Liquid documentation examples.
+{% endcomment %}
+
+{% liquid
+  assign target_collection = section.settings.collection
+  if target_collection == blank and product and product.collections.size > 0
+    assign target_collection = product.collections.first
+  endif
+%}
+
+<section class="product-list product-list-{{ section.id }}" {{ section.shopify_attributes }}>
+  <div class="product-list__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="product-list__heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if target_collection != blank and target_collection.products_count > 0 %}
+      <div class="product-list__items" data-product-list-items>
+        {% for item in target_collection.products limit: section.settings.products_to_show %}
+          {% if section.settings.hide_current_product and product and item.id == product.id %}
+            {% continue %}
+          {% endif %}
+
+          <article class="product-list__card" data-product-card data-id="{{ item.id }}">
+            <div class="product-list__card-main">
+              <h3 class="product-list__title">{{ item.title }}</h3>
+              {% if section.settings.show_price %}
+                <p class="product-list__price">Price: {{ item.price | money }}</p>
+              {% endif %}
+            </div>
+
+            <button
+              type="button"
+              class="product-list__button"
+              data-details-button
+              aria-expanded="false"
+              aria-controls="product-list-details-{{ section.id }}-{{ item.id }}"
+            >
+              {{ section.settings.button_label }}
+            </button>
+
+            <div
+              id="product-list-details-{{ section.id }}-{{ item.id }}"
+              class="product-list__details"
+              data-details
+              hidden
+            >
+              {% if section.settings.show_vendor and item.vendor != blank %}
+                <p><strong>Vendor:</strong> {{ item.vendor }}</p>
+              {% endif %}
+              {% if item.url != blank %}
+                <p><a href="{{ item.url }}">View product</a></p>
+              {% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% if section.settings.empty_text != blank %}
+        <p class="product-list__empty">{{ section.settings.empty_text }}</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .product-list-{{ section.id }} {
+    --product-list-highlight: {{ section.settings.highlight_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .product-list-{{ section.id }} .product-list__inner {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
+  }
+
+  .product-list-{{ section.id }} .product-list__heading {
+    margin: 0 0 1rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .product-list-{{ section.id }} .product-list__items {
+    display: grid;
+    gap: 12px;
+  }
+
+  .product-list-{{ section.id }} .product-list__card {
+    border: 1px solid #ccc;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .product-list-{{ section.id }} .product-list__card.is-highlighted {
+    background-color: var(--product-list-highlight);
+    border-color: #9db8bd;
+  }
+
+  .product-list-{{ section.id }} .product-list__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.1rem;
+  }
+
+  .product-list-{{ section.id }} .product-list__price {
+    margin: 0 0 0.75rem;
+    opacity: 0.9;
+  }
+
+  .product-list-{{ section.id }} .product-list__button {
+    border: 1px solid #111;
+    background: #111;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .product-list-{{ section.id }} .product-list__details {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .product-list-{{ section.id }} .product-list__details p {
+    margin: 0 0 0.5rem;
+  }
+
+  .product-list-{{ section.id }} .product-list__empty {
+    margin: 0;
+    opacity: 0.75;
+  }
+</style>
+
+<script>
+  (function() {
+    function init(sectionRoot) {
+      if (!sectionRoot || sectionRoot.dataset.initialized === 'true') return;
+
+      sectionRoot.addEventListener('click', function(event) {
+        var button = event.target.closest('[data-details-button]');
+        if (!button) return;
+
+        var card = button.closest('[data-product-card]');
+        if (!card) return;
+
+        var details = card.querySelector('[data-details]');
+        var expanded = button.getAttribute('aria-expanded') === 'true';
+
+        card.classList.toggle('is-highlighted');
+        button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+
+        if (details) {
+          if (expanded) details.setAttribute('hidden', '');
+          else details.removeAttribute('hidden');
+        }
+      });
+
+      sectionRoot.dataset.initialized = 'true';
+    }
+
+    init(document.querySelector('.product-list-{{ section.id }}'));
+
+    document.addEventListener('shopify:section:load', function(event) {
+      if (!event.detail || event.detail.sectionId !== '{{ section.id }}') return;
+      var selector = '.shopify-section[id=\"shopify-section-' + event.detail.sectionId + '\"] .product-list-{{ section.id }}';
+      init(document.querySelector(selector));
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product List",
+  "tag": "section",
+  "class": "section-product-list",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Products to show",
+      "default": 6
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Show Details"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_current_product",
+      "label": "Hide current product on product page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor in details",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "Highlight color",
+      "default": "#e0f7fa"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state text",
+      "default": "No products found."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product List"
+    }
+  ]
+}
+{% endschema %}

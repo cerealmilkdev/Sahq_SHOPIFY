@@ -1,11 +1,53 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "collections",
-      "settings": {}
+      "settings": {
+        "title": "Shop by Category",
+        "subtitle": "The Essentials",
+        "description": "Discover our curated selections designed for your lifestyle.",
+        "container_width": 1400,
+        "grid_gap": 24,
+        "card_radius": 32,
+        "show_count": true,
+        "hover_animation": "float",
+        "bg_color": "#ffffff",
+        "accent_gradient": "linear-gradient(135deg, rgba(102, 126, 234, 1), rgba(118, 75, 162, 1) 100%)",
+        "overlay_style": "premium",
+        "overlay_blur": 4,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "product_list_jQkLci": {
+      "type": "product-list",
+      "name": "Product List",
+      "settings": {
+        "heading": "Our Products",
+        "collection": "automated-collection",
+        "products_to_show": 6,
+        "button_label": "Show Details",
+        "hide_current_product": true,
+        "show_price": true,
+        "show_vendor": false,
+        "highlight_color": "#e0f7fa",
+        "empty_text": "No products found.",
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "product_list_jQkLci"
   ]
 }
