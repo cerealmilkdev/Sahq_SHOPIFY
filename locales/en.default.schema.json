@@ -37,51 +37,6 @@
     }
   },
   "sections": {
-    "banner": {
-      "name": "Name",
-      "presets": {
-        "name": "Name"
-      },
-      "settings": {
-        "bg_color": {
-          "label": "Label"
-        },
-        "link": {
-          "label": "Label"
-        },
-        "link_text": {
-          "label": "Label"
-        },
-        "show_banner": {
-          "label": "Label"
-        },
-        "show_close_button": {
-          "label": "Label"
-        },
-        "show_icon": {
-          "label": "Label"
-        },
-        "show_timer": {
-          "label": "Label"
-        },
-        "style": {
-          "header": "Header"
-        },
-        "text": {
-          "label": "Label"
-        },
-        "text_color": {
-          "label": "Label"
-        },
-        "timer": {
-          "header": "Header"
-        },
-        "timer_end_date": {
-          "info": "Info",
-          "label": "Label"
-        }
-      }
-    },
     "countdown": {
       "name": "Name",
       "presets": {

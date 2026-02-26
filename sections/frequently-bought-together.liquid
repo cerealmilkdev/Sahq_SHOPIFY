@@ -318,7 +318,7 @@
     })
     .catch(function() {
       btn.disabled = false;
-      btn.textContent = '⚠️ Erreur – réessayez';
+      btn.textContent = '⚠️ Error – try again';
       setTimeout(function() {
         btn.textContent = '🛒 {{ section.settings.cta_text | default: 'Ajouter tout au panier' | escape }}';
       }, 2500);

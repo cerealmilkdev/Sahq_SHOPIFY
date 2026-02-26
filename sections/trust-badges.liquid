@@ -168,12 +168,12 @@
     {
       "type": "text",
       "id": "title",
-      "label": "t:sections.trust_badges.settings.title.label"
+      "label": "Title"
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.trust_badges.settings.bg_color.label",
+      "label": "Background Color",
       "default": "#ffffff"
     },
     {
@@ -183,7 +183,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.trust_badges.settings.padding_top.label",
+      "label": "Padding Top",
       "default": 48
     },
     {
@@ -193,19 +193,19 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.trust_badges.settings.padding_bottom.label",
+      "label": "Padding Bottom",
       "default": 48
     }
   ],
   "blocks": [
     {
       "type": "badge",
-      "name": "t:sections.trust_badges.blocks.badge.name",
+      "name": "Badge",
       "settings": [
         {
           "type": "select",
           "id": "icon",
-          "label": "t:sections.trust_badges.blocks.badge.settings.icon.label",
+          "label": "Icon",
           "options": [
             { "value": "shield", "label": "Shield (Secure)" },
             { "value": "truck", "label": "Truck (Delivery)" },
@@ -218,13 +218,13 @@
         {
           "type": "text",
           "id": "text",
-          "label": "t:sections.trust_badges.blocks.badge.settings.text.label",
+          "label": "Text",
           "default": "Secure Payment"
         },
         {
           "type": "text",
           "id": "subtext",
-          "label": "t:sections.trust_badges.blocks.badge.settings.subtext.label",
+          "label": "Subtext",
           "default": "SSL encrypted checkout"
         }
       ]
@@ -232,7 +232,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.trust_badges.presets.name",
+      "name": "Trust Badges",
       "blocks": [
         {
           "type": "badge",

@@ -5,7 +5,8 @@
       "Bash(ls -lh /d/MakeSocial/SHIP/shopify_template/Sahq/Sahq/sections/*.liquid)",
       "Bash(sort -k2)",
       "Bash(head:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(python3:*)"
     ]
   }
 }

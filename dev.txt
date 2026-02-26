@@ -1,0 +1,183 @@
+AUDIT THEME SHOPIFY "SAHQ" - OBJECTIF: ULTRA COMPETITIF ECOM (2026)
+Date d'audit: 2026-02-25
+
+==================================================
+1) VERDICT GLOBAL
+==================================================
+Le theme a une base interessante pour la conversion (upsell, FBT, sticky ATC, social proof, trust badges), mais il n'est pas encore au niveau "ultra competitif" pour un marche Shopify moderne.
+
+Priorite immediate:
+- fiabiliser les parcours panier/upsell/quick-view (bugs d'integration)
+- renforcer PDP (media, infos d'achat, reassurance reelle)
+- professionnaliser i18n + QA + tracking + CI
+
+Sans ces points, le theme peut convertir "correctement" mais restera fragile a l'echelle.
+
+==================================================
+2) POINTS FORTS (A CONSERVER)
+==================================================
+- Bonne base CRO:
+- sticky add-to-cart, urgence stock/viewers, trust badges, back-in-stock, upsell modal, frequently bought together.
+- Architecture Online Store 2.0 presente (sections/templates JSON), donc bonne flexibilite marchand.
+- Presence de donnees structurees produit via `product | structured_data` (SEO).
+- Theme JS centralise dans `assets/theme.js` avec classes dediees (menu/cart/search), lisible.
+- Effort de design marque (sections visuelles fortes, grid premium, testimonials/reviews).
+
+==================================================
+3) POINTS FAIBLES / RISQUES MAJEURS
+==================================================
+
+[P0 - Bloquants conversion/qualite]
+
+1) Integrations panier "cassables" depuis quick view / upsell / FBT
+- Plusieurs sections appellent `window.CartDrawer.open()` alors qu'aucune instance globale `window.CartDrawer` n'existe.
+- References:
+  - `sections/frequently-bought-together.liquid:308`
+  - `sections/product-grid.liquid:591`
+  - `snippets/upsell-modal.liquid:294`
+- Dans `assets/theme.js`, seule la classe est exposee via `window.SahqTheme.CartDrawer`, pas l'instance (`assets/theme.js:537-542`).
+- Resultat: ouverture drawer non fiable apres ajout, donc perte de momentum checkout.
+
+2) Event bus incomplet
+- Ces composants fallback sur `document.dispatchEvent(new CustomEvent('cart:open'))`, mais aucun listener `cart:open` n'est present dans `assets/theme.js`.
+- References:
+  - fallback event: `sections/frequently-bought-together.liquid:312`, `snippets/upsell-modal.liquid:297`
+  - absence de listener dans `assets/theme.js`.
+
+3) Conflit de logique menu mobile (double controle)
+- Le menu mobile est gere a la fois:
+  - inline dans `sections/header.liquid:164-210`
+  - via classe `MobileMenu` dans `assets/theme.js`.
+- Risque: listeners dupliques + comportements incoherents.
+
+4) Theme Check en echec (erreurs)
+- `shopify theme check` retourne 4 erreurs, 10 warnings.
+- Erreurs principales:
+  - noms schema manquants pour blocs: `t:general.group`, `t:general.text` (`blocks/group.liquid:49`, `blocks/text.liquid:136`)
+  - images sans width/height et remote placeholders (`sections/hero.liquid:39`, `sections/slider.liquid:13`)
+
+[P1 - Freins competitivite]
+
+5) PDP trop basique pour un niveau premium
+- Galerie produit limitee a `product.images` (pas de prise en charge reelle `product.media` video/3D/modeles).
+- Reference: `sections/product.liquid:12`.
+- Pas de sticky resume achat enrichi (SKU, delai, livraison, retours, paiement fractionne visible).
+- Gestion variantes par parsing du titre (`split(' / ')`) fragile.
+  - Reference: `sections/product.liquid:823-826`.
+
+6) Qualite i18n et contenu inegale
+- De nombreuses traductions sont des placeholders generiques ("Title", "Label"), pas du copywriting business.
+- References:
+  - `locales/en.default.json`
+  - `locales/en.default.schema.json`
+- Impact: image de marque faible + confiance reduite + difficulte d'internationalisation serieuse.
+
+7) Page search et collection sous-exploitees
+- Search page tres minimale (pas de filtres avances, pas de merchandising search, pas de scoring UX).
+- Reference: `sections/search.liquid`.
+- Template collection actuel centré sur visuel categorie + listage, sans faceting robuste UX type "PLP moderne".
+
+8) Accessibilite et robustesse UX partielles
+- Pas de skip-link visible en debut de `body`.
+- Focus trapping non applique aux overlays critiques (drawer/search/modal) malgre utilitaire present.
+- Overlay/dialog sans systeme unifie (close/focus/restore).
+
+[P2 - Dette technique/perf]
+
+9) Strategie fonts non optimisee
+- Import Google Fonts + nombreuses polices locales TTF (3.7M total) dans `assets/*.ttf`.
+- References:
+  - imports distants: `assets/custom-fonts.css:4-5`
+  - multiples `@font-face` TTF: `assets/custom-fonts.css:20+`
+- Risque: overhead reseau, FOUT/CLS, incoherence legal/privacy selon geographie.
+
+10) Snippet image trop simple
+- `snippets/image.liquid` n'exploite pas activement priorite LCP/fetchpriority/sizes adaptation par contexte.
+- Reference: `snippets/image.liquid:48`.
+
+11) CI technique insuffisante
+- Workflow GitHub present quasi uniquement CLA (`.github/workflows/cla.yml`).
+- Pas de pipeline QA obligatoire: theme check, lint, smoke tests, budgets perf.
+
+==================================================
+4) ESSENTIELS MANQUANTS POUR DEVENIR "ULTRA COMPETITIF"
+==================================================
+
+Essentiels produit/conversion:
+- PDP "achat rapide" complet:
+  - media gallery moderne (images + video + 3D + zoom + thumbnails/sticky media)
+  - blocs reassurance transactionnelle (livraison estimee, retours, paiement, stock date)
+  - bundles natifs et offres quantity-breaks robustes (pas seulement visuels)
+- PLP moderne:
+  - filtres Shopify storefront robustes, tri UX, badge promo/sold-out, quick add fiable
+- Search competitive:
+  - predictive search riche (produits + collections + suggestions + no-result recovery)
+- Parcours cart-to-checkout blindes:
+  - ouverture drawer fiable depuis tous les points d'ajout
+  - events standardises et instrumentation analytics (add_to_cart, begin_checkout, upsell_accept, etc.)
+
+Essentiels confiance/marque:
+- Vraie base i18n (copy ecom qualitatif, FR/EN propres, schema labels pro)
+- Reviews connectees a vraie source (ou app reviews) + JSON-LD coherent
+- Pages legales/reassurance premium (shipping, returns, FAQ, contact, trust)
+
+Essentiels engineering:
+- CI minimale obligatoire:
+  - `shopify theme check`
+  - lint JS/CSS
+  - build tailwind
+  - smoke test templates critiques
+- Definition de budgets perf (LCP, CLS, INP) et checklist release
+
+==================================================
+5) PLAN D'ACTION PRIORISE (SHIP FAST)
+==================================================
+
+Sprint 1 (P0, 3-5 jours):
+1. Unifier le CartDrawer:
+   - exposer instance globale (ex: `window.Sahq.cartDrawer`)
+   - ecouter `cart:open` dans `theme.js`
+   - remplacer tous les appels `window.CartDrawer.open()` par API stable.
+2. Supprimer la double logique menu mobile:
+   - garder une seule implementation (JS global ou section), pas les deux.
+3. Passer Theme Check sans erreurs:
+   - corriger cles schema manquantes
+   - retirer placeholders remotes de prod (`picsum.photos`)
+   - fixer width/height.
+
+Sprint 2 (P1, 1-2 semaines):
+1. Refaire PDP media + variantes:
+   - support `product.media`
+   - logique variantes basee sur `product.variants` (pas parsing titre).
+2. Renforcer PLP/Search:
+   - filtres/tri UX avances
+   - search suggestions et zero-result fallback.
+3. i18n professionnelle:
+   - nettoyage complet des labels/copy placeholders.
+
+Sprint 3 (P1/P2, 1 semaine):
+1. Analytics ecom events + dashboard conversion.
+2. Optimisation fonts (woff2 subset, suppression poids inutiles).
+3. CI release-ready (check + lint + smoke + gates).
+
+==================================================
+6) KPIs CIBLES (POUR VALIDER LA COMPETITIVITE)
+==================================================
+- LCP mobile (P75): < 2.5s
+- CLS (P75): < 0.1
+- INP (P75): < 200ms
+- Add-to-cart rate: +15% vs baseline apres Sprint 2
+- Checkout initiation rate: +10% vs baseline
+- Erreurs JS critiques: 0 sur parcours PDP -> cart -> checkout
+- Theme Check: 0 erreur en CI
+
+==================================================
+7) CONCLUSION
+==================================================
+Le theme est une bonne base "CRO visuelle", mais pas encore industrialise pour gagner durablement sur un paysage ecom Shopify tres concurrentiel.
+
+Si tu veux un projet ultra competitif:
+- priorise la fiabilite parcours achat (P0),
+- puis monte le niveau PDP/PLP/Search (P1),
+- puis verrouille perf + CI + analytics (P2).
+

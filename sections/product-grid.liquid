@@ -511,7 +511,7 @@
     fetch('/products/' + handle + '.js')
       .then(function(r) { return r.json(); })
       .then(function(p) { render(p); })
-      .catch(function() { inner.innerHTML = '<div class="qv-loader">Erreur de chargement.</div>'; });
+      .catch(function() { inner.innerHTML = '<div class="qv-loader">Failed to load.</div>'; });
   }
 
   function render(p) {
@@ -548,8 +548,8 @@
           '<span class="qv-price-current">' + formatMoney(variant.price) + '</span>' + compareHtml +
         '</div>' +
         variantsHtml +
-        '<button type="button" class="qv-atc-btn" id="qv-atc-' + sectionId + '" data-variant-id="' + variant.id + '">🛒 Ajouter au panier</button>' +
-        '<a href="' + p.url + '" class="qv-view-link">Voir le produit complet →</a>' +
+        '<button type="button" class="qv-atc-btn" id="qv-atc-' + sectionId + '" data-variant-id="' + variant.id + '">🛒 Add to cart</button>' +
+        '<a href="' + p.url + '" class="qv-view-link">View full product →</a>' +
       '</div>';
 
     // Variant change
@@ -579,7 +579,7 @@
       var vid = parseInt(atcBtn.dataset.variantId);
       if (!vid) return;
       atcBtn.disabled = true;
-      atcBtn.textContent = '⏳ Ajout…';
+      atcBtn.textContent = '⏳ Adding…';
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -595,8 +595,8 @@
         }
       })
       .catch(function() {
-        atcBtn.textContent = '⚠️ Erreur';
-        setTimeout(function() { atcBtn.disabled = false; atcBtn.textContent = '🛒 Ajouter au panier'; }, 2000);
+        atcBtn.textContent = '⚠️ Error';
+        setTimeout(function() { atcBtn.disabled = false; atcBtn.textContent = '🛒 Add to cart'; }, 2000);
       });
     });
   }

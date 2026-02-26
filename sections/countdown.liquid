@@ -47,7 +47,7 @@
         </div>
       </div>
       <p class="countdown-expired-msg" data-expired-msg style="display: none;">
-        {{ 'sections.countdown.expired' | t | default: 'Offer expired' }}
+        Offer expired
       </p>
     {% else %}
       <p class="countdown-no-date">Set an end date in section settings.</p>
@@ -201,75 +201,75 @@
 
 {% schema %}
 {
-  "name": "t:sections.countdown.name",
+  "name": "Countdown",
   "tag": "section",
   "settings": [
     {
       "type": "text",
       "id": "title",
-      "label": "t:sections.countdown.settings.title.label",
+      "label": "Title",
       "default": "Limited Time Offer"
     },
     {
       "type": "text",
       "id": "subtitle",
-      "label": "t:sections.countdown.settings.subtitle.label",
+      "label": "Subtitle",
       "default": "Sale ends in"
     },
     {
       "type": "text",
       "id": "end_date",
-      "label": "t:sections.countdown.settings.end_date.label",
-      "info": "t:sections.countdown.settings.end_date.info",
+      "label": "End Date",
+      "info": "Format: YYYY-MM-DDTHH:MM:SS",
       "placeholder": "2025-12-31T23:59:59"
     },
     {
       "type": "header",
-      "content": "t:sections.countdown.settings.labels.header"
+      "content": "Labels"
     },
     {
       "type": "text",
       "id": "label_days",
-      "label": "t:sections.countdown.settings.label_days.label",
+      "label": "Days Label",
       "default": "Days"
     },
     {
       "type": "text",
       "id": "label_hours",
-      "label": "t:sections.countdown.settings.label_hours.label",
+      "label": "Hours Label",
       "default": "Hours"
     },
     {
       "type": "text",
       "id": "label_minutes",
-      "label": "t:sections.countdown.settings.label_minutes.label",
+      "label": "Minutes Label",
       "default": "Minutes"
     },
     {
       "type": "text",
       "id": "label_seconds",
-      "label": "t:sections.countdown.settings.label_seconds.label",
+      "label": "Seconds Label",
       "default": "Seconds"
     },
     {
       "type": "header",
-      "content": "t:sections.countdown.settings.style.header"
+      "content": "Style"
     },
     {
       "type": "color_background",
       "id": "bg_color",
-      "label": "t:sections.countdown.settings.bg_color.label",
+      "label": "Background Color",
       "default": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "t:sections.countdown.settings.text_color.label",
+      "label": "Text Color",
       "default": "#ffffff"
     },
     {
       "type": "header",
-      "content": "t:sections.countdown.settings.spacing.header"
+      "content": "Spacing"
     },
     {
       "type": "range",
@@ -278,7 +278,7 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.countdown.settings.padding_top.label",
+      "label": "Padding Top",
       "default": 60
     },
     {
@@ -288,13 +288,13 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "label": "t:sections.countdown.settings.padding_bottom.label",
+      "label": "Padding Bottom",
       "default": 60
     }
   ],
   "presets": [
     {
-      "name": "t:sections.countdown.presets.name"
+      "name": "Countdown"
     }
   ]
 }
